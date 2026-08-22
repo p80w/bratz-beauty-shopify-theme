@@ -1,142 +1,21 @@
+{% render 'bratz-font' %}
+
 {% style %}
-  {%- liquid
-    assign rendered_fonts = ''
-
-    assign primary_font = settings.type_body_font
-    assign primary_font_bold = primary_font | font_modify: 'weight', 'bold'
-    assign primary_font_italic = primary_font | font_modify: 'style', 'italic'
-    assign primary_font_bold_italic = primary_font_bold | font_modify: 'style', 'italic'
-
-    assign primary_font_face_id = '[primary_font_family]-[primary_font_weight]-[primary_font_style]|' | replace: '[primary_font_family]', primary_font.family | replace: '[primary_font_weight]', primary_font.weight | replace: '[primary_font_style]', primary_font.style
-    assign primary_font_bold_face_id = '[primary_font_bold_family]-[primary_font_bold_weight]-[primary_font_bold_style]|' | replace: '[primary_font_bold_family]', primary_font_bold.family | replace: '[primary_font_bold_weight]', primary_font_bold.weight | replace: '[primary_font_bold_style]', primary_font_bold.style
-    assign primary_font_italic_face_id = '[primary_font_italic_family]-[primary_font_italic_weight]-[primary_font_italic_style]|' | replace: '[primary_font_italic_family]', primary_font_italic.family | replace: '[primary_font_italic_weight]', primary_font_italic.weight | replace: '[primary_font_italic_style]', primary_font_italic.style
-    assign primary_font_bold_italic_face_id = '[primary_font_bold_italic_family]-[primary_font_bold_italic_weight]-[primary_font_bold_italic_style]|' | replace: '[primary_font_bold_italic_family]', primary_font_bold_italic.family | replace: '[primary_font_bold_italic_weight]', primary_font_bold_italic.weight | replace: '[primary_font_bold_italic_style]', primary_font_bold_italic.style
-
-    assign secondary_font = settings.type_subheading_font
-    assign secondary_font_bold = secondary_font | font_modify: 'weight', 'bold'
-    assign secondary_font_italic = secondary_font | font_modify: 'style', 'italic'
-    assign secondary_font_bold_italic = secondary_font_bold | font_modify: 'style', 'italic'
-
-    assign secondary_font_face_id = '[secondary_font_family]-[secondary_font_weight]-[secondary_font_style]|' | replace: '[secondary_font_family]', secondary_font.family | replace: '[secondary_font_weight]', secondary_font.weight | replace: '[secondary_font_style]', secondary_font.style
-    assign secondary_font_bold_face_id = '[secondary_font_bold_family]-[secondary_font_bold_weight]-[secondary_font_bold_style]|' | replace: '[secondary_font_bold_family]', secondary_font_bold.family | replace: '[secondary_font_bold_weight]', secondary_font_bold.weight | replace: '[secondary_font_bold_style]', secondary_font_bold.style
-    assign secondary_font_italic_face_id = '[secondary_font_italic_family]-[secondary_font_italic_weight]-[secondary_font_italic_style]|' | replace: '[secondary_font_italic_family]', secondary_font_italic.family | replace: '[secondary_font_italic_weight]', secondary_font_italic.weight | replace: '[secondary_font_italic_style]', secondary_font_italic.style
-    assign secondary_font_bold_italic_face_id = '[secondary_font_bold_italic_family]-[secondary_font_bold_italic_weight]-[secondary_font_bold_italic_style]|' | replace: '[secondary_font_bold_italic_family]', secondary_font_bold_italic.family | replace: '[secondary_font_bold_italic_weight]', secondary_font_bold_italic.weight | replace: '[secondary_font_bold_italic_style]', secondary_font_bold_italic.style
-
-    assign tertiary_font = settings.type_heading_font
-    assign tertiary_font_bold = tertiary_font | font_modify: 'weight', 'bold'
-    assign tertiary_font_italic = tertiary_font | font_modify: 'style', 'italic'
-    assign tertiary_font_bold_italic = tertiary_font_bold | font_modify: 'style', 'italic'
-
-    assign tertiary_font_face_id = '[tertiary_font_family]-[tertiary_font_weight]-[tertiary_font_style]|' | replace: '[tertiary_font_family]', tertiary_font.family | replace: '[tertiary_font_weight]', tertiary_font.weight | replace: '[tertiary_font_style]', tertiary_font.style
-    assign tertiary_font_bold_face_id = '[tertiary_font_bold_family]-[tertiary_font_bold_weight]-[tertiary_font_bold_style]|' | replace: '[tertiary_font_bold_family]', tertiary_font_bold.family | replace: '[tertiary_font_bold_weight]', tertiary_font_bold.weight | replace: '[tertiary_font_bold_style]', tertiary_font_bold.style
-    assign tertiary_font_italic_face_id = '[tertiary_font_italic_family]-[tertiary_font_italic_weight]-[tertiary_font_italic_style]|' | replace: '[tertiary_font_italic_family]', tertiary_font_italic.family | replace: '[tertiary_font_italic_weight]', tertiary_font_italic.weight | replace: '[tertiary_font_italic_style]', tertiary_font_italic.style
-    assign tertiary_font_bold_italic_face_id = '[tertiary_font_bold_italic_family]-[tertiary_font_bold_italic_weight]-[tertiary_font_bold_italic_style]|' | replace: '[tertiary_font_bold_italic_family]', tertiary_font_bold_italic.family | replace: '[tertiary_font_bold_italic_weight]', tertiary_font_bold_italic.weight | replace: '[tertiary_font_bold_italic_style]', tertiary_font_bold_italic.style
-
-    assign accent_font = settings.type_accent_font
-    assign accent_font_bold = accent_font | font_modify: 'weight', 'bold'
-    assign accent_font_italic = accent_font | font_modify: 'style', 'italic'
-    assign accent_font_bold_italic = accent_font_bold | font_modify: 'style', 'italic'
-
-    assign accent_font_face_id = '[accent_font_family]-[accent_font_weight]-[accent_font_style]|' | replace: '[accent_font_family]', accent_font.family | replace: '[accent_font_weight]', accent_font.weight | replace: '[accent_font_style]', accent_font.style
-    assign accent_font_bold_face_id = '[accent_font_bold_family]-[accent_font_bold_weight]-[accent_font_bold_style]|' | replace: '[accent_font_bold_family]', accent_font_bold.family | replace: '[accent_font_bold_weight]', accent_font_bold.weight | replace: '[accent_font_bold_style]', accent_font_bold.style
-    assign accent_font_italic_face_id = '[accent_font_italic_family]-[accent_font_italic_weight]-[accent_font_italic_style]|' | replace: '[accent_font_italic_family]', accent_font_italic.family | replace: '[accent_font_italic_weight]', accent_font_italic.weight | replace: '[accent_font_italic_style]', accent_font_italic.style
-    assign accent_font_bold_italic_face_id = '[accent_font_bold_italic_family]-[accent_font_bold_italic_weight]-[accent_font_bold_italic_style]|' | replace: '[accent_font_bold_italic_family]', accent_font_bold_italic.family | replace: '[accent_font_bold_italic_weight]', accent_font_bold_italic.weight | replace: '[accent_font_bold_italic_style]', accent_font_bold_italic.style
-
-    unless rendered_fonts contains primary_font_face_id
-      echo primary_font | font_face: font_display: 'swap'
-      assign rendered_fonts = rendered_fonts | append: primary_font_face_id
-    endunless
-
-    unless rendered_fonts contains primary_font_bold_face_id
-      echo primary_font_bold | font_face: font_display: 'swap'
-      assign rendered_fonts = rendered_fonts | append: primary_font_bold_face_id
-    endunless
-
-    unless rendered_fonts contains primary_font_italic_face_id
-      echo primary_font_italic | font_face: font_display: 'swap'
-      assign rendered_fonts = rendered_fonts | append: primary_font_italic_face_id
-    endunless
-
-    unless rendered_fonts contains primary_font_bold_italic_face_id
-      echo primary_font_bold_italic | font_face: font_display: 'swap'
-      assign rendered_fonts = rendered_fonts | append: primary_font_bold_italic_face_id
-    endunless
-
-    unless rendered_fonts contains secondary_font_face_id
-      echo secondary_font | font_face: font_display: 'swap'
-      assign rendered_fonts = rendered_fonts | append: secondary_font_face_id
-    endunless
-
-    unless rendered_fonts contains secondary_font_bold_face_id
-      echo secondary_font_bold | font_face: font_display: 'swap'
-      assign rendered_fonts = rendered_fonts | append: secondary_font_bold_face_id
-    endunless
-
-    unless rendered_fonts contains secondary_font_italic_face_id
-      echo secondary_font_italic | font_face: font_display: 'swap'
-      assign rendered_fonts = rendered_fonts | append: secondary_font_italic_face_id
-    endunless
-
-    unless rendered_fonts contains secondary_font_bold_italic_face_id
-      echo secondary_font_bold_italic | font_face: font_display: 'swap'
-      assign rendered_fonts = rendered_fonts | append: secondary_font_bold_italic_face_id
-    endunless
-
-    unless rendered_fonts contains tertiary_font_face_id
-      echo tertiary_font | font_face: font_display: 'swap'
-      assign rendered_fonts = rendered_fonts | append: tertiary_font_face_id
-    endunless
-
-    unless rendered_fonts contains tertiary_font_bold_face_id
-      echo tertiary_font_bold | font_face: font_display: 'swap'
-      assign rendered_fonts = rendered_fonts | append: tertiary_font_bold_face_id
-    endunless
-
-    unless rendered_fonts contains tertiary_font_italic_face_id
-      echo tertiary_font_italic | font_face: font_display: 'swap'
-      assign rendered_fonts = rendered_fonts | append: tertiary_font_italic_face_id
-    endunless
-
-    unless rendered_fonts contains tertiary_font_bold_italic_face_id
-      echo tertiary_font_bold_italic | font_face: font_display: 'swap'
-      assign rendered_fonts = rendered_fonts | append: tertiary_font_bold_italic_face_id
-    endunless
-
-    unless rendered_fonts contains accent_font_face_id
-      echo accent_font | font_face: font_display: 'swap'
-      assign rendered_fonts = rendered_fonts | append: accent_font_face_id
-    endunless
-
-    unless rendered_fonts contains accent_font_bold_face_id
-      echo accent_font_bold | font_face: font_display: 'swap'
-      assign rendered_fonts = rendered_fonts | append: accent_font_bold_face_id
-    endunless
-
-    unless rendered_fonts contains accent_font_italic_face_id
-      echo accent_font_italic | font_face: font_display: 'swap'
-      assign rendered_fonts = rendered_fonts | append: accent_font_italic_face_id
-    endunless
-
-    unless rendered_fonts contains accent_font_bold_italic_face_id
-      echo accent_font_bold_italic | font_face: font_display: 'swap'
-      assign rendered_fonts = rendered_fonts | append: accent_font_bold_italic_face_id
-    endunless
-  %}
 
   :root {
     /* Page Layout */
-    --sidebar-width: 25rem;
-    --theme-drawer-width: 30rem;
-    --narrow-content-width: 36rem;
-    --normal-content-width: 42rem;
-    --narrow-page-width: 90rem;
-    --normal-page-width: 120rem;
-    --wide-page-width: 150rem;
+    --sidebar-width: 40rem;
+    --theme-drawer-width: 48rem;
+    --narrow-content-width: 57.6rem;
+    --normal-content-width: 67.2rem;
+    --narrow-page-width: 144rem;
+    --normal-page-width: 192rem;
+    --wide-page-width: 240rem;
 
     /* Section Heights */
-    --section-height-small: 15rem;
-    --section-height-medium: 25rem;
-    --section-height-large: 35rem;
+    --section-height-small: 24rem;
+    --section-height-medium: 40rem;
+    --section-height-large: 56rem;
 
     @media screen and (min-width: 40em) {
       --section-height-small: 40svh;
@@ -154,18 +33,18 @@
     --letter-spacing-sm: 0.06em;
 
     /* Font families */
-    --font-body--family: {{ settings.type_body_font.family }}, {{ settings.type_body_font.fallback_families }};
-    --font-body--style: {{ settings.type_body_font.style }};
-    --font-body--weight: {{ settings.type_body_font.weight }};
-    --font-subheading--family: {{ settings.type_subheading_font.family }}, {{ settings.type_subheading_font.fallback_families }};
-    --font-subheading--style: {{ settings.type_subheading_font.style }};
-    --font-subheading--weight: {{ settings.type_subheading_font.weight }};
-    --font-heading--family: {{ settings.type_heading_font.family }}, {{ settings.type_heading_font.fallback_families }};
-    --font-heading--style: {{ settings.type_heading_font.style }};
-    --font-heading--weight: {{ settings.type_heading_font.weight }};
-    --font-accent--family: {{ settings.type_accent_font.family }}, {{ settings.type_accent_font.fallback_families }};
-    --font-accent--style: {{ settings.type_accent_font.style }};
-    --font-accent--weight: {{ settings.type_accent_font.weight }};
+    --font-body--family: 'Akkurat Mono LL', monospace;
+    --font-body--style: normal;
+    --font-body--weight: 400;
+    --font-subheading--family: 'Druk', sans-serif;
+    --font-subheading--style: normal;
+    --font-subheading--weight: 700;
+    --font-heading--family: 'Druk', sans-serif;
+    --font-heading--style: normal;
+    --font-heading--weight: 700;
+    --font-accent--family: 'Sloop', cursive;
+    --font-accent--style: normal;
+    --font-accent--weight: 400;
 
     /* Margin sizes */
     --font-heading--spacing: 0.25em;
@@ -232,144 +111,214 @@
 
     /* Typography presets */
     {% liquid
-      assign font_sizes = "paragraph, h1, h2, h3, h4, h5, h6" | split: ", "
-      assign fluid_size_cutoff = 48
-      assign absolute_font_size_min = 10
-
-      comment
-        Build an array of font sizes and sort it
-      endcomment
-      assign font_size_values = ''
-      for font_size in font_sizes
-        assign size_setting = 'type_size_[font_size]' | replace: '[font_size]', font_size
-        assign size_setting_value = settings[size_setting] | times: 1
-
-        comment
-          If the font size is less than 100, pad it with a 0
-          This is because we end up with an array of strings, which | sort filter can't order "correctly")
-        endcomment
-        if size_setting_value < 100
-          assign size_setting_value = '0[size_setting_value]' | replace: '[size_setting_value]', size_setting_value
-        endif
-
-        assign font_size_values = font_size_values | append: '[size_setting_value],' | replace: '[size_setting_value]', size_setting_value
-      endfor
-
-      assign font_size_values = font_size_values | split: ',' | uniq | sort_natural
-
-      comment
-        For each font size S, find the next smaller size S-1, and determine the minimum for S
-        The calculation depends on the size of S-1 (over or under the cutoff)
-      endcomment
-      for font_size in font_sizes
-        assign size_setting = 'type_size_[font_size]' | replace: '[font_size]', font_size
-        assign font_size_value = settings[size_setting] | times: 1
-        assign font_size_string = '[font_size_value]' | replace: '[font_size_value]', font_size_value
-        assign index = font_size_values | find_index: font_size_string
-
-        if font_size_value >= fluid_size_cutoff
-
-          comment
-            Calculate the minimum size for each font size
-          endcomment
-          assign fluid_font_size_min = font_size_value
-
-          if index == 0
-            assign fluid_font_size_min = absolute_font_size_min
-          else
-            assign next_font_size_index = index | minus: 1
-            assign next_font_size_value = font_size_values[next_font_size_index]
-            assign next_font_size_value_number = next_font_size_value | times: 1
-
-            comment
-              If the next bigger font size under the fluid cutoff, we use keep a 4px buffer
-            endcomment
-            if next_font_size_value_number < fluid_size_cutoff
-              assign fluid_font_size_min = next_font_size_value_number | plus: 4
-              if font_size_value < fluid_font_size_min
-                assign fluid_font_size_min = font_size_value
-              endif
-            else
-              assign fluid_font_size_min = next_font_size_value | times: 1
-            endif
-          endif
-
-          comment
-            Calculate the fluid and maximum size for each font size
-          endcomment
-          assign fluid_size_min_rem = fluid_font_size_min | divided_by: 16.0
-          assign fluid_size = font_size_value | times: 0.1
-          assign fluid_size_max_rem = font_size_value | divided_by: 16.0
-
-          echo '--font-size--[font_size]: clamp([fluid_size_min_rem]rem, [fluid_size]vw, [fluid_size_max_rem]rem);' | replace: '[font_size]', font_size | replace: '[fluid_size_min_rem]', fluid_size_min_rem | replace: '[fluid_size]', fluid_size | replace: '[fluid_size_max_rem]', fluid_size_max_rem
-        else
-          assign fluid_size_rem = font_size_value | divided_by: 16.0
-          echo '--font-size--[font_size]: [fluid_size_rem]rem;' | replace: '[font_size]', font_size | replace: '[fluid_size_rem]', fluid_size_rem
-        endif
-      endfor
-
-      assign type_presets = "paragraph, h1, h2, h3, h4, h5, h6" | split: ", "
-
+      assign type_presets = "paragraph, tagline, paragraph-large, paragraph-small, paragraph-extrasmall, tagline-large, tagline-small, h1, h2, h3, h4, h5, h6" | split: ", "
       for preset_name in type_presets
-        assign preset_size = '--font-size--[preset_name]' | replace: '[preset_name]', preset_name
-        assign preset_line_height = 'type_line_height_[preset_name]' | replace: '[preset_name]', preset_name
 
-        if preset_name == 'paragraph'
+        if preset_name == 'h1'
+          assign preset_size_rem = 12.0
+          assign preset_mobile_size_rem = 4.0
+
+          assign preset_line_height_rem = 11.0
+          assign preset_mobile_line_height_rem = 3.6
+
+          assign preset_font = '--font-heading--family'
+          assign preset_style = '--font-heading--style'
+          assign preset_weight = '--font-heading--weight'
+
+        elsif preset_name == 'h2'
+          assign preset_size_rem = 4.8
+          assign preset_mobile_size_rem = 3.0
+
+          assign preset_line_height_rem = 4.0
+          assign preset_mobile_line_height_rem = 2.6
+
+          assign preset_font = '--font-heading--family'
+          assign preset_style = '--font-heading--style'
+          assign preset_weight = '--font-heading--weight'
+
+        elsif preset_name == 'h3'
+          assign preset_size_rem = 4.0
+          assign preset_mobile_size_rem = 2.4
+
+          assign preset_line_height_rem = 3.6
+          assign preset_mobile_line_height_rem = 2.0
+
+          assign preset_font = '--font-heading--family'
+          assign preset_style = '--font-heading--style'
+          assign preset_weight = '--font-heading--weight'
+
+        elsif preset_name == 'h4'
+          assign preset_size_rem = 2.4
+          assign preset_mobile_size_rem = 1.6
+
+          assign preset_line_height_rem = 2.2
+          assign preset_mobile_line_height_rem = 1.4
+
+          assign preset_font = '--font-heading--family'
+          assign preset_style = '--font-heading--style'
+          assign preset_weight = '--font-heading--weight'
+
+        elsif preset_name == 'h5'
+          assign preset_size_rem = 1.8
+          assign preset_mobile_size_rem = 1.4
+
+          assign preset_line_height_rem = 1.6
+          assign preset_mobile_line_height_rem = 1.2
+
+          assign preset_font = '--font-heading--family'
+          assign preset_style = '--font-heading--style'
+          assign preset_weight = '--font-heading--weight'
+
+        elsif preset_name == 'h6'
+          assign preset_size_rem = 1.6
+          assign preset_mobile_size_rem = 1.2
+
+          assign preset_line_height_rem = 1.4
+          assign preset_mobile_line_height_rem = 1.2
+
+          assign preset_font = '--font-heading--family'
+          assign preset_style = '--font-heading--style'
+          assign preset_weight = '--font-heading--weight'
+
+        elsif preset_name == 'tagline-large'
+          assign preset_size_rem = 1.6
+          assign preset_mobile_size_rem = 1.6
+
+          assign preset_line_height_rem = 1.6
+          assign preset_mobile_line_height_rem = 1.6
+
           assign preset_font = '--font-body--family'
           assign preset_style = '--font-body--style'
-          assign preset_weight = '400'
-          assign preset_case = '--font-body--case'
+          assign preset_weight = '--font-body--weight'
 
-          echo '--font-[preset_name]--weight: [preset_weight];' | replace: '[preset_name]', preset_name | replace: '[preset_weight]', preset_weight
-        else
-          assign preset_font_id = 'type_font_[preset_name]' | replace: '[preset_name]', preset_name
-          assign preset_font = '--font-[preset_font]--family' | replace: '[preset_font]', settings[preset_font_id]
-          assign preset_style = '--font-[preset_font]--style' | replace: '[preset_font]', settings[preset_font_id]
-          assign preset_weight = '--font-[preset_font]--weight' | replace: '[preset_font]', settings[preset_font_id]
-          assign preset_case = 'type_case_[preset_name]' | replace: '[preset_name]', preset_name
-          assign preset_letter_spacing = 'type_letter_spacing_[preset_name]' | replace: '[preset_name]', preset_name
+        elsif preset_name == 'tagline-regular'
+          assign preset_size_rem = 1.4
+          assign preset_mobile_size_rem = 1.4
 
-          echo '--font-[preset_name]--weight: var([preset_weight]);' | replace: '[preset_name]', preset_name | replace: '[preset_weight]', preset_weight
-          echo '--font-[preset_name]--letter-spacing: var(--letter-spacing--[preset_letter_spacing]);' | replace: '[preset_name]', preset_name | replace: '[preset_letter_spacing]', settings[preset_letter_spacing]
+          assign preset_line_height_rem = 1.4
+          assign preset_mobile_line_height_rem = 1.4
+
+          assign preset_font = '--font-body--family'
+          assign preset_style = '--font-body--style'
+          assign preset_weight = '--font-body--weight'
+
+        elsif preset_name == 'tagline-small'
+          assign preset_size_rem = 1.2
+          assign preset_mobile_size_rem = 1.2
+
+          assign preset_line_height_rem = 1.2
+          assign preset_mobile_line_height_rem = 1.2
+
+          assign preset_font = '--font-body--family'
+          assign preset_style = '--font-body--style'
+          assign preset_weight = '--font-body--weight'
+
+        elsif preset_name == 'paragraph'
+          assign preset_size_rem = 1.6
+          assign preset_mobile_size_rem = 1.6
+
+          assign preset_line_height_rem = 2.4
+          assign preset_mobile_line_height_rem = 2.4
+
+          assign preset_font = '--font-body--family'
+          assign preset_style = '--font-body--style'
+          assign preset_weight = '--font-body--weight'
+
+        elsif preset_name == 'paragraph-large'
+          assign preset_size_rem = 1.8
+          assign preset_mobile_size_rem = 1.8
+
+          assign preset_line_height_rem = 2.6
+          assign preset_mobile_line_height_rem = 2.6
+
+          assign preset_font = '--font-body--family'
+          assign preset_style = '--font-body--style'
+          assign preset_weight = '--font-body--weight'
+
+        elsif preset_name == 'paragraph-small'
+          assign preset_size_rem = 1.4
+          assign preset_mobile_size_rem = 1.4
+
+          assign preset_line_height_rem = 2.0
+          assign preset_mobile_line_height_rem = 2.0
+
+          assign preset_font = '--font-body--family'
+          assign preset_style = '--font-body--style'
+          assign preset_weight = '--font-body--weight'
+
+        elsif preset_name == 'paragraph-extrasmall'
+          assign preset_size_rem = 1.2
+          assign preset_mobile_size_rem = 1.2
+
+          assign preset_line_height_rem = 1.6
+          assign preset_mobile_line_height_rem = 1.6
+
+          assign preset_font = '--font-body--family'
+          assign preset_style = '--font-body--style'
+          assign preset_weight = '--font-body--weight'
         endif
 
-        echo '--font-[preset_name]--size: var([preset_size]);' | replace: '[preset_name]', preset_name | replace: '[preset_size]', preset_size
+        echo '--font-size--[preset_name]: [preset_size_rem]rem;' | replace: '[preset_name]', preset_name | replace: '[preset_size_rem]', preset_size_rem
+
+        echo '--font-[preset_name]--size: var(--font-size--[preset_name]);' | replace: '[preset_name]', preset_name
+
+        echo '--font-[preset_name]--size-mobile: [preset_mobile_size_rem]rem;' | replace: '[preset_name]', preset_name | replace: '[preset_mobile_size_rem]', preset_mobile_size_rem
+
+        echo '--font-[preset_name]--line-height: [preset_line_height_rem]rem;' | replace: '[preset_name]', preset_name | replace: '[preset_line_height_rem]', preset_line_height_rem
+
+        echo '--font-[preset_name]--line-height-mobile: [preset_mobile_line_height_rem]rem;' | replace: '[preset_name]', preset_name | replace: '[preset_mobile_line_height_rem]', preset_mobile_line_height_rem
+
         echo '--font-[preset_name]--family: var([preset_font]);' | replace: '[preset_name]', preset_name | replace: '[preset_font]', preset_font
+
         echo '--font-[preset_name]--style: var([preset_style]);' | replace: '[preset_name]', preset_name | replace: '[preset_style]', preset_style
-        echo '--font-[preset_name]--case: [preset_case];' | replace: '[preset_name]', preset_name | replace: '[preset_case]', settings[preset_case]
-        echo '--font-[preset_name]--line-height: var(--line-height--[preset_line_height]);' | replace: '[preset_name]', preset_name | replace: '[preset_line_height]', settings[preset_line_height]
+
+        echo '--font-[preset_name]--weight: var([preset_weight]);' | replace: '[preset_name]', preset_name | replace: '[preset_weight]', preset_weight
+
+        echo '--font-[preset_name]--case: none;' | replace: '[preset_name]', preset_name
       endfor
     %}
 
     /* Hardcoded font sizes */
-    --font-size--3xs: 0.625rem;
-    --font-size--2xs: 0.75rem;
-    --font-size--xs: 0.8125rem;
-    --font-size--sm: 0.875rem;
-    --font-size--md: 1rem;
-    --font-size--lg: 1.125rem;
-    --font-size--xl: 1.25rem;
-    --font-size--2xl: 1.5rem;
-    --font-size--3xl: 2rem;
-    --font-size--4xl: 2.5rem;
-    --font-size--5xl: 3rem;
-    --font-size--6xl: 3.5rem;
+    --font-size--3xs: 1rem;
+    --font-size--2xs: 1.2rem;
+    --font-size--xs: 1.3rem;
+    --font-size--sm: 1.4rem;
+    --font-size--md: 1.6rem;
+    --font-size--lg: 1.8rem;
+    --font-size--xl: 2rem;
+    --font-size--2xl: 2.4rem;
+    --font-size--3xl: 3.2rem;
+    --font-size--4xl: 4rem;
+    --font-size--5xl: 4.8rem;
+    --font-size--6xl: 5.6rem;
 
     /* Menu font sizes */
-    --menu-font-sm--size: 0.875rem;
+    --menu-font-sm--size: 1.4rem;
     --menu-font-sm--line-height: calc(1.1 + 0.5 * min(16 / 14));
-    --menu-font-md--size: 1rem;
+    --menu-font-md--size: 1.6rem;
     --menu-font-md--line-height: calc(1.1 + 0.5 * min(16 / 16));
-    --menu-font-xl--size: 1.25rem;
+    --menu-font-xl--size: 2rem;
     --menu-font-xl--line-height: calc(1.1 + 0.5 * min(16 / 20));
-    --menu-font-2xl--size: 1.75rem;
+    --menu-font-2xl--size: 2.8rem;
     --menu-font-2xl--line-height: calc(1.1 + 0.5 * min(16 / 28));
 
     /* Colors */
-    --color-error: #8B0000;
-    --color-success: #006400;
+
+    /* Primary */
+    --color-drama-queen: #96245E;
+    --color-not-pink-punk: #F86EFC;
+    --color-angel: #C690FF;
+    --color-kool-kat: #000000;
+    --color-bunny-boo: #F2F2F2;
     --color-white: #FFFFFF;
     --color-white-rgb: 255 255 255;
+
+    /* Notification */
+    --color-error: #FF0059;
+    --color-attention: #D9FF00;
+    --color-success: #00FF84;
+
+    /* Existing Horizon stock colors */
     --color-instock: #3ED660;
     --color-lowstock: #EE9441;
     --color-outofstock: #C8C8C8;
@@ -396,40 +345,40 @@
     --gradient-image-overlay: linear-gradient(to top, rgb(0 0 0 / 0.5), transparent);
 
     /* Spacing */
-    --margin-3xs: 0.125rem;
-    --margin-2xs: 0.3rem;
-    --margin-xs: 0.5rem;
-    --margin-sm: 0.7rem;
-    --margin-md: 0.8rem;
-    --margin-lg: 1rem;
-    --margin-xl: 1.25rem;
-    --margin-2xl: 1.5rem;
-    --margin-4xl: 2rem;
-    --margin-6xl: 5rem;
+    --margin-3xs: 0.2rem;
+    --margin-2xs: 0.48rem;
+    --margin-xs: 0.8rem;
+    --margin-sm: 1.12rem;
+    --margin-md: 1.28rem;
+    --margin-lg: 1.6rem;
+    --margin-xl: 2rem;
+    --margin-2xl: 2.4rem;
+    --margin-4xl: 3.2rem;
+    --margin-6xl: 8rem;
 
 
-    --padding-3xs: 0.125rem;
-    --padding-2xs: 0.25rem;
-    --padding-xs: 0.5rem;
-    --padding-sm: 0.7rem;
-    --padding-md: 0.8rem;
-    --padding-lg: 1rem;
-    --padding-xl: 1.25rem;
-    --padding-2xl: 1.5rem;
-    --padding-3xl: 1.75rem;
-    --padding-4xl: 2rem;
-    --padding-5xl: 3rem;
-    --padding-6xl: 4rem;
+    --padding-3xs: 0.2rem;
+    --padding-2xs: 0.4rem;
+    --padding-xs: 0.8rem;
+    --padding-sm: 1.12rem;
+    --padding-md: 1.28rem;
+    --padding-lg: 1.6rem;
+    --padding-xl: 2rem;
+    --padding-2xl: 2.4rem;
+    --padding-3xl: 2.8rem;
+    --padding-4xl: 3.2rem;
+    --padding-5xl: 4.8rem;
+    --padding-6xl: 6.4rem;
 
-    --gap-3xs: 0.125rem;
-    --gap-2xs: 0.3rem;
-    --gap-xs: 0.5rem;
-    --gap-sm: 0.7rem;
-    --gap-md: 0.9rem;
-    --gap-lg: 1rem;
-    --gap-xl: 1.25rem;
-    --gap-2xl: 2rem;
-    --gap-3xl: 3rem;
+    --gap-3xs: 0.2rem;
+    --gap-2xs: 0.48rem;
+    --gap-xs: 0.8rem;
+    --gap-sm: 1.12rem;
+    --gap-md: 1.44rem;
+    --gap-lg: 1.6rem;
+    --gap-xl: 2rem;
+    --gap-2xl: 3.2rem;
+    --gap-3xl: 4.8rem;
 
     --spacing-scale-md: 0.7;
     --spacing-scale-default: 1.0;
@@ -439,11 +388,11 @@
 
     /* Borders */
     --style-border-width: 1px;
-    --style-border-radius-xs: 0.2rem;
-    --style-border-radius-sm: 0.6rem;
-    --style-border-radius-md: 0.8rem;
+    --style-border-radius-xs: 0.32rem;
+    --style-border-radius-sm: 0.96rem;
+    --style-border-radius-md: 1.28rem;
     --style-border-radius-50: 50%;
-    --style-border-radius-lg: 1rem;
+    --style-border-radius-lg: 1.6rem;
     --style-border-radius-pills: {{ settings.pills_border_radius }}px;
     --style-border-radius-inputs: {{ settings.inputs_border_radius }}px;
     --style-border-radius-buttons-primary: {{ settings.button_border_radius_primary }}px;
@@ -510,7 +459,7 @@
     --view-transition-new-main-content: var(--animation-speed) var(--animation-easing) both fadeIn, var(--animation-speed) var(--animation-easing) both slideInTopViewTransition;
 
     /* Focus */
-    --focus-outline-width: 0.09375rem;
+    --focus-outline-width: 0.15rem;
     --focus-outline-offset: 0.2em;
 
     /* Badges */
@@ -522,16 +471,16 @@
     }
 
     /* Icons */
-    --icon-size-2xs: 0.6rem;
-    --icon-size-xs: 0.85rem;
-    --icon-size-sm: 1.25rem;
-    --icon-size-md: 1.375rem;
-    --icon-size-lg: 1.5rem;
+    --icon-size-2xs: 0.96rem;
+    --icon-size-xs: 1.36rem;
+    --icon-size-sm: 2rem;
+    --icon-size-md: 2.2rem;
+    --icon-size-lg: 2.4rem;
     --icon-stroke-width: {% if settings.icon_stroke == 'thin' %}1px{% elsif settings.icon_stroke == 'heavy' %}2px{% else %}1.5px{% endif %};
 
     /* Input */
-    --input-padding-y: 0.8rem;
-    --input-padding-x: 0.8rem;
+    --input-padding-y: 1.28rem;
+    --input-padding-x: 1.28rem;
     --input-padding: var(--input-padding-y) var(--input-padding-x);
     --input-box-shadow-width: var(--style-border-width-inputs);
     --input-box-shadow: 0 0 0 var(--input-box-shadow-width) var(--color-input-border);
@@ -556,12 +505,12 @@
     /* Button size */
     --button-size-md: 36px;
     --button-size: var(--minimum-touch-target);
-    --button-padding-inline: 24px;
-    --button-padding-block: 16px;
+    --button-padding-inline: 16px;
+    --button-padding-block: 12px;
 
     /* Button font-family */
-    --button-font-family-primary: var(--font-{{ settings.type_font_button_primary }}--family);
-    --button-font-family-secondary: var(--font-{{ settings.type_font_button_secondary }}--family);
+    --button-font-family-primary: 'Druk Wide Web', sans-serif;
+    --button-font-family-secondary: 'Druk Wide Web', sans-serif;
 
     /* Button text case */
     --button-text-case-primary: {{ settings.button_text_case_primary }};
@@ -570,7 +519,7 @@
     /* Borders */
     --border-color: rgb(var(--color-border-rgb) / var(--opacity-50));
     --border-width-sm: 1px;
-    --border-radius-sm: 0.25rem;
+    --border-radius-sm: 0.4rem;
 
     /* Drawers */
     --drawer-header-desktop-top: 0rem;
@@ -595,8 +544,8 @@
     --variant-option-label-color: var(--color, var(--color-foreground));
 
     /* Slideshow */
-    --slideshow-controls-icon: 2rem;
-    --peek-next-slide-size: 3rem;
+    --slideshow-controls-icon: 3.2rem;
+    --peek-next-slide-size: 4.8rem;
 
     /* Utilities */
     --backdrop-opacity: 0.15;
@@ -611,19 +560,19 @@
     --height-buy-buttons: calc(var(--padding-lg) * 2 + var(--icon-size-sm));
 
     /* Card image width and height variables */
-    --card-width-small: 10rem;
+    --card-width-small: 16rem;
 
-    --height-small: 10rem;
+    --height-small: 16rem;
 
     @media screen and (min-width: 750px) {
-      --height-small: 17.5rem;
+      --height-small: 28rem;
     }
 
     /* Modal */
     --modal-max-height: 65dvh;
     --quick-add-modal-height: min(38.5rem, 96vh);
     --quick-add-modal-width: min(54rem, 96vw);
-    --quick-add-modal-gallery-width: 24rem;
+    --quick-add-modal-gallery-width: 38.4rem;
 
     /* Card styles for search */
     --card-bg-hover: rgb(var(--color-foreground-rgb) / var(--opacity-5));

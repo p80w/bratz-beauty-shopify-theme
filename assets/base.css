@@ -23,6 +23,7 @@ body {
 }
 
 html {
+  font-size: 62.5%;  /* 1rem = 10 */
   /* Firefox */
   scrollbar-width: thin;
   scrollbar-color: rgb(var(--color-foreground-rgb) / var(--opacity-40)) var(--color-background);
@@ -557,7 +558,7 @@ p:empty {
 .title--aligned-center {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 1.6rem;
 }
 
 .svg-wrapper {
@@ -634,7 +635,7 @@ body,
   input.paragraph.paragraph:not([type]),
   textarea.paragraph.paragraph,
   select.paragraph.paragraph {
-    font-size: max(1rem, var(--font-paragraph--size));
+    font-size: max(1.6rem, var(--font-paragraph--size));
   }
 }
 
@@ -662,7 +663,7 @@ h1,
   input.h1.h1,
   textarea.h1.h1,
   select.h1.h1 {
-    font-size: max(1rem, var(--font-h1--size));
+    font-size: max(1.6rem, var(--font-h1--size));
   }
 }
 
@@ -684,7 +685,7 @@ h2,
   input.h2.h2,
   textarea.h2.h2,
   select.h2.h2 {
-    font-size: max(1rem, var(--font-h2--size));
+    font-size: max(1.6rem, var(--font-h2--size));
   }
 }
 
@@ -707,7 +708,7 @@ h3,
   input.h3,
   textarea.h3,
   select.h3 {
-    font-size: max(1rem, var(--font-h3--size));
+    font-size: max(1.6rem, var(--font-h3--size));
   }
 }
 
@@ -729,7 +730,7 @@ h4,
   input.h4.h4,
   textarea.h4.h4,
   select.h4.h4 {
-    font-size: max(1rem, var(--font-h4--size));
+    font-size: max(1.6rem, var(--font-h4--size));
   }
 }
 
@@ -751,7 +752,7 @@ h5,
   input.h5.h5,
   textarea.h5.h5,
   select.h5.h5 {
-    font-size: max(1rem, var(--font-h5--size));
+    font-size: max(1.6rem, var(--font-h5--size));
   }
 }
 
@@ -773,7 +774,59 @@ h6,
   input.h6.h6,
   textarea.h6.h6,
   select.h6.h6 {
-    font-size: max(1rem, var(--font-h6--size));
+    font-size: max(1.6rem, var(--font-h6--size));
+  }
+}
+
+/* Mobile Typography */
+
+@media screen and (max-width: 749px) {
+  h1,
+  .h1.h1,
+  .text-block.h1 > *,
+  .text-block.h1 :is(h1, h2, h3, h4, h5, h6) {
+    font-size: var(--font-h1--size-mobile);
+    line-height: var(--font-h1--line-height-mobile);
+  }
+
+  h2,
+  .h2.h2,
+  .text-block.h2 > *,
+  .text-block.h2 :is(h1, h2, h3, h4, h5, h6) {
+    font-size: var(--font-h2--size-mobile);
+    line-height: var(--font-h2--line-height-mobile);
+  }
+
+  h3,
+  .h3.h3,
+  .text-block.h3 > *,
+  .text-block.h3 :is(h1, h2, h3, h4, h5, h6) {
+    font-size: var(--font-h3--size-mobile);
+    line-height: var(--font-h3--line-height-mobile);
+  }
+
+  h4,
+  .h4.h4,
+  .text-block.h4 > *,
+  .text-block.h4 :is(h1, h2, h3, h4, h5, h6) {
+    font-size: var(--font-h4--size-mobile);
+    line-height: var(--font-h4--line-height-mobile);
+  }
+
+  h5,
+  .h5.h5,
+  .text-block.h5 > *,
+  .text-block.h5 :is(h1, h2, h3, h4, h5, h6) {
+    font-size: var(--font-h5--size-mobile);
+    line-height: var(--font-h5--line-height-mobile);
+  }
+
+  h6,
+  .h6.h6,
+  .text-block.h6 > *,
+  .text-block.h6 :is(h1, h2, h3, h4, h5, h6) {
+    font-size: var(--font-h6--size-mobile);
+    line-height: var(--font-h6--line-height-mobile);
   }
 }
 
@@ -1298,7 +1351,7 @@ summary:hover {
 .rte,
 .shopify-policy__title {
   :is(h1, h2, h3, h4, h5, h6) {
-    margin-block: clamp(1.5rem, 1em * 3.3, 2.5rem) var(--font-heading--spacing);
+    margin-block: clamp(2.4rem, 1em * 3.3, 4rem) var(--font-heading--spacing);
   }
 
   :first-child:is(p, h1, h2, h3, h4, h5, h6),
@@ -1862,7 +1915,7 @@ label:has(input[type='checkbox']:disabled) {
   .h6.h6 input,
   .h6.h6 textarea,
   .h6.h6 select {
-    font-size: max(1rem, 100%);
+    font-size: max(1.6rem, 100%);
   }
 }
 
