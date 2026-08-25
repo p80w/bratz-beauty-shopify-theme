@@ -31,7 +31,9 @@
       class="svg-wrapper {% if display_style != 'icon' %}desktop:hidden{% endif %}"
       aria-hidden="true"
     >
-      {{ 'icon-cart.svg' | inline_asset_content }}
+    <svg xmlns="http://www.w3.org/2000/svg" width="19" height="25" viewBox="0 0 19 25" fill="none">
+      <path fill-rule="evenodd" clip-rule="evenodd" d="M14.5734 6.79842H17.117L18.4337 24.323H0L1.31669 6.79842H3.86049V5.4502C3.86059 2.47149 6.22777 0 9.21693 0C12.2061 6.09781e-05 14.5733 2.47153 14.5734 5.4502V6.79842ZM11.7609 6.79842V5.4502C11.7608 3.96209 10.5907 2.81256 9.21693 2.8125C7.84308 2.8125 6.67309 3.96205 6.67299 5.4502V6.79842H11.7609Z" fill="black"/>
+    </svg>
     </span>
 
     {% render 'cart-bubble', limit: 100 %}
@@ -39,23 +41,20 @@
 {% endcapture %}
 
 {% capture account_icon %}
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="15"
-    height="17"
-    viewBox="0 0 15 17"
-    fill="none"
-    slot="signed-out-avatar"
-    class="account-button__icon"
-  >
-    <path
-      stroke="currentColor"
-      stroke-linejoin="round"
-      stroke-width="var(--icon-stroke-width)"
-      d="M10.375 3.813a3.063 3.063 0 1 1-6.125 0 3.063 3.063 0 0 1 6.125 0ZM7.313 9.5c-3.667 0-6.24 2.691-6.563 6.125h13.125C13.552 12.191 10.979 9.5 7.312 9.5Z"
-    />
+  <svg xmlns="http://www.w3.org/2000/svg" width="29" height="24" viewBox="0 0 29 24" fill="none" class="account-button__icon">
+    <path d="M28.3367 4.78257C28.4787 4.6175 28.3796 4.35833 28.1634 4.32697C27.0079 4.1586 24.0316 3.62211 21.473 2.27348C17.6846 0.276104 15.7665 -0.524495 13.6899 0.353688C11.6133 1.23187 12.0804 1.98625 9.70504 2.46331C7.32965 2.94037 6.09491 2.53099 4.37651 6.85752C2.65976 11.1857 3.03448 12.3264 1.47125 15.0401C1.11139 15.6641 0.467609 16.3508 0.0631823 16.7519C-0.070526 16.884 0.0219144 17.1134 0.210096 17.1101C1.22364 17.0953 3.5462 16.8658 5.33558 15.225C7.69281 13.0659 7.37257 11.9814 9.42441 11.917C11.4763 11.8543 12.1712 12.9536 14.7331 11.4548C17.295 9.95593 16.8163 8.08071 18.5529 7.99322C20.2894 7.90573 24.8124 8.87966 28.3351 4.77927L28.3367 4.78257Z" fill="black"/>
+    <path d="M15.9996 12.7473C17.1122 12.2439 18.1406 11.1445 18.2974 10.849C18.408 10.641 18.6143 10.499 18.8504 10.4842C23.1802 10.23 25.9716 9.19333 26.9323 8.78065C27.1452 8.68986 27.3978 8.77404 27.5034 8.97873C30.9237 15.542 25.5127 19.8372 20.0686 21.9105C14.5238 24.0234 11.0359 24.3932 8.42608 23.6454C5.30127 22.749 4.12596 19.649 3.80241 18.5546C3.74464 18.3565 3.85524 18.1567 4.05332 18.1006C4.53863 17.9619 5.55218 17.546 7.27883 16.2964C8.66708 15.2911 8.80574 14.4888 9.72685 14.3766C10.2914 14.3073 10.8196 14.0646 12.6189 13.9623C12.9821 13.9424 15.166 13.1237 15.9996 12.7473Z" fill="black"/>
   </svg>
 {% endcapture %}
+
+
+<div class="my-favorites">
+  <a href="#">
+    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="24" viewBox="0 0 25 24" fill="none">
+      <path d="M12.5 0L15.4508 9.16718H25L17.2746 14.8328L20.2254 24L12.5 18.3344L4.77458 24L7.72542 14.8328L0 9.16718H9.54915L12.5 0Z" fill="black"/>
+    </svg>
+  </a>
+</div>
 
 <header-actions
   {% if display_style == 'text' %}
@@ -82,9 +81,7 @@
         assign account_actions_style = '--header-actions-font-family: ' | append: font_family_safe | append: '; --header-actions-font-weight: ' | append: font_obj.weight | append: ';'
       endif
     %}
-    <div
-      class="account-button header-actions__action{% if display_style == 'text' %} account-button--text{% endif %} color-custom-popover"
-    >
+    <div class="account-button header-actions__action{% if display_style == 'text' %} account-button--text{% endif %} color-custom-popover">
       <shopify-account
         menu="{{ customer_account_menu }}"
         {% if account_actions_style != blank %}
@@ -110,8 +107,9 @@
           </span>
         {% endif %}
       </shopify-account>
+
     </div>
-  {% endif %}
+    {% endif %}
 
   {% if settings.cart_type == 'drawer' and template.name != 'cart' %}
     <button
@@ -319,7 +317,7 @@
     align-items: center;
   }
 
-  @media screen and (min-width: 750px) {
+  @media screen and (min-width: 1360px) {
     .header-actions__cart-icon--text {
       display: flex;
       align-items: center;
@@ -329,5 +327,43 @@
     .header__column--right .header-actions--text {
       margin-inline-start: 0;
     }
+
+    .my-favorites {
+      display: none;
+    }
   }
+
+  @media screen and (max-width: 1359px) {
+
+    .my-favorites {
+        width: 4.4rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .account-button shopify-account {
+      display: none;
+    }
+
+    summary.header__icon .header-drawer-icon--open {
+      font-family: var(--font-druk-wide--family);
+      font-weight: var(--font-druk-wide--weight);
+      font-size: 1.6rem;
+      line-height: 1.6rem;
+      letter-spacing: -0.08em;
+      text-transform: uppercase;
+      width: 3.6rem;
+      white-space: normal;
+      overflow-wrap: break-word;
+      word-break: break-all;
+      letter-spacing: 0rem;
+    }
+  }
+
+
+
+
+
+  
 {% endstylesheet %}

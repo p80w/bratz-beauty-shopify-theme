@@ -11,38 +11,6 @@
   "type": "header",
   "name": "t:names.header",
   "sections": {
-    "header_announcements_9jGBFp": {
-      "type": "header-announcements",
-      "blocks": {
-        "announcement_BxgCk9": {
-          "type": "_announcement",
-          "settings": {
-            "text": "Welcome to our store",
-            "link": "",
-            "font": "var(--font-subheading--family)",
-            "font_size": "1rem",
-            "weight": "",
-            "letter_spacing": "normal",
-            "case": "none",
-            "text_color": ""
-          },
-          "blocks": {}
-        }
-      },
-      "block_order": [
-        "announcement_BxgCk9"
-      ],
-      "name": "t:names.announcement_bar",
-      "settings": {
-        "speed": 5,
-        "section_width": "page-width",
-        "background_color": "{{ settings.color_palette.background }}",
-        "divider_width": 1,
-        "divider_color": "{{ settings.color_palette.color2 }}",
-        "padding-block-start": 15,
-        "padding-block-end": 15
-      }
-    },
     "header_section": {
       "type": "header",
       "blocks": {
@@ -63,18 +31,24 @@
             "menu": "main-menu",
             "background_color": "{{ settings.color_palette.background }}",
             "text_color": "",
-            "type_font_primary_size": "0.875rem",
-            "menu_font_style": "inverse",
-            "type_font_primary_link": "body",
-            "type_case_primary_link": "none",
-            "menu_style": "featured_products",
+            "type_font_primary_size": "1.4rem",
+            "type_case_primary_link": "uppercase",
+            "menu_style": "text",
             "featured_products_aspect_ratio": "4 / 5",
-            "featured_collections_aspect_ratio": "16 / 9",
+            "featured_collections_aspect_ratio": "adapt",
             "image_border_radius": 0,
+            "shop_all_image_1": "shopify://shop_images/Rectangle_88.png",
+            "shop_all_text_1": "Description Text",
+            "shop_all_label_1": "SHOP NOW",
+            "shop_all_link_1": "#",
+            "shop_all_image_2": "shopify://shop_images/Rectangle_88_1.png",
+            "shop_all_text_2": "Description Text",
+            "shop_all_label_2": "SHOP NOW",
+            "shop_all_link_2": "#",
             "navigation_bar": false,
             "background_color_navigation_bar": "{{ settings.color_palette.background }}",
             "text_color_navigation_bar": "",
-            "drawer_accordion": false,
+            "drawer_accordion": true,
             "drawer_accordion_expand_first": false,
             "drawer_dividers": false
           },
@@ -82,7 +56,7 @@
         }
       },
       "settings": {
-        "logo_position": "left",
+        "logo_position": "center",
         "menu_position": "left",
         "menu_row": "top",
         "customer_account_menu": "customer-account-main-menu",
@@ -102,7 +76,7 @@
         "divider_width": 0,
         "divider_size": "page-width",
         "divider_color": "",
-        "border_width": 0,
+        "border_width": 1,
         "bottom_border_color": "",
         "actions_display_style": "icon",
         "actions_font_size": "0.875rem",
@@ -128,7 +102,6 @@
     }
   },
   "order": [
-    "header_announcements_9jGBFp",
     "header_section"
   ]
 }

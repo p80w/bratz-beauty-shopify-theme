@@ -1,5 +1,13 @@
 {%- doc -%}
   Renders mega menu list markup and optional featured content.
+  @param {object} [shop_all_image_1] - Shop All promotional image 1.
+  @param {string} [shop_all_text_1] - Shop All promotional text 1.
+  @param {string} [shop_all_label_1] - Shop All promotional label 1.
+  @param {string} [shop_all_link_1] - Shop All promotional link 1.
+  @param {object} [shop_all_image_2] - Shop All promotional image 2.
+  @param {string} [shop_all_text_2] - Shop All promotional text 2.
+  @param {string} [shop_all_label_2] - Shop All promotional label 2.
+  @param {string} [shop_all_link_2] - Shop All promotional link 2.
 
   @param {object} parent_link - The linklist to render.
   @param {string} id - Unique ID to assign to the `<ul>` element.
@@ -180,7 +188,107 @@
       endif
     %}
   {% endfor %}
+
+ {% if parent_link.title == 'Shop All' %}
+    <div class="bratz-shop-all-featured">
+      {% if shop_all_image_1 != blank %}
+        <a
+          href="{{ shop_all_link_1 | default: '#' }}"
+          class="bratz-shop-all-featured__item"
+        >
+          {{
+            shop_all_image_1
+            | image_url: width: 600
+            | image_tag:
+              class: 'bratz-shop-all-featured__image',
+              loading: 'lazy',
+              widths: '300, 450, 600'
+          }}
+
+          {% if shop_all_text_1 != blank %}
+            <span class="bratz-shop-all-featured__text">
+              {{ shop_all_text_1 }}
+            </span>
+          {% endif %}
+
+          {% if shop_all_label_1 != blank %}
+            <span class="bratz-shop-all-featured__link">
+              {{ shop_all_label_1 }}
+            </span>
+          {% endif %}
+        </a>
+      {% endif %}
+
+      {% if shop_all_image_2 != blank %}
+        <a
+          href="{{ shop_all_link_2 | default: '#' }}"
+          class="bratz-shop-all-featured__item"
+        >
+          {{
+            shop_all_image_2
+            | image_url: width: 600
+            | image_tag:
+              class: 'bratz-shop-all-featured__image',
+              loading: 'lazy',
+              widths: '300, 450, 600'
+          }}
+
+          {% if shop_all_text_2 != blank %}
+            <span class="bratz-shop-all-featured__text">
+              {{ shop_all_text_2 }}
+            </span>
+          {% endif %}
+
+          {% if shop_all_label_2 != blank %}
+            <span class="bratz-shop-all-featured__link">
+              {{ shop_all_label_2 }}
+            </span>
+          {% endif %}
+        </a>
+      {% endif %}
+    </div>
+  {% endif %}
+
+  {% if parent_link.title == 'Lips' %}
+    {% assign collection_links = parent_link.links | where: 'type', 'collection_link' %}
+
+    <div class="bratz-lips-featured">
+      {% for child_link in collection_links %}
+        {% assign collection = child_link.object %}
+
+        {% if collection != blank %}
+          <a
+            href="{{ child_link.url }}"
+            class="bratz-lips-featured__item"
+          >
+            {% if collection.image != blank %}
+              {{
+                collection.image
+                | image_url: width: 600
+                | image_tag:
+                  class: 'bratz-lips-featured__image',
+                  loading: 'lazy',
+                  widths: '300, 450, 600'
+              }}
+            {% endif %}
+
+            {% if collection.description != blank %}
+              <span class="bratz-lips-featured__text">
+                {{ collection.description | strip_html }}
+              </span>
+            {% endif %}
+
+            <span class="bratz-lips-featured__link">
+              {{ child_link.title }}
+            </span>
+          </a>
+        {% endif %}
+      {% endfor %}
+    </div>
+  {% endif %}
+
 </ul>
+
 
 {% liquid
   # decide how many grid columns are needed for the menu list, and how many columns are needed for the featured content
