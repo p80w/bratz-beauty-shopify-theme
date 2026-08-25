@@ -158,9 +158,27 @@
                       grid_columns_count_collection_images: 8,
                       menu_content_type: menu_content_type,
                       content_aspect_ratio: ratio,
-                      image_border_radius: image_border_radius
+                      image_border_radius: image_border_radius,
+                      shop_all_image_1: block.settings.shop_all_image_1,
+                      shop_all_text_1: block.settings.shop_all_text_1,
+                      shop_all_label_1: block.settings.shop_all_label_1,
+                      shop_all_link_1: block.settings.shop_all_link_1,
+                      shop_all_image_2: block.settings.shop_all_image_2,
+                      shop_all_text_2: block.settings.shop_all_text_2,
+                      shop_all_label_2: block.settings.shop_all_label_2,
+                      shop_all_link_2: block.settings.shop_all_link_2
                     %}
                   </div>
+
+                  <!-- GLOBAL MEGA MENU BUTTON -->
+                  {% if link.title == 'Shop All' or link.title == 'Lips' %}
+                    <a
+                      href="{{ routes.all_products_collection_url }}"
+                      class="button bratz-shop-all-button"
+                    >
+                      SHOP ALL
+                    </a>
+                  {% endif %}
                 </div>
               </div>
             </div>
@@ -235,9 +253,10 @@
   #header-component[data-menu-style='drawer'] .header__drawer {
     display: flex;
     min-height: var(--header-drawer-min-height);
+    justify-content: center;
   }
 
-  @media screen and (min-width: 750px) {
+  @media screen and (min-width: 1360px) {
     #header-component[data-menu-style='menu'] .header__drawer {
       display: none;
       min-height: 0;
@@ -310,9 +329,9 @@
   }
 
   .menu-list__link {
-    font-family: var(--menu-top-level-font-family);
-    font-style: var(--menu-top-level-font-style);
-    font-weight: var(--menu-top-level-font-weight);
+    font-family: var(--font-druk-wide--family);
+    font-style: var(--font-druk-wide--style);
+    font-weight: var(--font-druk-wide--weight);
     font-size: var(--menu-top-level-font-size);
     line-height: var(--menu-top-level-font-line-height);
     text-transform: var(--menu-top-level-font-case);
@@ -397,7 +416,7 @@
   }
 
   .menu-list__link-title {
-    padding-inline: var(--gap-sm);
+    padding-inline: var(--gap-lg);
   }
   [slot='overflow'] .menu-list__link-title {
     padding-inline: 0;
@@ -454,8 +473,8 @@
   /** mega menu **/
   .menu-list__submenu,
   .overflow-menu::part(overflow) {
-    --submenu-padding-block-start: var(--padding-3xl);
-    --submenu-padding-block-end: var(--padding-3xl);
+    --submenu-padding-block-start: var(--padding-5xl);
+    --submenu-padding-block-end: var(--padding-5xl);
 
     background-color: transparent;
   }
@@ -632,7 +651,7 @@
     white-space: normal;
     text-decoration: none;
     display: inline-flex;
-    padding: var(--padding-2xs) 0;
+    padding: .8rem 0;
 
     &:hover {
       color: var(--menu-child-active-font-color);
@@ -810,6 +829,221 @@
   .menu-list__list-item:not(:has([aria-expanded='true'])) > .menu-list__submenu product-component {
     display: none;
   }
+
+  /* BRATZ MEGA MENU CUSTOM*/
+
+  .header-menu__inner {
+      margin-left: -0.6rem;
+  }
+
+  .bratz-lips-featured a:hover span.bratz-lips-featured__link,
+  .bratz-shop-all-featured a:hover span.bratz-shop-all-featured__link,
+  li.mega-menu__column a.mega-menu__link:hover, 
+  li.menu-list__list-item:hover .menu-list__link-title,
+  li.menu-list__list-item.active .menu-list__link-title {
+    color: var(--color-drama-queen);
+  }
+
+  a.mega-menu__link.mega-menu__link--parent {
+    font-family: var(--font-heading--family);
+    font-style: var(--font-heading--style);
+    font-weight: var(--font-heading--weight);
+    font-size: 2.4rem;
+    text-transform: uppercase;
+    line-height: 2rem;
+    padding: 0 0 1.8rem 0;
+    pointer-events: none;
+  }
+
+  /* BRATZ - Shop All Mega Menu */
+
+
+  .active.shop-all .mega-menu__grid {
+      padding: 0 10rem;
+  }
+
+  @media screen and (min-width: 1360px) {
+
+    a.button.bratz-shop-all-button {
+      margin: 5rem auto auto;
+    }
+
+    span.bratz-lips-featured__link,
+    span.bratz-shop-all-featured__link {
+      font-size: 1.4rem;
+      font-family: var(--font-druk-wide--family);
+      font-style: var(--font-druk-wide--style);
+      font-weight: var(--font-druk-wide--weight);
+      text-transform: uppercase;
+    }
+   
+    .active.explore .mega-menu__list {
+      display: flex;
+      justify-content: center;
+      gap: 12rem;
+    }
+  
+
+    
+    .active.shop-all li:nth-child(2).mega-menu__column {
+      padding-left: 4rem;
+    }
+
+    .mega-menu__list:has(.bratz-shop-all-featured) > .bratz-shop-all-featured {
+        grid-column: 3 / -1;
+        width: 100%;
+        max-width: 70rem;
+        min-width: 0;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 4.8rem;
+        margin-left: auto;
+    }
+
+    .bratz-shop-all-featured__item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-width: 0;
+      text-align: center;
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .bratz-shop-all-featured__image {
+      display: block;
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+    }
+
+    .bratz-lips-featured__text,
+    .bratz-shop-all-featured__text {
+      margin: 1.6rem 0;
+      font-size: 1.6rem;
+      line-height: 1.6rem;
+    }
+  }
+
+  
+  @media screen and (max-width: 1399px) {
+    .active.shop-all .mega-menu__grid {
+      padding: 0;
+    }
+
+  }
+
+
+  @media screen and (max-width: 1359px) {
+
+    span.bratz-mobile-menu-title {
+      font-family: var(--font-subheading--family);
+      font-weight: var(--font-subheading--weight);
+      font-style: var(--font-subheading--style);
+      font-size: 2.4rem;
+      line-height: 2rem;
+      padding: 2.4rem;
+    }
+
+    .bratz-shop-all-featured {
+      display: none;
+    }
+
+    button.header-actions__action {
+      margin-left: 0;
+    }
+    .header-actions__action {
+        margin-left: 0;
+    }
+  }
+
+
+  /* BRATZ - Lips Mega Menu */
+
+  @media screen and (min-width: 1360px) {
+    /* Hide the original Lips menu links on desktop */
+    .mega-menu__list:has(.bratz-lips-featured) > .mega-menu__column {
+      display: none;
+    }
+
+    /* Featured area takes the full mega menu width */
+    .mega-menu__list:has(.bratz-lips-featured) > .bratz-lips-featured {
+      grid-column: 1 / -1;
+      width: 100%;
+      min-width: 0;
+
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 4.8rem;
+    }
+
+    .bratz-lips-featured__item {
+      display: block;
+      width: 100%;
+      min-width: 0;
+      text-align: center;
+      text-decoration: none;
+    }
+
+    .bratz-lips-featured__image {
+      display: block;
+      width: 100%;
+      height: auto;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+    }
+
+    .bratz-lips-featured__text,
+    .bratz-lips-featured__link {
+      display: block;
+    }
+  }
+
+  @media screen and (max-width: 1359px) {
+    .bratz-lips-featured {
+      display: none;
+    }
+
+    .mega-menu__list:has(.bratz-lips-featured) > .mega-menu__column {
+      display: block;
+    }
+  }
+
+  
+
+
+
+
+/* TEMP - Keep BRATZ Shop All mega menu visible for styling */
+ /*@media screen and (min-width: 750px) {
+  .menu-list__list-item:has(.bratz-lips-featured) > .menu-list__submenu {
+    display: none !important;
+  }
+
+  .menu-list__list-item:has(.bratz-lips-featured) .menu-list__submenu-inner {
+   display: none !important;
+  }
+
+   .menu-list__list-item:has(.bratz-shop-all-featured) > .menu-list__submenu {
+    display: none !important;
+  }
+
+  .menu-list__list-item:has(.bratz-shop-all-featured) .menu-list__submenu-inner {
+    display: none !important;
+  }
+
+  .menu-list__list-item > .menu-list__submenu {
+    visibility: visible !important;
+    clip-path: none !important;
+  }
+
+  .menu-list__list-item .menu-list__submenu-inner {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}  */
+
+
 {% endstylesheet %}
 
 {% schema %}
@@ -853,71 +1087,27 @@
       "label": "t:settings.top_level_size",
       "options": [
         {
-          "value": "0.625rem",
+          "value": "1rem",
           "label": "10px"
         },
         {
-          "value": "0.75rem",
+          "value": "1.2rem",
           "label": "12px"
         },
         {
-          "value": "0.875rem",
+          "value": "1.4rem",
           "label": "14px"
         },
         {
-          "value": "1rem",
+          "value": "1.6rem",
           "label": "16px"
         },
         {
-          "value": "1.125rem",
+          "value": "1.8rem",
           "label": "18px"
         }
       ],
-      "default": "1rem"
-    },
-    {
-      "type": "select",
-      "id": "menu_font_style",
-      "label": "t:settings.submenu_size",
-      "options": [
-        {
-          "value": "regular",
-          "label": "t:options.small"
-        },
-        {
-          "value": "inverse",
-          "label": "t:options.medium"
-        },
-        {
-          "value": "inverse_large",
-          "label": "t:options.large"
-        }
-      ],
-      "default": "inverse"
-    },
-    {
-      "type": "select",
-      "id": "type_font_primary_link",
-      "label": "t:settings.font",
-      "options": [
-        {
-          "value": "body",
-          "label": "t:options.body"
-        },
-        {
-          "value": "subheading",
-          "label": "t:options.subheading"
-        },
-        {
-          "value": "heading",
-          "label": "t:options.heading"
-        },
-        {
-          "value": "accent",
-          "label": "t:options.accent"
-        }
-      ],
-      "default": "heading"
+      "default": "1.6rem"
     },
     {
       "type": "select",
@@ -1016,6 +1206,54 @@
       "unit": "px",
       "default": 0,
       "visible_if": "{{ block.settings.menu_style != 'text' }}"
+    },
+    {
+      "type": "header",
+      "content": "BRATZ Mega Menu"
+    },
+    {
+      "type": "image_picker",
+      "id": "shop_all_image_1",
+      "label": "Image 1"
+    },
+    {
+      "type": "text",
+      "id": "shop_all_text_1",
+      "label": "Text 1",
+      "default": "Description Text"
+    },
+    {
+      "type": "text",
+      "id": "shop_all_label_1",
+      "label": "Label 1",
+      "default": "SHOP NOW"
+    },
+    {
+      "type": "url",
+      "id": "shop_all_link_1",
+      "label": "Link 1"
+    },
+    {
+      "type": "image_picker",
+      "id": "shop_all_image_2",
+      "label": "Image 2"
+    },
+    {
+      "type": "text",
+      "id": "shop_all_text_2",
+      "label": "Text 2",
+      "default": "Description Text"
+    },
+    {
+      "type": "text",
+      "id": "shop_all_label_2",
+      "label": "Label 2",
+      "default": "SHOP NOW"
+    },
+    {
+      "type": "url",
+      "id": "shop_all_link_2",
+      "label": "Link 2"
     },
     {
       "type": "header",

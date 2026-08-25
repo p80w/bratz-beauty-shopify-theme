@@ -9,8 +9,9 @@
  */
 {
   "current": {
-    "logo_height": 36,
-    "logo_height_mobile": 28,
+    "logo": "shopify://shop_images/bratz_logo_black.svg",
+    "logo_height": 85,
+    "logo_height_mobile": 64,
     "page_text_color": "{{ settings.color_palette.foreground }}",
     "page_background_color": "{{ settings.color_palette.background }}",
     "page_width": "narrow",

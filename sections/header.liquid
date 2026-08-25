@@ -499,7 +499,7 @@
     display: none;
   }
 
-  @media screen and (min-width: 750px) {
+  @media screen and (min-width: 1360px) {
     #header-component[data-menu-style='menu'] :is(.header-menu, .dropdown-localization) {
       display: flex;
     }
@@ -509,7 +509,7 @@
     display: contents;
   }
 
-  @media screen and (min-width: 750px) {
+  @media screen and (min-width: 1360px) {
     #header-component[data-menu-style='menu'] .header__navigation-bar-row {
       display: none;
     }
@@ -858,8 +858,7 @@
       grid-column: span 3;
       column-gap: 0;
       align-items: center;
-      padding-block: 0;
-      padding-inline: 0 var(--padding-3xs);
+      padding: 0.8rem 0.2rem .8rem 1.5rem;
 
       .header-logo {
         grid-area: center;
@@ -891,10 +890,10 @@
 
     grid-template-areas: 'leftA leftB center rightA rightB';
     grid-column: span 3;
-    column-gap: 0;
+    column-gap: 2rem;
     align-items: center;
     padding-block: 0;
-    padding-inline: 0 var(--padding-3xs);
+    padding: 0.8rem .3rem 0.8rem 1.5rem;
 
     .header-logo {
       grid-area: center;
@@ -952,6 +951,7 @@
     cursor: pointer;
     display: flex;
     justify-content: center;
+    margin-left: 1.6rem;
 
     &:hover {
       --button-color: var(--color-foreground);
@@ -964,8 +964,8 @@
   }
 
   .header-actions__action:not(.account-button) svg {
-    width: var(--icon-size-md);
-    height: var(--icon-size-md);
+    width: var(--icon-size-lg);
+    height: var(--icon-size-lg);
   }
 
   .header:has(#Details-menu-drawer-container[open]) {
@@ -1193,6 +1193,45 @@
     hydrate('{{ section.id }}', url);
   </script>
 {% endunless %}
+
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const menuItems = document.querySelectorAll('.menu-list__list-item');
+
+  menuItems.forEach((item) => {
+    const submenu = item.querySelector('.menu-list__submenu');
+    const disclosure = item.querySelector('.menu-list__disclosure');
+    const linkTitle = item.querySelector('.menu-list__link-title');
+
+    if (!submenu || !disclosure || !linkTitle) return;
+
+    const menuName = linkTitle.textContent.trim().toLowerCase().replace(/\s+/g, '-');
+
+    const updateMenuClass = () => {
+      const isOpen = disclosure.getAttribute('aria-expanded') === 'true';
+
+      item.classList.toggle('active', isOpen);
+
+      if (isOpen) {
+        item.classList.add(menuName);
+      } else {
+        item.classList.remove(menuName);
+      }
+    };
+
+    updateMenuClass();
+
+    const observer = new MutationObserver(updateMenuClass);
+
+    observer.observe(disclosure, {
+      attributes: true,
+      attributeFilter: ['aria-expanded'],
+    });
+  });
+});
+</script>
+
 
 {% schema %}
 {

@@ -66,10 +66,7 @@
       on:click="/toggle"
     >
       <span class="svg-wrapper header-drawer-icon header-drawer-icon--open">
-        {{- 'icon-menu.svg' | inline_asset_content -}}
-      </span>
-      <span class="svg-wrapper header-drawer-icon header-drawer-icon--close">
-        {{- 'icon-close-menu.svg' | inline_asset_content -}}
+        Menu
       </span>
     </summary>
     <div
@@ -81,16 +78,22 @@
         {% endif %}
       "
     >
-      <button
-        class="button close-button menu-drawer__close-button focus-inset"
-        type="button"
-        aria-label="{{ 'actions.close' | t }}"
-        on:click="/close"
-      >
-        <span class="svg-wrapper header-drawer-icon header-drawer-icon--close">
-          {{- 'icon-close-menu.svg' | inline_asset_content -}}
-        </span>
-      </button>
+      <div class="bratz-mobile-menu-header">
+        <span class="bratz-mobile-menu-title">MENU</span>
+
+        <button
+          class="button close-button menu-drawer__close-button focus-inset"
+          type="button"
+          aria-label="{{ 'actions.close' | t }}"
+          on:click="/close"
+        >
+          <span class="svg-wrapper header-drawer-icon header-drawer-icon--close">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="16" viewBox="0 0 22 16" fill="none">
+              <path d="M0 16L7.87234 7.91398L0.170213 0H6.80851L11.2766 4.68817L15.7447 0H21.8298L14.234 7.80645L22 16H15.766L10.9149 11.0323L6.10638 16H0Z" fill="black"/>
+            </svg>
+          </span>
+        </button>
+      </div>
       <nav
         class="menu-drawer__navigation"
         style="
@@ -283,7 +286,9 @@
                     >
                       <span class="menu-drawer__menu-item-text wrap-text">{{ link.title | escape }}</span>
                       <span class="svg-wrapper icon-caret icon-caret--forward">
-                        {{- 'icon-caret.svg' | inline_asset_content -}}
+                        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="24" viewBox="0 0 25 24" fill="none">
+                          <path d="M24.8536 12.3536C25.0488 12.1583 25.0488 11.8417 24.8536 11.6464L21.6716 8.46447C21.4763 8.2692 21.1597 8.2692 20.9645 8.46447C20.7692 8.65973 20.7692 8.97631 20.9645 9.17157L23.7929 12L20.9645 14.8284C20.7692 15.0237 20.7692 15.3403 20.9645 15.5355C21.1597 15.7308 21.4763 15.7308 21.6716 15.5355L24.8536 12.3536ZM0.500002 11.5C0.223858 11.5 1.90735e-06 11.7239 1.90735e-06 12C1.90735e-06 12.2761 0.223858 12.5 0.500002 12.5V12V11.5ZM24.5 12V11.5L0.500002 11.5V12V12.5L24.5 12.5V12Z" fill="black"/>
+                        </svg>
                       </span>
                     </summary>
                     <div
@@ -300,7 +305,9 @@
                             aria-label="{{ 'actions.back_to_main_menu' | t }}"
                           >
                             <span class="svg-wrapper icon-caret icon-caret--backward">
-                              {{- 'icon-caret.svg' | inline_asset_content -}}
+                              <svg xmlns="http://www.w3.org/2000/svg" width="25" height="24" viewBox="0 0 25 24" fill="none">
+                                <path d="M0.146447 11.6464C-0.0488155 11.8417 -0.0488155 12.1583 0.146447 12.3536L3.32843 15.5355C3.52369 15.7308 3.84027 15.7308 4.03553 15.5355C4.2308 15.3403 4.2308 15.0237 4.03553 14.8284L1.20711 12L4.03553 9.17157C4.2308 8.97631 4.2308 8.65973 4.03553 8.46447C3.84027 8.2692 3.52369 8.2692 3.32843 8.46447L0.146447 11.6464ZM24.5 12.5C24.7761 12.5 25 12.2761 25 12C25 11.7239 24.7761 11.5 24.5 11.5V12V12.5ZM0.5 12L0.5 12.5L24.5 12.5V12V11.5L0.5 11.5V12Z" fill="black"/>
+                              </svg>
                             </span>
                           </button>
                           <a
@@ -313,7 +320,7 @@
                             <span class="menu-drawer__menu-item-text wrap-text">{{ link.title | escape }}</span>
                           </a>
                           <button
-                            class="button button-unstyled close-button menu-drawer__close-button focus-inset"
+                            class="hidden button button-unstyled close-button menu-drawer__close-button focus-inset"
                             type="button"
                             aria-label="{{ 'actions.close' | t }}"
                             on:click="header-drawer/close"
@@ -398,7 +405,9 @@
                                           {{- childlink.title | escape -}}
                                         </span>
                                         <span class="svg-wrapper icon-plus">
-                                          {{- 'icon-plus.svg' | inline_asset_content -}}
+                                          <svg xmlns="http://www.w3.org/2000/svg" width="25" height="24" viewBox="0 0 25 24" fill="none">
+                                            <path d="M24.8536 12.3536C25.0488 12.1583 25.0488 11.8417 24.8536 11.6464L21.6716 8.46447C21.4763 8.2692 21.1597 8.2692 20.9645 8.46447C20.7692 8.65973 20.7692 8.97631 20.9645 9.17157L23.7929 12L20.9645 14.8284C20.7692 15.0237 20.7692 15.3403 20.9645 15.5355C21.1597 15.7308 21.4763 15.7308 21.6716 15.5355L24.8536 12.3536ZM0.500002 11.5C0.223858 11.5 1.90735e-06 11.7239 1.90735e-06 12C1.90735e-06 12.2761 0.223858 12.5 0.500002 12.5V12V11.5ZM24.5 12V11.5L0.500002 11.5V12V12.5L24.5 12.5V12Z" fill="black"/>
+                                          </svg>
                                         </span>
                                       </summary>
                                       {% liquid
@@ -720,6 +729,22 @@
             </drawer-localization-component>
           {% endif %}
         {%- endif -%}
+
+        <div class="menu-drawer__account-wrapper">
+          <shopify-account>
+            {% if customer %}
+              <div class="account-button__fallback"></div>
+            {% else %}
+                <span slot="signed-out-avatar" aria-hidden="true" class="sign-in-button">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="29" height="24" viewBox="0 0 29 24" fill="none" class="account-button__icon">
+                    <path d="M28.3367 4.78257C28.4787 4.6175 28.3796 4.35833 28.1634 4.32697C27.0079 4.1586 24.0316 3.62211 21.473 2.27348C17.6846 0.276104 15.7665 -0.524495 13.6899 0.353688C11.6133 1.23187 12.0804 1.98625 9.70504 2.46331C7.32965 2.94037 6.09491 2.53099 4.37651 6.85752C2.65976 11.1857 3.03448 12.3264 1.47125 15.0401C1.11139 15.6641 0.467609 16.3508 0.0631823 16.7519C-0.070526 16.884 0.0219144 17.1134 0.210096 17.1101C1.22364 17.0953 3.5462 16.8658 5.33558 15.225C7.69281 13.0659 7.37257 11.9814 9.42441 11.917C11.4763 11.8543 12.1712 12.9536 14.7331 11.4548C17.295 9.95593 16.8163 8.08071 18.5529 7.99322C20.2894 7.90573 24.8124 8.87966 28.3351 4.77927L28.3367 4.78257Z" fill="black"/>
+                    <path d="M15.9996 12.7473C17.1122 12.2439 18.1406 11.1445 18.2974 10.849C18.408 10.641 18.6143 10.499 18.8504 10.4842C23.1802 10.23 25.9716 9.19333 26.9323 8.78065C27.1452 8.68986 27.3978 8.77404 27.5034 8.97873C30.9237 15.542 25.5127 19.8372 20.0686 21.9105C14.5238 24.0234 11.0359 24.3932 8.42608 23.6454C5.30127 22.749 4.12596 19.649 3.80241 18.5546C3.74464 18.3565 3.85524 18.1567 4.05332 18.1006C4.53863 17.9619 5.55218 17.546 7.27883 16.2964C8.66708 15.2911 8.80574 14.4888 9.72685 14.3766C10.2914 14.3073 10.8196 14.0646 12.6189 13.9623C12.9821 13.9424 15.166 13.1237 15.9996 12.7473Z" fill="black"/>
+                  </svg>
+                  Sign In
+                </span>
+            {% endif %}
+          </shopify-account>
+        </div>
       </div>
 
       {% liquid
@@ -785,12 +810,21 @@
 </header-drawer>
 
 {% stylesheet %}
+
+  ul.menu-drawer__menu.menu-drawer__menu--childlist accordion-custom details[open] span.svg-wrapper.icon-plus svg {
+    transform: rotate(90deg);
+  }
+
+  ul.menu-drawer__menu.menu-drawer__menu--grandchildlist.details-content {
+    padding-left: 2.4rem;
+  }
+
   .icon-caret--forward svg {
-    transform: rotate(-90deg);
+    transform: rotate(0deg);
   }
 
   .icon-caret--backward svg {
-    transform: rotate(90deg);
+    transform: rotate(0deg);
   }
 
   .header__icon--menu {
@@ -802,7 +836,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: var(--padding-lg);
+    padding: 0;
   }
 
   .header__icon--summary .header-drawer-icon {
@@ -964,8 +998,9 @@
   /* Submenu header with a centered, clickable title flanked by the back and
      close controls. */
   .menu-drawer__nav-buttons--with-title {
-    display: grid;
-    grid-template-columns: 1fr auto 1fr;
+    display: flex;
+    border-bottom: .1rem solid;
+    justify-content: flex-start;
   }
 
   .menu-drawer__title {
@@ -982,7 +1017,7 @@
     --menu-drawer-inline-padding: calc(var(--padding-sm) + 7px);
 
     list-style: none;
-    padding-inline: var(--drawer-padding);
+    padding: 1.4rem 2.4rem;
     margin-inline: 0;
     margin-block-start: 0;
   }
@@ -1152,7 +1187,7 @@
 
   .menu-drawer__menu-item {
     display: flex;
-    padding: var(--padding-2xs) 0;
+    padding: 0.7rem 0;
     position: relative;
     text-decoration: none;
     justify-content: space-between;
@@ -1198,6 +1233,24 @@
     border-radius: var(--menu-image-border-radius);
   }
 
+  .bratz-mobile-menu-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .bratz-mobile-menu-title {
+    padding: var(--padding-lg);
+    font-family: var(--menu-top-level-font-family);
+    font-style: var(--menu-top-level-font-style);
+    font-weight: var(--menu-top-level-font-weight);
+    font-size: var(--menu-top-level-font-size);
+    line-height: 1.2;
+    text-transform: var(--menu-top-level-font-case);
+  }
+
   .menu-drawer__close-button {
     position: relative;
     right: auto;
@@ -1205,7 +1258,7 @@
     width: fit-content;
     height: fit-content;
     color: inherit;
-    padding: var(--padding-lg);
+    padding: 2.4rem;
   }
 
   .menu-drawer__back-button {
@@ -1241,7 +1294,7 @@
 
   .menu-drawer__nav-buttons--with-title .menu-drawer__back-button {
     width: fit-content;
-    padding: var(--padding-lg);
+    padding: 2.2rem 0rem 2.2rem 2.4rem;
     justify-self: start;
   }
 
@@ -1268,8 +1321,6 @@
     width: fit-content;
     height: fit-content;
     margin: 0;
-    padding-block: var(--padding-lg);
-    padding-inline-start: var(--padding-xl);
     flex-shrink: 0;
   }
 
@@ -1278,15 +1329,15 @@
   }
 
   .menu-drawer svg {
-    width: var(--icon-size-xs);
-    height: var(--icon-size-xs);
+    width: var(--icon-size-lg);
+    height: var(--icon-size-lg);
   }
 
   .menu-drawer__submenu {
     position: absolute;
     width: 100%;
-    top: 0;
-    height: 100dvh;
+    top: 7rem;
+    height: auto;
     left: 0;
     background-color: var(--color-background);
     z-index: var(--layer-flat);
@@ -1298,8 +1349,8 @@
 
   .menu-drawer__back-button > .svg-wrapper {
     margin-right: var(--padding-md);
-    width: var(--icon-size-xs);
-    height: var(--icon-size-xs);
+    width: var(--icon-size-lg);
+    height: var(--icon-size-lg);
   }
 
   .menu-drawer__utility-links {
@@ -1479,4 +1530,41 @@
   .drawer-localization .language-selector .svg-wrapper.icon-caret svg {
     transform: none;
   }
+
+  button.button.close-button.menu-drawer__close-button.focus-inset {
+    --button-border-color: transparent;
+  }
+
+  button.button.close-button.menu-drawer__close-button.focus-inset svg {
+    width: 2.4rem;
+  }
+
+  @media screen and (max-width: 1359px) {
+
+    a.menu-drawer__title.focus-inset span.menu-drawer__menu-item-text.wrap-text,
+    li.menu-drawer__list-item a.menu-drawer__menu-item.menu-drawer__menu-item--mainlist.menu-drawer__animated-element,
+    li.menu-drawer__list-item summary {
+      font-size: 1.4rem;
+      font-family: var(--font-druk-wide--family);
+      font-weight: var(--font-druk-wide--weight);
+      font-style: var(--font-druk-wide--style);
+      text-transform: uppercase;
+    }
+
+    li.menu-drawer__list-item a.menu-drawer__menu-item.menu-drawer__menu-item--child  {
+      font-family: var(--font-body--family);
+      font-weight: var(--font-body--weight);
+      font-style: var(--font-body--style);
+      text-transform: capitalize;
+    }
+  }
+
+  span.sign-in-button {
+    display: flex;
+    gap: 0.8rem;
+    font-family: var(--font-body--family);
+    font-weight: var(--font-body--weight);
+    font-style: var(--font-body--style);
+  }
+ 
 {% endstylesheet %}
