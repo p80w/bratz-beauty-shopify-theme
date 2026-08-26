@@ -51,10 +51,127 @@
     "
   >
     {% content_for 'blocks' %}
+
+    <div class="section--page-width bratz-footer-menu-wrapper">
+      <div class="bratz-footer-menu">
+          <!-- Keep in Touch -->
+          <div class="bratz-footer-menu__button">
+            <a href="/pages/contact" class="bratz-footer-menu__button-link button button-secondary">
+              <span>KEEP IN TOUCH</span>
+              <span class="bratz-footer-menu__arrow">
+                <svg xmlns="http://www.w3.org/2000/svg" width="65" height="8" viewBox="0 0 65 8" fill="none">
+                  <path d="M0.5 3.18188C0.223858 3.18188 2.41411e-08 3.40574 0 3.68188C-2.41411e-08 3.95803 0.223858 4.18188 0.5 4.18188L0.5 3.68188L0.5 3.18188ZM64.8536 4.03544C65.0488 3.84018 65.0488 3.5236 64.8536 3.32834L61.6716 0.146356C61.4763 -0.048906 61.1597 -0.048906 60.9645 0.146356C60.7692 0.341618 60.7692 0.658201 60.9645 0.853463L63.7929 3.68189L60.9645 6.51032C60.7692 6.70558 60.7692 7.02216 60.9645 7.21742C61.1597 7.41269 61.4763 7.41269 61.6716 7.21742L64.8536 4.03544ZM0.5 3.68188L0.5 4.18188L64.5 4.18189L64.5 3.68189L64.5 3.18189L0.5 3.18188L0.5 3.68188Z" fill="black"/>
+                </svg>
+              </span>
+            </a>
+          </div>
+
+          <!-- Footer Menu -->
+          <nav class="bratz-footer-menu__nav" aria-label="Footer">
+            {% for link in linklists.footer.links %}
+              <a
+                href="{{ link.url }}"
+                class="bratz-footer-menu__link"
+              >
+                {{ link.title }}
+              </a>
+            {% endfor %}
+          </nav>
+      </div>
+    </div>
+
   </div>
 </div>
 
+
+
+
+
 {% stylesheet %}
+
+  /* BRATZ - Footer Menu */
+
+  .bratz-footer-menu {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 3rem;
+    width: 100%;
+  }
+
+  .bratz-footer-menu__button {
+    flex: 0 0 auto;
+  }
+
+  .bratz-footer-menu__button-link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 4rem;
+    min-width: 230px;
+    padding: 1.2rem 1.6rem;
+    /* border: 1px solid currentColor; */
+    color: inherit;
+    text-decoration: none;
+    font-family: var(--font-druk-wide--family);
+    font-weight: var(--font-druk-wide--weight);
+    text-transform: uppercase;
+    font-size: 1.6rem;
+  }
+
+  .bratz-footer-menu__arrow {
+    font-family: var(--font-body--family);
+    font-size: 1.2rem;
+  }
+
+  .bratz-footer-menu__nav {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    align-items: center;
+    column-gap: 3.1rem;
+    row-gap: 2rem;
+    max-width: 70%;
+  }
+
+  .bratz-footer-menu__link {
+    font-size: 1.4rem;
+    text-decoration: none;
+    font-family: var(--font-druk-wide--family);
+    font-weight: var(--font-druk-wide--weight);
+    text-transform: uppercase;
+    line-height: 1.4rem;
+  }
+
+  /* Mobile */
+  @media screen and (max-width: 749px) {
+    .bratz-footer-menu {
+      flex-direction: column;
+      align-items: center;
+      gap: 2.4rem;
+    }
+
+    .bratz-footer-menu__button {
+      width: 100%;
+    }
+
+    .bratz-footer-menu__button-link {
+      width: 100%;
+    }
+
+    .bratz-footer-menu__nav {
+      width: 100%;
+      max-width: 100%;
+      flex-direction: column;
+      flex-wrap: nowrap;
+      justify-content: center;
+      align-items: center;
+      gap: 2.4rem;
+      text-align: center;
+    }
+  }
+
+
   .footer-content {
     contain: content;
     content-visibility: auto;
