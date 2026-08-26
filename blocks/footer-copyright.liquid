@@ -12,18 +12,22 @@
   "
   {{ block.shopify_attributes }}
 >
-  <span class="footer-utilities__text">
+  {% comment %} <span class="footer-utilities__text">
     &copy; {{ 'now' | date: '%Y' }}
     {{ shop.name | link_to: routes.root_url -}}
     {%- if block_settings.show_powered_by -%}
       , {{ powered_by_link }}
     {%- endif -%}
+  </span> {% endcomment %}
+  <span class="footer-utilities__text">
+    TM &amp; © MGA Entertainment, Inc. All Rights Reserved
   </span>
 </div>
 
 {% stylesheet %}
   .footer-utilities__group-copyright {
     color: var(--color-utilities, var(--color-foreground-muted));
+    line-height: 1.6rem;
   }
 {% endstylesheet %}
 
@@ -58,27 +62,27 @@
       "label": "t:settings.size",
       "options": [
         {
-          "value": "0.625rem",
+          "value": "1rem",
           "label": "10px"
         },
         {
-          "value": "0.75rem",
+          "value": "1.2rem",
           "label": "12px"
         },
         {
-          "value": "0.875rem",
+          "value": "1.4rem",
           "label": "14px"
         },
         {
-          "value": "1rem",
+          "value": "1.6rem",
           "label": "16px"
         },
         {
-          "value": "1.125rem",
+          "value": "1.8rem",
           "label": "18px"
         }
       ],
-      "default": "0.75rem"
+      "default": "1.6rem"
     },
     {
       "type": "select",
