@@ -1,0 +1,811 @@
+{% liquid
+  assign section_settings = section.settings
+%}
+
+<section
+  class="bratz-video-banner"
+  id="BratzVideoBanner-{{ section.id }}"
+>
+  {%- comment -%}
+    VIDEO BACKGROUND
+    Reuses Horizon's existing video snippet.
+  {%- endcomment -%}
+
+  {% if section_settings.video != blank %}
+    <div class="bratz-video-banner__video">
+      {% render 'video',
+        video: section_settings.video,
+        video_autoplay: true,
+        video_loop: true,
+        disable_controls: true,
+        video_preview_image: section_settings.video.preview_image,
+        additional_attributes: 'aria-hidden="true"'
+      %}
+    </div>
+  {% endif %}
+
+
+  {%- comment -%}
+    VIDEO OVERLAY
+    Allows the video darkness to be controlled
+    from the Theme Editor.
+  {%- endcomment -%}
+
+  {% if section_settings.video_overlay %}
+    <div
+      class="bratz-video-banner__overlay"
+      style="
+        background-color: {{ section_settings.video_overlay_color }};
+        opacity: {{ section_settings.video_overlay_opacity | divided_by: 100.0 }};
+      "
+      aria-hidden="true"
+    ></div>
+  {% endif %}
+
+
+  {%- comment -%}
+    FLOATING ELEMENTS
+    Supports:
+    - Image
+    - Text
+  {%- endcomment -%}
+
+  {% if section.blocks.size > 0 %}
+    <div class="bratz-video-banner__floating-elements">
+
+      {% for block in section.blocks %}
+        {% case block.type %}
+
+          {% when 'floating_element' %}
+
+            {% if block.settings.element_type == 'image' %}
+              {% if block.settings.image != blank %}
+
+                <div
+                  class="bratz-video-banner__floating-element bratz-video-banner__floating-element--image"
+                  {{ block.shopify_attributes }}
+                >
+                  {% if block.settings.link != blank %}
+                    <a
+                      href="{{ block.settings.link }}"
+                      class="bratz-video-banner__floating-link"
+                    >
+                  {% endif %}
+
+                    {{
+                      block.settings.image
+                      | image_url: width: 1200
+                      | image_tag:
+                        loading: 'lazy',
+                        widths: '240, 400, 600, 800, 1000, 1200',
+                        class: 'bratz-video-banner__floating-image',
+                        alt: block.settings.image_alt
+                    }}
+
+                  {% if block.settings.link != blank %}
+                    </a>
+                  {% endif %}
+                </div>
+
+              {% endif %}
+
+            {% elsif block.settings.element_type == 'text' %}
+
+              {% if block.settings.text != blank %}
+
+                <div
+                  class="bratz-video-banner__floating-element bratz-video-banner__floating-element--text"
+                  {{ block.shopify_attributes }}
+                >
+                  {% if block.settings.link != blank %}
+                    <a
+                      href="{{ block.settings.link }}"
+                      class="bratz-video-banner__floating-link"
+                    >
+                  {% endif %}
+
+                    <span class="bratz-video-banner__floating-text">
+                      {{ block.settings.text }}
+                    </span>
+
+                  {% if block.settings.link != blank %}
+                    </a>
+                  {% endif %}
+                </div>
+
+              {% endif %}
+            {% endif %}
+
+
+          {% when 'star' %}
+
+            {% if block.settings.star != blank %}
+
+              <div
+                class="bratz-video-banner__star"
+                {{ block.shopify_attributes }}
+              >
+                {% if block.settings.link != blank %}
+                  <a
+                    href="{{ block.settings.link }}"
+                    class="bratz-video-banner__star-link"
+                  >
+                {% endif %}
+
+                  {{
+                    block.settings.star
+                    | image_url: width: 300
+                    | image_tag:
+                      loading: 'lazy',
+                      widths: '100, 150, 200, 300',
+                      class: 'bratz-video-banner__star-image',
+                      alt: block.settings.star_alt
+                  }}
+
+                {% if block.settings.link != blank %}
+                  </a>
+                {% endif %}
+              </div>
+
+            {% endif %}
+
+        {% endcase %}
+      {% endfor %}
+
+    </div>
+  {% endif %}
+
+
+  {%- comment -%}
+    MAIN CONTENT
+  {%- endcomment -%}
+
+  <div class="bratz-video-banner__content">
+
+    {% if section_settings.heading != blank %}
+      <h2 class="bratz-video-banner__heading h1">
+        {{ section_settings.heading }}
+      </h2>
+    {% endif %}
+
+    {% if section_settings.description != blank %}
+      <div class="bratz-video-banner__description">
+        {{ section_settings.description }}
+      </div>
+    {% endif %}
+
+    {% if section_settings.button_label != blank %}
+      <a
+        class="bratz-video-banner__button button button-secondary"
+        href="{{ section_settings.button_link | default: '#' }}"
+      >
+        {{ section_settings.button_label }}
+      </a>
+    {% endif %}
+
+  </div>
+
+</section>
+
+
+{% stylesheet %}
+/* =========================================
+   BRATZ VIDEO BANNER
+   ========================================= */
+
+.bratz-video-banner {
+  position: relative;
+  width: 100%;
+  min-height: 80rem;
+  overflow: hidden;
+}
+
+
+/* =========================================
+   VIDEO BACKGROUND
+   ========================================= */
+
+.bratz-video-banner__video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+
+.bratz-video-banner__video deferred-media,
+.bratz-video-banner__video video,
+.bratz-video-banner__video iframe {
+  width: 100%;
+  height: 100%;
+}
+
+.bratz-video-banner__video video {
+  display: block;
+  object-fit: cover;
+}
+
+.bratz-video-banner__video iframe {
+  display: block;
+  border: 0;
+}
+
+
+/* =========================================
+   FLOATING ELEMENTS
+   ========================================= */
+
+.bratz-video-banner__floating-elements {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 144rem;
+    height: 100%;
+    z-index: 2;
+    pointer-events: none;
+}
+
+.bratz-video-banner__floating-element {
+  position: absolute;
+}
+
+.bratz-video-banner__floating-link {
+  display: block;
+  pointer-events: auto;
+  color: inherit;
+  text-decoration: none;
+}
+
+
+/* =========================================
+   FLOATING IMAGE 1
+   ========================================= */
+
+.bratz-video-banner__floating-element:nth-child(1) {
+    left: -4rem;
+    top: 3rem;
+    width: 43rem;
+}
+
+
+/* =========================================
+   FLOATING IMAGE 2
+   ========================================= */
+
+.bratz-video-banner__floating-element:nth-child(2) {
+    right: -3rem;
+    top: 10rem;
+    /* width: 26%; */
+    width: 40rem;
+}
+
+/* =========================================
+   FLOATING IMAGE 3
+   ========================================= */
+
+.bratz-video-banner__floating-element:nth-child(3) {
+  right: 4%;
+  bottom: 10%;
+  width: 27rem;
+}
+
+
+/* =========================================
+   FLOATING IMAGES
+   ========================================= */
+
+.bratz-video-banner__floating-element--image {
+  position: absolute;
+}
+
+.bratz-video-banner__floating-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+
+/* =========================================
+   FLOATING TEXT
+   ========================================= */
+
+.bratz-video-banner__floating-element--text {
+  position: absolute;
+  right: 5%;
+  bottom: 8%;
+}
+
+.bratz-video-banner__floating-text {
+  display: block;
+}
+
+.bratz-video-banner__floating-text p {
+    margin: 0;
+    font-family: var(--font-accent--family);
+    font-weight: var(--font-accent--weight);
+    color: var(--color-not-pink-punk);
+    font-size: 4.8rem;
+    line-height: 4.8rem;
+    text-align: center;
+    transform: rotate(-15deg);
+}
+
+
+/* =========================================
+   ROTATING STARS
+   ========================================= */
+
+.bratz-video-banner__star {
+  width: 4rem;
+}
+
+.bratz-video-banner__star {
+  position: absolute;
+}
+
+.bratz-video-banner__star-link {
+  display: block;
+  pointer-events: auto;
+}
+
+.bratz-video-banner__star-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  animation: bratz-star-rotate 6s linear infinite;
+}
+
+@keyframes bratz-star-rotate {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+
+/* =========================================
+   STAR 1
+   ========================================= */
+
+.bratz-video-banner__star:nth-child(4) {
+    left: 17%;
+    top: 18%;
+}
+
+/* =========================================
+   STAR 2
+   ========================================= */
+
+.bratz-video-banner__star:nth-child(5) {
+  right: 18%;
+  top: 18%;
+}
+
+
+/* =========================================
+   STAR 3
+   ========================================= */
+
+.bratz-video-banner__star:nth-child(6) {
+  left: 30%;
+  bottom: 27%;
+}
+
+
+/* =========================================
+   MAIN CONTENT
+   ========================================= */
+
+.bratz-video-banner__content {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 80rem;
+  text-align: center;
+  color: #fff;
+  max-width: 53rem;
+  margin: 0 auto;
+}
+
+.bratz-video-banner__heading {
+  margin: 0;
+}
+
+.bratz-video-banner__description {
+    margin: 2.4rem 0;
+}
+
+.bratz-video-banner__description p {
+  margin: 0;
+}
+
+.bratz-video-banner__button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 0;
+  text-decoration: none;
+}
+
+
+/* =========================================
+   VIDEO OVERLAY
+   ========================================= */
+
+.bratz-video-banner__overlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.bratz-video-banner__video {
+  z-index: 0;
+}
+
+.bratz-video-banner__overlay {
+  z-index: 1;
+}
+
+.bratz-video-banner__floating-elements {
+  z-index: 2;
+}
+
+.bratz-video-banner__content {
+  z-index: 3;
+}
+
+
+/* =========================================
+   IPAD
+   ========================================= */
+
+
+
+@media screen and (min-width: 750px) and (max-width: 989px) {
+
+  .bratz-video-banner__content {
+    padding-top: 5rem;
+  }
+
+  .bratz-video-banner__floating-element:nth-child(1) {
+    left: -8rem;
+    top: 21rem;
+    width: 43rem;
+  }
+
+  .bratz-video-banner__floating-element:nth-child(2) {
+    right: -3rem;
+    top: -5rem;
+    width: 36rem;
+  }
+
+  .bratz-video-banner__floating-element:nth-child(3) {
+    right: 4%;
+    bottom: 7%;
+    width: 27rem;
+  } 
+
+  .bratz-video-banner__star:nth-child(4) {
+    left: 10rem;
+    top: 23%;
+  }
+
+  .bratz-video-banner__star:nth-child(6) {
+    left: 18rem;
+    bottom: 25%;
+  }
+  .bratz-video-banner__star:nth-child(5) {
+    right: 4rem;
+    top: 18%;
+  }
+
+
+
+}
+
+
+/* =========================================
+   MOBILE
+   ========================================= */
+
+@media screen and (max-width: 749px) {
+
+  .bratz-video-banner {
+    min-height: 60rem;
+
+  }
+
+  .bratz-video-banner__content {
+    min-height: 60rem;
+    padding-top: 5rem;
+  }
+
+  .bratz-video-banner__floating-image {
+    max-width: 100%;
+  }
+
+  h2.bratz-video-banner__heading.h1 {
+    font-size: 6rem;
+    line-height: 5rem;
+    max-width: 40rem;
+  }
+
+  .bratz-video-banner__floating-text p {
+    font-size: 3.2rem;
+    line-height: 3.2rem;
+  }
+
+  .bratz-video-banner__description {
+    max-width: 30rem;
+  }
+
+  /* FLOATING IMAGE 1 */
+    .bratz-video-banner__floating-element:nth-child(1) {
+      left: -4rem;
+      top: 34%;
+      width: 27rem;
+    }
+
+  /* FLOATING IMAGE 2 */
+    .bratz-video-banner__floating-element:nth-child(2) {
+      right: 0rem;
+      top: 2%;
+      width: 19rem;
+    }
+
+  /* FLOATING IMAGE 3 */
+  .bratz-video-banner__floating-element:nth-child(3) {
+      right: 2rem;
+      bottom: 6%;
+      width: 18rem;
+  }
+
+
+  /* FLOATING TEXT */
+  .bratz-video-banner__floating-element--text {
+    right: 3%;
+    bottom: 8%;
+  }
+
+  /* STARS */
+
+  .bratz-video-banner__star {
+    width: 2.4rem;
+  }
+
+  .bratz-video-banner__star:nth-child(4) {
+      left: 6%;
+      top: 26%;
+  }
+
+  .bratz-video-banner__star:nth-child(5) {
+    right: 6%;
+    top: 18%;
+  }
+
+  .bratz-video-banner__star:nth-child(6) {
+      left: 88%;
+      bottom: 36%;
+  }
+
+
+}
+
+
+
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Bratz Video Banner",
+  "tag": "section",
+  "class": "bratz-video-banner-section",
+
+  "settings": [
+
+    {
+      "type": "header",
+      "content": "Video"
+    },
+
+    {
+      "type": "video",
+      "id": "video",
+      "label": "Background video"
+    },
+
+    {
+      "type": "header",
+      "content": "Video Overlay"
+    },
+
+    {
+      "type": "checkbox",
+      "id": "video_overlay",
+      "label": "Enable video overlay",
+      "default": true
+    },
+
+    {
+      "type": "color",
+      "id": "video_overlay_color",
+      "label": "Overlay color",
+      "default": "#000000"
+    },
+
+    {
+      "type": "range",
+      "id": "video_overlay_opacity",
+      "label": "Overlay opacity",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 30
+    },
+
+    {
+      "type": "header",
+      "content": "Content"
+    },
+
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "DON'T THEORIZE, ACCESSORIZE."
+    },
+
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description",
+      "default": "<p>Makeup as rebellion, packaging as obsession. Made to be played with, flaunted and obsessed over.</p>"
+    },
+
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "SHOP NOW"
+    },
+
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    }
+
+  ],
+
+  "blocks": [
+
+    {
+      "type": "floating_element",
+      "name": "Floating Element",
+
+      "settings": [
+
+        {
+          "type": "select",
+          "id": "element_type",
+          "label": "Element type",
+
+          "options": [
+            {
+              "value": "image",
+              "label": "Image"
+            },
+            {
+              "value": "text",
+              "label": "Text"
+            }
+          ],
+
+          "default": "image"
+        },
+
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image",
+          "visible_if": "{{ block.settings.element_type == 'image' }}"
+        },
+
+        {
+          "type": "text",
+          "id": "image_alt",
+          "label": "Image alt text",
+          "visible_if": "{{ block.settings.element_type == 'image' }}"
+        },
+
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "visible_if": "{{ block.settings.element_type == 'text' }}"
+        },
+
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        }
+
+      ]
+    },
+
+    {
+      "type": "star",
+      "name": "Rotating Star",
+
+      "settings": [
+
+        {
+          "type": "image_picker",
+          "id": "star",
+          "label": "Star image"
+        },
+
+        {
+          "type": "text",
+          "id": "star_alt",
+          "label": "Alt text",
+          "default": "Decorative star"
+        },
+
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        }
+
+      ]
+    }
+
+  ],
+
+  "presets": [
+
+    {
+      "name": "Bratz Video Banner",
+
+      "blocks": [
+        {
+          "type": "floating_element"
+        },
+        {
+          "type": "floating_element"
+        },
+        {
+          "type": "floating_element"
+        },
+        {
+          "type": "star"
+        },
+        {
+          "type": "star"
+        },
+        {
+          "type": "star"
+        }
+      ]
+    }
+
+  ]
+
+}
+{% endschema %}
