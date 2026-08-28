@@ -333,6 +333,20 @@
     }
   }
 
+  summary.header__icon span.svg-wrapper.header-drawer-icon.header-drawer-icon--open {
+    font-family: var(--font-druk-wide--family);
+    font-weight: var(--font-druk-wide--weight);
+    font-size: 1.6rem;
+    line-height: 1.6rem;
+    letter-spacing: -0.08em;
+    text-transform: uppercase;
+    width: 3.6rem;
+    white-space: normal;
+    overflow-wrap: break-word;
+    word-break: break-all;
+    letter-spacing: 0rem;
+  }
+
   @media screen and (max-width: 1359px) {
 
     .my-favorites {
@@ -346,24 +360,61 @@
       display: none;
     }
 
-    summary.header__icon .header-drawer-icon--open {
-      font-family: var(--font-druk-wide--family);
-      font-weight: var(--font-druk-wide--weight);
-      font-size: 1.6rem;
-      line-height: 1.6rem;
-      letter-spacing: -0.08em;
-      text-transform: uppercase;
-      width: 3.6rem;
-      white-space: normal;
-      overflow-wrap: break-word;
-      word-break: break-all;
-      letter-spacing: 0rem;
+
+    .header--homepage-overlay .my-favorites a svg path {
+      fill: var(--color-white);
     }
+ 
   }
 
+  /* Overlay Header */
 
+  .header.header--homepage-overlay {
+    position: absolute;
+    top: 0;
+    width: 100%;
+  }
 
+  .header.header--homepage-overlay .header__underlay.header__underlay-closed {
+    background: transparent;
+  }
 
+  .header--homepage-overlay .menu-list__link {
+    color: var(--color-white);
+  }
 
-  
+  .header--homepage-overlay .header-actions__action svg path {
+    fill: var(--color-white);
+  }
+
+  .header--homepage-overlay .header-actions__action:hover svg path {
+    fill: var(--color-drama-queen);
+  }
+
+  .header--homepage-overlay .header__row.header__row--top {
+    border: none;
+  }
+
+  .header--homepage-overlay span.header-logo__image-container {
+    -webkit-filter: brightness(0) invert(1);
+    filter: brightness(0) invert(1);
+  }
+
+  .header--homepage-overlay.mega-menu-open .header-actions__action svg path{
+    fill: var(--color-kool-kat);
+  }
+
+   .header--homepage-overlay.mega-menu-open span.header-logo__image-container {
+    -webkit-filter: none;
+    filter: none;
+   }
+
+    .header--homepage-overlay.mega-menu-open li.menu-list__list-item a.menu-list__link {
+      color: var(--color-kool-kat);
+    }
+
+    .header--homepage-overlay.mega-menu-open .header__row.header__row--top {
+      border-bottom: 0.1rem solid var(--color-kool-kat);
+    }
+
 {% endstylesheet %}

@@ -325,7 +325,7 @@
 
 <header-component
   id="header-component"
-  class="{{ class }}"
+  class="{{ class }} {% if template.name == 'index' %} header--homepage-overlay{% endif %}"
   data-theme-color="rgb({{ section.settings.background_color_top.rgb | default: settings.page_background_color.rgb }})"
   data-bubble-style="{{ section.settings.bubble_style }}"
   {% if transparent %}
@@ -1198,6 +1198,7 @@
 <script>
 document.addEventListener('DOMContentLoaded', () => {
   const menuItems = document.querySelectorAll('.menu-list__list-item');
+  const headerComponent = document.querySelector('#header-component');
 
   menuItems.forEach((item) => {
     const submenu = item.querySelector('.menu-list__submenu');
@@ -1217,6 +1218,18 @@ document.addEventListener('DOMContentLoaded', () => {
         item.classList.add(menuName);
       } else {
         item.classList.remove(menuName);
+      }
+
+      /* Add class to header when any mega menu is open */
+      if (headerComponent) {
+        const anyMenuOpen = document.querySelector(
+          '.menu-list__list-item.active'
+        );
+
+        headerComponent.classList.toggle(
+          'mega-menu-open',
+          !!anyMenuOpen
+        );
       }
     };
 
