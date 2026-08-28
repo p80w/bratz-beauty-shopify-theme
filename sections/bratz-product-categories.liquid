@@ -1,0 +1,853 @@
+{% liquid
+  assign section_settings = section.settings
+
+  assign show_arrows = false
+  if section.blocks.size > section_settings.mobile_columns
+    assign show_arrows = section_settings.show_arrows
+  endif
+%}
+
+<section
+  id="BratzProductCategories-{{ section.id }}"
+  class="bratz-product-categories"
+>
+  <div
+    class="
+      bratz-product-categories__section
+      section
+      section--{{ section_settings.section_width }}
+      spacing-style
+    "
+    style="
+      {% render 'spacing-style', settings: section_settings %}
+      --bratz-category-columns: {{ section_settings.columns }};
+      --bratz-category-mobile-columns: {{ section_settings.mobile_columns }};
+      --bratz-category-gap: {{ section_settings.columns_gap }}px;
+      --bratz-mobile-slide-gap: {{ section_settings.mobile_slide_gap }}px;
+    "
+  >
+
+    {% if section_settings.heading != blank %}
+      <div class="bratz-product-categories__header">
+        <h2 class="bratz-product-categories__heading">
+          {{ section_settings.heading }}
+        </h2>
+      </div>
+    {% endif %}
+
+
+    {% capture slides %}
+
+      {% for block in section.blocks %}
+
+        {% liquid
+          assign block_settings = block.settings
+        %}
+
+        <slideshow-slide
+          slide-id="BratzCategorySlide-{{ section.id }}-{{ block.id }}"
+          class="bratz-product-categories__slide"
+          {{ block.shopify_attributes }}
+        >
+
+          <article class="bratz-product-category">
+
+            {%- comment -%}
+              DEFAULT IMAGE
+            {%- endcomment -%}
+
+            <div class="bratz-product-category__default">
+              {% if block_settings.image != blank %}
+
+                {% render 'image',
+                  image: block_settings.image,
+                  class: 'bratz-product-category__image',
+                  alt_text_fallback: block_settings.title
+                %}
+
+              {% else %}
+
+                <div class="bratz-product-category__placeholder">
+                  {{ 'detailed-apparel-1' | placeholder_svg_tag }}
+                </div>
+
+              {% endif %}
+            </div>
+
+
+            {%- comment -%}
+              HOVER IMAGE / BACKGROUND
+            {%- endcomment -%}
+
+            {% if block_settings.hover_image != blank %}
+
+              <div class="bratz-product-category__hover">
+
+                {% render 'image',
+                  image: block_settings.hover_image,
+                  class: 'bratz-product-category__hover-image',
+                  alt_text_fallback: block_settings.title
+                %}
+
+              </div>
+
+            {% endif %}
+
+
+            {%- comment -%}
+              CATEGORY CONTENT
+            {%- endcomment -%}
+
+            <div class="bratz-product-category__content">
+
+              {% if block_settings.title != blank %}
+                <h3 class="bratz-product-category__title">
+                  {{ block_settings.title }}
+                </h3>
+              {% endif %}
+
+
+              {% if block_settings.label != blank %}
+
+                <div class="bratz-product-category__button">
+
+                  {% render 'button',
+                    link: block_settings.button_link,
+                    block: block
+                  %}
+
+                </div>
+
+              {% endif %}
+
+            </div>
+
+          </article>
+
+        </slideshow-slide>
+
+      {% endfor %}
+
+    {% endcapture %}
+
+
+    {% if section.blocks.size > 0 %}
+
+      <div
+        class="
+          bratz-product-categories__carousel
+          {% if section_settings.show_arrows %}bratz-product-categories__carousel--arrows{% endif %}
+        "
+        style="
+          --bratz-category-gap: {{ section_settings.columns_gap }}px;
+        "
+      >
+
+        {% render 'slideshow',
+          class: 'bratz-product-categories__slideshow',
+          show_arrows: show_arrows,
+          icon_style: section_settings.icons_style,
+          icon_shape: section_settings.icons_shape,
+          infinite: false,
+          initial_slide: 0,
+          slides: slides,
+          slide_count: section.blocks.size
+        %}
+
+      </div>
+
+    {% else %}
+
+      <div class="bratz-product-categories__empty">
+        Add product category blocks in the theme editor.
+      </div>
+
+    {% endif %}
+
+  </div>
+</section>
+
+
+{% stylesheet %}
+
+/* =========================================================
+   BRATZ PRODUCT CATEGORIES
+   ========================================================= */
+
+.bratz-product-categories {
+  width: 100%;
+  overflow: hidden;
+}
+
+.bratz-product-categories__section {
+  width: 100%;
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.bratz-product-categories__header {
+  width: 100%;
+  margin-block-end: 2.4rem;
+}
+
+.bratz-product-categories__heading {
+  margin: 0;
+}
+
+
+/* =========================================================
+   CAROUSEL
+   ========================================================= */
+
+.bratz-product-categories__carousel {
+  width: 100%;
+  position: relative;
+}
+
+.bratz-product-categories__slideshow {
+  width: 100%;
+}
+
+
+/* =========================================================
+   SLIDES
+   ========================================================= */
+
+.bratz-product-categories__slideshow slideshow-slides {
+  gap: var(--bratz-category-gap);
+}
+
+.bratz-product-categories__slide {
+  width: calc(
+    (100% - (var(--bratz-category-gap) * (var(--bratz-category-columns) - 1)))
+    / var(--bratz-category-columns)
+  );
+
+  flex: 0 0 auto;
+  min-width: 0;
+
+  scroll-snap-align: start;
+}
+
+
+/* =========================================================
+   CATEGORY CARD
+   ========================================================= */
+
+.bratz-product-category {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 63.6rem;
+  overflow: hidden;
+}
+
+
+/* =========================================================
+   DEFAULT IMAGE
+   ========================================================= */
+
+.bratz-product-category__default {
+  position: absolute;
+  inset: 0;
+
+  z-index: 2;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bratz-product-category__image {
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+
+  display: block;
+}
+
+
+/* =========================================================
+   HOVER IMAGE / BACKGROUND
+   Appears BEHIND the default image
+   ========================================================= */
+
+.bratz-product-category__hover {
+  position: absolute;
+  inset: 0;
+
+  z-index: 1;
+
+  opacity: 0;
+  visibility: hidden;
+
+  pointer-events: none;
+
+  transition:
+    opacity 0.3s ease,
+    visibility 0.3s ease;
+}
+
+.bratz-product-category__hover-image {
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+
+  display: block;
+}
+
+
+/* =========================================================
+   HOVER
+   ========================================================= */
+
+.bratz-product-category:hover
+.bratz-product-category__hover {
+  opacity: 1;
+  visibility: visible;
+}
+
+.bratz-product-category:hover
+.bratz-product-category__button {
+  display: block;
+}
+
+.bratz-product-category:hover 
+.bratz-product-category__content {
+  color: var(--color-white);
+}
+
+/* =========================================================
+   CONTENT
+   ========================================================= */
+
+.bratz-product-category__content {
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+
+  z-index: 3;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+
+  padding: 32px 0;
+  text-align: center;
+
+  pointer-events: none;
+}
+
+.bratz-product-category__title {
+  margin: 0;
+}
+
+.bratz-product-category__button {
+  margin-block-start: 1.6rem;
+  pointer-events: auto;
+  display: none;
+}
+
+h3.bratz-product-category__title {
+    text-transform: uppercase;
+}
+
+
+/* =========================================================
+   PLACEHOLDER
+   ========================================================= */
+
+.bratz-product-category__placeholder {
+  width: 100%;
+  height: 100%;
+}
+
+.bratz-product-category__placeholder svg {
+  width: 100%;
+  height: 100%;
+}
+
+@media screen and (min-width: 750px) and (max-width: 1024px) {
+  .bratz-product-category {
+    min-height: 40rem;
+  }
+}
+
+
+/* =========================================================
+   MOBILE SLIDER
+   One full card + gap before the next card
+   ========================================================= */
+
+
+@media screen and (max-width: 749px) {
+
+  .bratz-product-categories__slideshow slideshow-slides {
+    gap: var(--bratz-category-gap);
+    padding-inline: 0;
+  }
+
+  .bratz-product-categories__slide {
+    flex: 0 0 calc(100% - var(--bratz-mobile-slide-gap));
+    }
+
+  .bratz-product-category {
+    min-height: 38.7rem;
+  }
+
+  .bratz-product-categories__section.section.section--page-width {
+    grid-template-columns: 0;
+  }
+
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .bratz-product-category__hover {
+    transition: none;
+  }
+
+}
+
+
+/* =========================================================
+   EMPTY STATE
+   ========================================================= */
+
+.bratz-product-categories__empty {
+  padding: 4rem;
+  text-align: center;
+}
+
+{% endstylesheet %}
+
+
+{% schema %}
+
+{
+  "name": "Bratz Product Categories",
+
+  "tag": "section",
+
+  "class": "bratz-product-categories-section",
+
+  "disabled_on": {
+    "groups": [
+      "header",
+      "footer"
+    ]
+  },
+
+  "settings": [
+
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "SHOP BY CATEGORY"
+    },
+
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+
+    {
+      "type": "range",
+      "id": "columns",
+      "label": "Desktop columns",
+      "min": 1,
+      "max": 3,
+      "step": 1,
+      "default": 3
+    },
+
+    {
+      "type": "select",
+      "id": "mobile_columns",
+      "label": "Mobile columns",
+      "options": [
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        }
+      ],
+      "default": "1"
+    },
+
+    {
+      "type": "range",
+      "id": "columns_gap",
+      "label": "Column gap",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+
+    {
+    "type": "range",
+    "id": "mobile_slide_gap",
+    "label": "Mobile slide gap",
+    "min": 0,
+    "max": 100,
+    "step": 1,
+    "unit": "px",
+    "default": 80
+    },
+
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Section width",
+      "options": [
+        {
+          "value": "page-width",
+          "label": "Page"
+        },
+        {
+          "value": "full-width",
+          "label": "Full"
+        }
+      ],
+      "default": "full-width"
+    },
+
+    {
+      "type": "header",
+      "content": "Carousel navigation"
+    },
+
+    {
+      "type": "checkbox",
+      "id": "show_arrows",
+      "label": "Show arrows",
+      "default": false
+    },
+
+    {
+      "type": "select",
+      "id": "icons_style",
+      "label": "Arrow style",
+      "options": [
+        {
+          "value": "arrow",
+          "label": "Arrows"
+        },
+        {
+          "value": "chevron",
+          "label": "Chevrons"
+        },
+        {
+          "value": "arrows_large",
+          "label": "Large arrows"
+        },
+        {
+          "value": "chevron_large",
+          "label": "Large chevrons"
+        },
+        {
+          "value": "none",
+          "label": "None"
+        }
+      ],
+      "default": "arrow",
+      "visible_if": "{{ section.settings.show_arrows }}"
+    },
+
+    {
+      "type": "select",
+      "id": "icons_shape",
+      "label": "Arrow background",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "circle",
+          "label": "Circle"
+        },
+        {
+          "value": "square",
+          "label": "Square"
+        }
+      ],
+      "default": "none",
+      "visible_if": "{{ section.settings.show_arrows }}"
+    },
+
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+
+    {
+      "type": "range",
+      "id": "padding-inline-start",
+      "label": "Left",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+
+    {
+      "type": "range",
+      "id": "padding-inline-end",
+      "label": "Right",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    }
+
+  ],
+
+  "blocks": [
+
+    {
+      "type": "category",
+
+      "name": "Category",
+
+      "settings": [
+
+        {
+          "type": "header",
+          "content": "Default"
+        },
+
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+
+        {
+          "type": "header",
+          "content": "Hover"
+        },
+
+        {
+          "type": "image_picker",
+          "id": "hover_image",
+          "label": "Hover background image"
+        },
+
+        {
+          "type": "header",
+          "content": "Content"
+        },
+
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "LIPSTICK"
+        },
+
+        {
+            "type": "text",
+            "id": "label",
+            "label": "Button label",
+            "default": "SHOP NOW"
+            },
+
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Button link"
+        },
+
+        {
+          "type": "checkbox",
+          "id": "open_in_new_tab",
+          "label": "Open button in new tab",
+          "default": false
+        },
+
+        {
+          "type": "select",
+          "id": "style_class",
+          "label": "Button style",
+          "options": [
+            {
+              "value": "button",
+              "label": "Primary"
+            },
+            {
+              "value": "button-secondary",
+              "label": "Secondary"
+            },
+            {
+              "value": "button-unstyled",
+              "label": "Link"
+            },
+            {
+              "value": "button-custom",
+              "label": "Custom"
+            }
+          ],
+          "default": "button-secondary"
+        },
+
+        {
+          "type": "header",
+          "content": "Button size"
+        },
+
+        {
+          "type": "select",
+          "id": "width",
+          "label": "Desktop width",
+          "options": [
+            {
+              "value": "fit-content",
+              "label": "Fit content"
+            },
+            {
+              "value": "custom",
+              "label": "Custom"
+            }
+          ],
+          "default": "fit-content"
+        },
+
+        {
+          "type": "range",
+          "id": "custom_width",
+          "label": "Custom width",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "default": 100,
+          "visible_if": "{{ block.settings.width == 'custom' }}"
+        },
+
+        {
+          "type": "select",
+          "id": "width_mobile",
+          "label": "Mobile width",
+          "options": [
+            {
+              "value": "fit-content",
+              "label": "Fit content"
+            },
+            {
+              "value": "custom",
+              "label": "Custom"
+            }
+          ],
+          "default": "fit-content"
+        },
+
+        {
+          "type": "range",
+          "id": "custom_width_mobile",
+          "label": "Custom mobile width",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "default": 100,
+          "visible_if": "{{ block.settings.width_mobile == 'custom' }}"
+        }
+
+      ]
+    }
+
+  ],
+
+  "presets": [
+
+    {
+      "name": "Bratz Product Categories",
+
+      "category": "Bratz",
+
+      "settings": {
+        "columns": 3,
+        "mobile_columns": "1",
+        "columns_gap": 0,
+        "section_width": "full-width"
+      },
+
+      "blocks": {
+
+        "lipstick": {
+          "type": "category",
+          "name": "Lipstick",
+          "settings": {
+            "title": "LIPSTICK",
+           "label": "SHOP NOW"
+          }
+        },
+
+        "lipliner": {
+          "type": "category",
+          "name": "Lip Liner",
+          "settings": {
+            "title": "LIP LINER",
+            "label": "SHOP NOW"
+          }
+        },
+
+        "lipgloss": {
+          "type": "category",
+          "name": "Lip Gloss",
+          "settings": {
+            "title": "LIP GLOSS",
+            "label": "SHOP NOW"
+          }
+        }
+
+      }
+    }
+
+  ]
+
+}
+
+{% endschema %}

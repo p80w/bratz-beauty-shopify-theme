@@ -77,14 +77,92 @@
       "name": "Bratz Video Banner",
       "settings": {
         "video": "shopify://files/videos/13c15a20cf7840569ed6fc53e566de3f.HD-1080p-7.2Mbps-89436699.mp4",
+        "video_overlay": true,
+        "video_overlay_color": "#000000",
+        "video_overlay_opacity": 30,
         "heading": "DON'T THEORIZE, ACCESSORIZE.",
         "description": "<p>Makeup as rebellion, packaging as obsession. Made to be played with, flaunted and obsessed over.</p>",
         "button_label": "SHOP NOW",
         "button_link": ""
       }
+    },
+    "bratz_product_categories_m7CBUH": {
+      "type": "bratz-product-categories",
+      "blocks": {
+        "category_M9RUcG": {
+          "type": "category",
+          "settings": {
+            "image": "shopify://shop_images/product.png",
+            "hover_image": "shopify://shop_images/Collection_Card.png",
+            "title": "Lipstick",
+            "label": "SHOP NOW",
+            "button_link": "#",
+            "open_in_new_tab": false,
+            "style_class": "button-secondary",
+            "width": "fit-content",
+            "custom_width": 100,
+            "width_mobile": "fit-content",
+            "custom_width_mobile": 100
+          }
+        },
+        "category_UmEgaG": {
+          "type": "category",
+          "settings": {
+            "image": "shopify://shop_images/product_1.png",
+            "hover_image": "shopify://shop_images/Collection_Card_1.png",
+            "title": "Lip Liner",
+            "label": "SHOP NOW",
+            "button_link": "#",
+            "open_in_new_tab": false,
+            "style_class": "button-secondary",
+            "width": "fit-content",
+            "custom_width": 100,
+            "width_mobile": "fit-content",
+            "custom_width_mobile": 100
+          }
+        },
+        "category_mKK9MG": {
+          "type": "category",
+          "settings": {
+            "image": "shopify://shop_images/product_2.png",
+            "hover_image": "shopify://shop_images/Collection_Card_2.png",
+            "title": "Lip Gloss",
+            "label": "SHOP NOW",
+            "button_link": "#",
+            "open_in_new_tab": false,
+            "style_class": "button-secondary",
+            "width": "fit-content",
+            "custom_width": 100,
+            "width_mobile": "fit-content",
+            "custom_width_mobile": 100
+          }
+        }
+      },
+      "block_order": [
+        "category_M9RUcG",
+        "category_UmEgaG",
+        "category_mKK9MG"
+      ],
+      "name": "Bratz Product Categories",
+      "settings": {
+        "heading": "",
+        "columns": 3,
+        "mobile_columns": "1",
+        "columns_gap": 0,
+        "mobile_slide_gap": 0,
+        "section_width": "full-width",
+        "show_arrows": false,
+        "icons_style": "arrow",
+        "icons_shape": "none",
+        "padding-block-start": 0,
+        "padding-block-end": 0,
+        "padding-inline-start": 0,
+        "padding-inline-end": 0
+      }
     }
   },
   "order": [
-    "bratz_video_banner_8d7ipJ"
+    "bratz_video_banner_8d7ipJ",
+    "bratz_product_categories_m7CBUH"
   ]
 }
