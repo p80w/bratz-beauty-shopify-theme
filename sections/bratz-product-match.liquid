@@ -1,0 +1,519 @@
+{% liquid
+  assign section_settings = section.settings
+  assign collection = section_settings.collection
+  assign product_count = section_settings.product_count
+%}
+
+<section
+  id="BratzProductMatch-{{ section.id }}"
+  class="bratz-product-match"
+>
+  <div
+    class="
+      bratz-product-match__section
+      section
+      section--{{ section_settings.section_width }}
+      spacing-style
+    "
+    style="
+      {% render 'spacing-style', settings: section_settings %}
+      --bratz-match-columns: {{ section_settings.columns }};
+      --bratz-match-gap: {{ section_settings.column_gap }}px;
+    "
+  >
+
+    {%- comment -%}
+      BACKGROUND IMAGE
+    {%- endcomment -%}
+
+    {% if section_settings.background_image != blank %}
+      <div
+        class="bratz-product-match__background"
+        aria-hidden="true"
+      >
+        {% render 'image',
+          image: section_settings.background_image,
+          class: 'bratz-product-match__background-image',
+          alt_text_fallback: ''
+        %}
+      </div>
+    {% endif %}
+
+
+    {%- comment -%}
+      CONTENT
+    {%- endcomment -%}
+
+    <div class="bratz-product-match__content">
+
+      {% if section_settings.heading != blank %}
+        <div class="bratz-product-match__header">
+          <h2 class="bratz-product-match__heading">
+            {{ section_settings.heading }}
+          </h2>
+        </div>
+      {% endif %}
+
+
+      {% if collection != blank and collection.products_count > 0 %}
+        <div class="bratz-product-match__slideshow section section--page-width">
+
+          {%- comment -%}
+            SLIDES
+
+            Render a slideshow-slide for each product in the collection.
+          {%- endcomment -%}
+          {% capture slides %}
+
+            {% for product in collection.products limit: product_count %}
+
+              <slideshow-slide
+                slide-id="BratzProductMatchSlide-{{ section.id }}-{{ product.id }}"
+                class="bratz-product-match__slide"
+              >
+
+                <article
+                  class="bratz-product-match__card"
+                  data-product-id="{{ product.id }}"
+                >
+
+                  {%- comment -%}
+                    HORIZON PRODUCT CARD
+
+                    Reuse Horizon's existing product-card architecture.
+                  {%- endcomment -%}
+
+                  <div class="bratz-product-match__horizon-card">
+                    {% content_for 'block',
+                      type: '_product-card',
+                      id: 'static-product-card',
+                      closest.product: product,
+                      product_view_context: 'collection'
+                    %}
+                  </div>
+                </article>
+
+              </slideshow-slide>
+
+            {% endfor %}
+
+          {% endcapture %}
+
+
+          {% liquid
+            assign bratz_slideshow_ref = 'bratzProductMatch-' | append: section.id
+          %}
+
+          {% render 'slideshow',
+            ref: bratz_slideshow_ref,
+            slides: slides,
+            show_arrows: false,
+            initial_slide: 0,
+            slide_count: product_count
+          %}
+
+        </div>
+
+      {% else %}
+
+        <div class="bratz-product-match__empty">
+          Select a product collection in the theme editor.
+        </div>
+
+      {% endif %}
+
+    </div>
+
+  </div>
+</section>
+
+{% stylesheet %}
+
+/* =========================================================
+   BRATZ PRODUCT MATCH SECTION
+   ========================================================= */
+
+slideshow-slide.bratz-product-match__slide {
+    background: var(--color-bunny-boo);
+}
+
+.bratz-product-match__slideshow slideshow-container {
+    background: transparent;
+}
+
+.bratz-product-match {
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+.bratz-product-match__section {
+  position: relative;
+  width: 100%;
+}
+
+.bratz-product-match__background {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.bratz-product-match__background-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.bratz-product-match__content {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.bratz-product-match__header {
+  width: 100%;
+  text-align: center;
+  margin-block-end: 3.2rem
+}
+
+.bratz-product-match__heading {
+  margin: 0;
+}
+
+
+/* =========================================================
+   SLIDESHOW
+   ========================================================= */
+
+.bratz-product-match__slideshow {
+  width: 100%;
+}
+
+.bratz-product-match__slideshow slideshow-slides {
+  gap: var(--bratz-match-gap);
+}
+
+.bratz-product-match__slide {
+  width: calc(
+    (100% - (var(--bratz-match-gap) * (var(--bratz-match-columns) - 1)))
+    / var(--bratz-match-columns)
+  );
+  flex: 0 0 auto;
+  min-width: 0;
+  scroll-snap-align: start;
+}
+
+
+/* =========================================================
+   PRODUCT CARD
+   ========================================================= */
+
+.bratz-product-match__card {
+  position: relative;
+  width: 100%;
+}
+
+
+/* =========================================================
+   PRODUCT HIGHLIGHT
+   ========================================================= */
+
+.bratz-product-match__highlight {
+  margin-block-start: .8rem;
+  font-size: 1.4rem;
+  line-height: 1.4rem;
+}
+
+
+/* =========================================================
+   EMPTY
+   ========================================================= */
+
+.bratz-product-match__empty {
+  padding: 4rem;
+  text-align: center;
+}
+
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media screen and (min-width: 990px) and (max-width: 1200px) {
+  .bratz-product-match__section {
+    --bratz-match-columns: 3 !important;
+  }
+}
+
+
+@media screen and (min-width: 750px) and (max-width: 989px) {
+  .bratz-product-match__section {
+    --bratz-match-columns: 2 !important;
+  }
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media screen and (max-width: 749px) {
+  .bratz-product-match__slideshow slideshow-slides {
+    gap: .4rem;
+  }
+
+  .bratz-product-match__slide {
+    flex: 0 0 calc(100% - 7rem);
+    width: calc(100% - 7rem);
+  }
+
+  .bratz-product-match__header {
+    margin-block-end: 5rem;
+  }
+  
+  .bratz-product-match__slideshow.section.section--page-width {
+    display: block;
+    padding-left: 1.5rem
+  }
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .bratz-product-match__horizon-card,
+  .bratz-product-match__card {
+    transition: none;
+  }
+}
+
+{% endstylesheet %}
+
+{% schema %}
+
+{
+  "name": "Bratz Product Match",
+
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Find Your Perfect Match"
+    },
+
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Product collection"
+    },
+
+    {
+      "type": "range",
+      "id": "product_count",
+      "label": "Product count",
+      "min": 1,
+      "max": 16,
+      "step": 1,
+      "default": 4
+    },
+
+    {
+      "type": "range",
+      "id": "columns",
+      "label": "Desktop columns",
+      "min": 1,
+      "max": 8,
+      "step": 1,
+      "default": 4
+    },
+
+    {
+      "type": "range",
+      "id": "column_gap",
+      "label": "Column gap",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 4
+    },
+
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Background image"
+    },
+
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Section width",
+      "options": [
+        {
+          "value": "page-width",
+          "label": "Page"
+        },
+        {
+          "value": "full-width",
+          "label": "Full"
+        }
+      ],
+      "default": "full-width"
+    },
+
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 40
+    },
+
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 40
+    },
+
+    {
+      "type": "range",
+      "id": "padding-inline-start",
+      "label": "Left",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+
+    {
+      "type": "range",
+      "id": "padding-inline-end",
+      "label": "Right",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    }
+  ],
+
+  "presets": [
+    {
+      "name": "Bratz Product Match",
+
+      "blocks": {
+        "static-product-card": {
+          "type": "_product-card",
+          "static": true,
+
+          "settings": {
+            "product_card_gap": 4,
+            "border": "none",
+            "border_width": 1,
+            "border_opacity": 100,
+            "border_radius": 0,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+
+          "blocks": {
+            "product-card-gallery": {
+              "type": "_product-card-gallery",
+
+              "settings": {
+                "image_ratio": "adapt",
+                "border": "none",
+                "border_width": 1,
+                "border_opacity": 100,
+                "border_radius": 0,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              }
+            },
+
+            "product_title": {
+              "type": "product-title",
+
+              "settings": {
+                "width": "fit-content",
+                "max_width": "normal",
+                "alignment": "left",
+                "type_preset": "paragraph",
+                "font": "var(--font-body--family)",
+                "font_size": "1rem",
+                "line_height": "normal",
+                "letter_spacing": "normal",
+                "case": "none",
+                "wrap": "pretty",
+                "background": false,
+                "background_color": "#00000026",
+                "corner_radius": 0,
+                "padding-block-start": 4,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              }
+            },
+
+            "price": {
+              "type": "price",
+
+              "settings": {
+                "show_sale_price_first": true,
+                "show_installments": false,
+                "show_tax_info": false,
+                "type_preset": "h6",
+                "width": "100%",
+                "alignment": "left",
+                "font": "var(--font-body--family)",
+                "font_size": "1rem",
+                "line_height": "normal",
+                "letter_spacing": "normal",
+                "case": "none",
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              }
+            }
+          },
+
+          "block_order": [
+            "product-card-gallery",
+            "product_title",
+            "price"
+          ]
+        }
+      }
+    }
+  ]
+}
+
+{% endschema %}
