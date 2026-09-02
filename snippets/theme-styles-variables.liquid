@@ -277,7 +277,7 @@
 
         echo '--font-[preset_name]--weight: var([preset_weight]);' | replace: '[preset_name]', preset_name | replace: '[preset_weight]', preset_weight
 
-        echo '--font-[preset_name]--case: none;' | replace: '[preset_name]', preset_name
+        echo '--font-[preset_name]--case: {{ settings.heading_text_case }};' | replace: '[preset_name]', preset_name
       endfor
     %}
 
@@ -294,6 +294,22 @@
     --font-size--4xl: 4rem;
     --font-size--5xl: 4.8rem;
     --font-size--6xl: 5.6rem;
+
+    --font-h1--letter-spacing: normal;
+    --font-h2--letter-spacing: normal;
+    --font-h3--letter-spacing: normal;
+    --font-h4--letter-spacing: normal;
+    --font-h5--letter-spacing: normal;
+    --font-h6--letter-spacing: normal;
+
+    --font-h1--case: uppercase;
+    --font-h2--case: uppercase;
+    --font-h3--case: uppercase;
+    --font-h4--case: uppercase;
+    --font-h5--case: uppercase;
+    --font-h6--case: uppercase;
+
+    --color: var(--color-foreground);
 
     /* Menu font sizes */
     --menu-font-sm--size: 1.4rem;

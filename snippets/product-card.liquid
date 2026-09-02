@@ -1,13 +1,10 @@
 {%- doc -%}
   This snippet is used to render a product card.
   It is used in the product block, featured product block, and the product card block.
-  The product object is null or when placeholders are rendered.
 
-  @param {object} product - The product object
-  @param {object} children - The children of the product card
-  @param {object} [block] - The block object
-  @param {number} [product_card_gap] - The gap between the product card children (overrides block settings)
-  @param {string} [product_view_context] - The context in which the product card is being rendered. Used for standard events.
+  Global Bratz-style product swatches / variant quick add
+  have been added directly to the product-card so the feature
+  works everywhere Horizon renders a product card.
 {%- enddoc -%}
 
 {% assign block_settings = block.settings %}
@@ -35,11 +32,11 @@
   assign product_card_id = 'product-card-link-' | append: block.id | append: '-' | append: product.id
   assign product_card_gap_value = product_card_gap | default: block_settings.product_card_gap
 
-  # variant_to_link drives the featured image used by the main-product view transition.
   assign variant_to_link = product.selected_or_first_available_variant
 
   if settings.transition_to_main_product
     assign featured_image = variant_to_link.featured_image
+
     if featured_image == blank
       assign featured_image = product.featured_media.preview_image
     endif
@@ -50,6 +47,7 @@
   endif
 
   assign onboarding = false
+
   if product.id == empty or product == blank
     assign onboarding = true
   endif
@@ -57,37 +55,62 @@
   if block_settings.background_color != blank
     render 'contrast-override', background_color: block_settings.background_color, text_color: block_settings.text_color, section_id: block.id
   endif
+
+  assign global_swatch_option = blank
+
+  unless onboarding
+    if product.options_with_values.size > 0
+      for product_option in product.options_with_values
+        assign global_swatch_count = product_option.values | map: 'swatch' | compact | size
+
+        if global_swatch_count > 0
+          assign global_swatch_option = product_option
+          break
+        endif
+      endfor
+    endif
+  endunless
+
+  assign global_initial_variant = product.selected_or_first_available_variant
+
+  assign global_details_id = 'GlobalProductCardDetails-' | append: block.id | append: '-' | append: product.id
+  assign global_form_id = 'GlobalProductCardForm-' | append: block.id | append: '-' | append: product.id
 %}
 
 <product-card
   class="product-card size-style"
   style="{% render 'size-style', settings: block_settings %}"
   data-product-id="{{ product.id }}"
-  id="product-card-{{ block.id }}"
+  id="product-card-{{ block.id }}-{{ product.id }}"
+
   {% if settings.transition_to_main_product %}
     data-product-transition="true"
     data-featured-media-url="{{ featured_media_url }}"
     on:click="/handleViewTransition"
   {% endif %}
+
   {{ block.shopify_attributes }}
+
   {% if onboarding %}
     data-placeholder="true"
   {% endif %}
+
   {%- unless onboarding -%}
     {% # theme-check-disable-next-line UnknownFilter %}
     view-event-payload="{{ product | standard_event_data: 'view', context: product_view_context | escape }}"
   {%- endunless -%}
 >
+
   <a
     id="{{ product_card_id | md5 }}"
     {% unless onboarding %}
-      {% # Link to product.url so algorithmic variant relevance and tracking params are maintained. %}
       href="{{ product.url }}"
     {% endunless %}
     class="product-card__link"
     ref="productCardLink"
     aria-label="{{ product.title | escape }}"
   ></a>
+
   <div
     class="
       product-card__content
@@ -97,24 +120,1306 @@
       spacing-style
       border-style
       gap-style
-      {% if block_settings.background_color != blank %} color-custom-{{ block.id }}{% endif %}
     "
     style="
       {% render 'border-override', settings: block_settings %}
       {% render 'layout-panel-style', settings: block_settings %}
       {% render 'spacing-style', settings: block_settings %}
       {% render 'gap-style', value: product_card_gap_value, name: 'product-card-gap' %}
+
       --quick-add-display: {% if has_quick_add %}flex{% else %}none{% endif %};
       --quick-add-mobile-display: {% if has_mobile_quick_add %}flex{% else %}none{% endif %};
       --quick-add-mobile-opacity: {% if has_mobile_quick_add %}1{% else %}0{% endif %};
-      {% if block_settings.padding-inline-start > 0 %}--zoom-out-padding-inline-start: min(var(--padding-xs), {{ block_settings.padding-inline-start | times: 0.7}}px);{% endif %}
-      {% if block_settings.padding-inline-end > 0 %}--zoom-out-padding-inline-end: min(var(--padding-xs), {{ block_settings.padding-inline-end | times: 0.7}}px);{% endif %}
-      {% if block_settings.padding-block-start > 0 %}--zoom-out-padding-block-start: min(var(--padding-xs), {{ block_settings.padding-block-start | times: 0.7}}px);{% endif %}
-      {% if block_settings.padding-block-end > 0 %}--zoom-out-padding-block-end: min(var(--padding-xs), {{ block_settings.padding-block-end | times: 0.7}}px);{% endif %}
+
+      {% if block_settings.padding-inline-start > 0 %}
+        --zoom-out-padding-inline-start: min(var(--padding-xs), {{ block_settings.padding-inline-start | times: 0.7 }}px);
+      {% endif %}
+
+      {% if block_settings.padding-inline-end > 0 %}
+        --zoom-out-padding-inline-end: min(var(--padding-xs), {{ block_settings.padding-inline-end | times: 0.7 }}px);
+      {% endif %}
+
+      {% if block_settings.padding-block-start > 0 %}
+        --zoom-out-padding-block-start: min(var(--padding-xs), {{ block_settings.padding-block-start | times: 0.7 }}px);
+      {% endif %}
+
+      {% if block_settings.padding-block-end > 0 %}
+        --zoom-out-padding-block-end: min(var(--padding-xs), {{ block_settings.padding-block-end | times: 0.7 }}px);
+      {% endif %}
     "
   >
+
     {{ children }}
+
   </div>
+
+  
+    {% comment %}
+      =========================================================
+      GLOBAL PRODUCT SWATCH / QUICK ADD
+      =========================================================
+    {% endcomment %}
+
+    {% if global_swatch_option != blank %}
+
+      <div
+        class="global-product-card-options"
+        data-global-product-card
+        data-product-id="{{ product.id }}"
+      >
+
+        {% comment %}
+          =====================================================
+          COMPACT SWATCH TRIGGER
+          4 swatches + remaining count + plus button
+          =====================================================
+        {% endcomment %}
+
+        <button
+          type="button"
+          class="global-product-card__swatch-trigger"
+          aria-expanded="false"
+          aria-controls="{{ global_details_id }}"
+          data-global-swatch-trigger
+        >
+
+          <span class="global-product-card__swatches">
+
+            {% for product_option_value in global_swatch_option.values limit: 4 %}
+
+              {% liquid
+                assign compact_swatch_variant = product_option_value.variant
+              %}
+
+              <span
+                class="global-product-card__swatch"
+                aria-hidden="true"
+              >
+                {% if product_option_value.swatch != blank %}
+                  {% render 'swatch',
+                    swatch: product_option_value.swatch,
+                    variant_image: compact_swatch_variant.featured_media
+                  %}
+                {% endif %}
+              </span>
+
+            {% endfor %}
+
+          </span>
+
+
+          {% assign global_remaining_swatches = global_swatch_option.values.size | minus: 4 %}
+
+          {% if global_remaining_swatches > 0 %}
+            <span class="global-product-card__swatch-count">
+              +{{ global_remaining_swatches }} shades
+            </span>
+          {% endif %}
+
+
+          <span
+            class="global-product-card__swatch-action"
+            aria-hidden="true"
+          >
+          <img
+            src="{{ 'plus.svg' | file_url }}"
+            alt="Plus"
+            width="20"
+            height="20"
+          >
+          </span>
+
+        </button>
+
+
+      
+      </div>
+
+    {% endif %}
+
+
+    {% comment %}
+      =====================================================
+      EXPANDED DETAILS
+      =====================================================
+    {% endcomment %}
+
+    <div class="details-wrapper">
+        <div
+          id="{{ global_details_id }}"
+          class="global-product-card__details"
+          data-global-details
+          hidden
+        >
+
+          <div class="global-product-card__details-inner">
+
+            <button
+              type="button"
+              class="global-product-card__details-close"
+              aria-label="Close product options"
+              data-global-details-close
+            >
+              <img
+                src="{{ 'x.svg' | file_url }}"
+                alt="Close"
+                width="12"
+                height="12"
+              >
+            </button>
+
+
+            {% comment %}
+              PRODUCT SUMMARY
+            {% endcomment %}
+
+            <div class="global-product-card__details-product">
+
+              {% if product.featured_media != blank %}
+
+                <div class="global-product-card__details-image">
+
+                  {% render 'image',
+                    image: product.featured_media.preview_image,
+                    class: 'global-product-card__details-image-element',
+                    alt_text_fallback: product.title
+                  %}
+
+                </div>
+
+              {% endif %}
+
+
+              <div class="global-product-card__details-info">
+
+                <h3 class="global-product-card__details-title">
+                  {{ product.title }}
+                </h3>
+
+                <div
+                  class="global-product-card__details-price"
+                  data-global-selected-price
+                >
+                  {{ global_initial_variant.price | money }}
+                </div>
+
+              </div>
+
+            </div>
+
+
+            <div class="global-product-card__details-divider"></div>
+
+
+            {% comment %}
+              VARIANT OPTIONS
+            {% endcomment %}
+
+            <div class="global-product-card__details-option">
+
+              <div
+                class="global-product-card__details-variant-title"
+                data-global-variant-title
+              >
+                {{ global_initial_variant.title }}
+              </div>
+
+
+              <div class="global-product-card__details-swatches">
+
+                {% for product_option_value in global_swatch_option.values %}
+
+                  {% liquid
+                    assign global_swatch_variant = product_option_value.variant
+                  %}
+
+                  <button
+                    type="button"
+                    class="
+                      global-product-card__details-swatch
+                      {% if global_swatch_variant.id == global_initial_variant.id %}
+                        is-selected
+                      {% endif %}
+                    "
+                    data-global-variant-swatch
+                    data-variant-id="{{ global_swatch_variant.id }}"
+                    data-variant-title="{{ global_swatch_variant.title | escape }}"
+                    data-variant-price="{{ global_swatch_variant.price | money | escape }}"
+                    data-variant-available="{{ global_swatch_variant.available }}"
+                    aria-label="{{ product_option_value.name | escape }}"
+                    aria-pressed="{% if global_swatch_variant.id == global_initial_variant.id %}true{% else %}false{% endif %}"
+                  >
+
+                    {% if product_option_value.swatch != blank %}
+
+                      {% render 'swatch',
+                        swatch: product_option_value.swatch,
+                        variant_image: global_swatch_variant.featured_media
+                      %}
+
+                    {% endif %}
+
+                  </button>
+
+                {% endfor %}
+
+              </div>
+
+            </div>
+
+
+            {% comment %}
+              =================================================
+              GLOBAL ADD TO CART
+              =================================================
+            {% endcomment %}
+
+            <div class="global-product-card__details-add-to-cart">
+
+              <product-form-component
+                data-section-id="{{ section.id }}"
+                data-product-id="{{ product.id }}"
+                on:submit="/handleSubmit"
+                class="global-product-card__product-form-component"
+              >
+
+                <div
+                  class="visually-hidden"
+                  aria-live="assertive"
+                  role="status"
+                  aria-atomic="true"
+                  ref="liveRegion"
+                ></div>
+
+
+                {% form 'product',
+                  product,
+                  id: global_form_id,
+                  class: 'global-product-card__product-form',
+                  novalidate: 'novalidate',
+                  data-type: 'add-to-cart-form'
+                %}
+
+                  <input
+                    type="hidden"
+                    name="id"
+                    value="{{ global_initial_variant.id }}"
+                    class="global-product-card__variant-id"
+                    data-global-variant-id
+                    {% unless global_initial_variant.available %}
+                      disabled
+                    {% endunless %}
+                  >
+
+
+                  <input
+                    type="hidden"
+                    name="quantity"
+                    value="1"
+                  >
+
+
+                  <button
+                    type="submit"
+                    name="add"
+                    class="global-product-card__add-button"
+                    data-global-add-button
+                    {% unless global_initial_variant.available %}
+                      disabled
+                    {% endunless %}
+                  >
+
+                    <span data-global-add-label>
+                      {% if global_initial_variant.available %}
+                        ADD TO CART - {{ global_initial_variant.price | money }}
+                      {% else %}
+                        SOLD OUT
+                      {% endif %}
+                    </span>
+
+                  </button>
+
+                {% endform %}
+
+              </product-form-component>
+
+            </div>
+
+          </div>
+
+        </div>
+
+    </div>
+
 </product-card>
 
+
 {% render 'product-card-styles' %}
+
+
+{% javascript %}
+  (() => {
+
+    const initGlobalProductCard = (card) => {
+
+      if (!card || card.dataset.globalProductCardInitialized === 'true') {
+        return;
+      }
+
+      card.dataset.globalProductCardInitialized = 'true';
+
+
+      const trigger = card.querySelector(
+        '[data-global-swatch-trigger]'
+      );
+
+      const details = card.querySelector(
+        '[data-global-details]'
+      );
+
+      const closeButton = card.querySelector(
+        '[data-global-details-close]'
+      );
+
+
+      if (!trigger || !details) {
+        return;
+      }
+
+
+      /* =========================================================
+        PREVENT PRODUCT PAGE NAVIGATION INSIDE OPEN DETAILS
+        ========================================================= */
+
+      card.addEventListener(
+        'click',
+        (event) => {
+
+          if (!card.classList.contains('is-details-open')) {
+            return;
+          }
+
+          const details = event.target.closest(
+            '[data-global-details]'
+          );
+
+          if (!details) {
+            return;
+          }
+
+
+          /* -------------------------------------------------------
+            ALLOWED INTERACTIONS
+            ------------------------------------------------------- */
+
+          const allowedElement = event.target.closest(
+            [
+              '[data-global-variant-swatch]',
+              '[data-global-add-button]',
+              '[data-global-details-close]'
+            ].join(',')
+          );
+
+
+          if (allowedElement) {
+            return;
+          }
+
+
+          /* -------------------------------------------------------
+            BLOCK PRODUCT CARD NAVIGATION
+            ------------------------------------------------------- */
+
+          event.preventDefault();
+          event.stopPropagation();
+          event.stopImmediatePropagation();
+
+        },
+        true
+      );
+
+
+      /* =========================================================
+         SHOW / HIDE DETAILS
+         ========================================================= */
+
+      const closeDetails = () => {
+
+        details.classList.remove('is-open');
+
+        card.classList.remove('is-details-open');
+
+        trigger.setAttribute(
+          'aria-expanded',
+          'false'
+        );
+
+        window.setTimeout(() => {
+
+          if (!details.classList.contains('is-open')) {
+            details.hidden = true;
+          }
+
+        }, 450);
+
+      };
+
+
+      const openDetails = () => {
+
+        details.hidden = false;
+
+        card.classList.add('is-details-open');
+
+        requestAnimationFrame(() => {
+
+          requestAnimationFrame(() => {
+
+            details.classList.add('is-open');
+
+          });
+
+        });
+
+        trigger.setAttribute(
+          'aria-expanded',
+          'true'
+        );
+
+      };
+
+
+      trigger.addEventListener('click', (event) => {
+
+        event.preventDefault();
+        event.stopPropagation();
+
+        const isOpen =
+          trigger.getAttribute('aria-expanded') === 'true';
+
+        if (isOpen) {
+          closeDetails();
+        } else {
+          openDetails();
+        }
+
+      });
+
+
+      if (closeButton) {
+
+        closeButton.addEventListener('click', (event) => {
+
+          event.preventDefault();
+          event.stopPropagation();
+
+          closeDetails();
+
+        });
+
+      }
+
+
+      /* =========================================================
+         VARIANT SELECTION
+         ========================================================= */
+
+      const swatches = details.querySelectorAll(
+        '[data-global-variant-swatch]'
+      );
+
+      const variantInput = details.querySelector(
+        '[data-global-variant-id]'
+      );
+
+      const variantTitle = details.querySelector(
+        '[data-global-variant-title]'
+      );
+
+      const price = details.querySelector(
+        '[data-global-selected-price]'
+      );
+
+      const addButton = details.querySelector(
+        '[data-global-add-button]'
+      );
+
+      const addLabel = details.querySelector(
+        '[data-global-add-label]'
+      );
+
+
+      swatches.forEach((swatch) => {
+
+        swatch.addEventListener('click', (event) => {
+
+          event.preventDefault();
+          event.stopPropagation();
+
+
+          const variantId =
+            swatch.dataset.variantId;
+
+          const selectedTitle =
+            swatch.dataset.variantTitle || '';
+
+          const selectedPrice =
+            swatch.dataset.variantPrice || '';
+
+          const selectedAvailable =
+            swatch.dataset.variantAvailable === 'true';
+
+
+          if (!variantId || !variantInput) {
+            return;
+          }
+
+
+          /* -----------------------------------------------
+             SELECTED SWATCH
+             ----------------------------------------------- */
+
+          swatches.forEach((item) => {
+
+            const selected =
+              item === swatch;
+
+            item.classList.toggle(
+              'is-selected',
+              selected
+            );
+
+            item.setAttribute(
+              'aria-pressed',
+              selected ? 'true' : 'false'
+            );
+
+          });
+
+
+          /* -----------------------------------------------
+             REAL SHOPIFY VARIANT
+             ----------------------------------------------- */
+
+          variantInput.value = variantId;
+
+
+          if (selectedAvailable) {
+
+            variantInput.removeAttribute(
+              'disabled'
+            );
+
+          } else {
+
+            variantInput.setAttribute(
+              'disabled',
+              'disabled'
+            );
+
+          }
+
+
+          /* -----------------------------------------------
+             VARIANT TITLE
+             ----------------------------------------------- */
+
+          if (variantTitle) {
+
+            variantTitle.textContent =
+              selectedTitle;
+
+          }
+
+
+          /* -----------------------------------------------
+             PRICE
+             ----------------------------------------------- */
+
+          if (price) {
+
+            price.textContent =
+              selectedPrice;
+
+          }
+
+
+          /* -----------------------------------------------
+             ADD TO CART BUTTON
+             ----------------------------------------------- */
+
+          if (addButton && addLabel) {
+
+            addButton.disabled =
+              !selectedAvailable;
+
+            addLabel.textContent =
+              selectedAvailable
+                ? `ADD TO CART - ${selectedPrice}`
+                : 'SOLD OUT';
+
+          }
+
+        });
+
+      });
+
+
+      /* =========================================================
+         ADD TO CART FEEDBACK
+         ========================================================= */
+
+      const productForm =
+        details.querySelector(
+          'product-form-component'
+        );
+
+
+      if (
+        productForm &&
+        addButton &&
+        addLabel
+      ) {
+
+        productForm.addEventListener(
+          'submit',
+          () => {
+
+            if (addButton.disabled) {
+              return;
+            }
+
+
+            /* ---------------------------------------------
+               LOADING STATE
+               --------------------------------------------- */
+
+            addButton.disabled = true;
+
+            addLabel.textContent =
+              'ADDING...';
+
+
+            /* ---------------------------------------------
+               RESTORE BUTTON
+               --------------------------------------------- */
+
+            window.setTimeout(() => {
+
+              if (
+                !document.body.contains(
+                  addButton
+                )
+              ) {
+                return;
+              }
+
+
+              const currentPrice =
+                price?.textContent || '';
+
+
+              addButton.disabled = false;
+
+              addLabel.textContent =
+                `ADD TO CART - ${currentPrice}`;
+
+            }, 1200);
+
+          }
+        );
+
+      }
+
+    };
+
+
+    /* =========================================================
+       INITIALIZE ALL PRODUCT CARDS
+       ========================================================= */
+
+    const initAllGlobalProductCards = (
+      root = document
+    ) => {
+
+      if (
+        root.matches &&
+        root.matches('product-card')
+      ) {
+
+        initGlobalProductCard(root);
+
+      }
+
+
+      root
+        .querySelectorAll('product-card')
+        .forEach(initGlobalProductCard);
+
+    };
+
+
+    /* =========================================================
+       INITIAL LOAD
+       ========================================================= */
+
+    if (
+      document.readyState === 'loading'
+    ) {
+
+      document.addEventListener(
+        'DOMContentLoaded',
+        () => {
+          initAllGlobalProductCards();
+        },
+        { once: true }
+      );
+
+    } else {
+
+      initAllGlobalProductCards();
+
+    }
+
+
+    /* =========================================================
+       SHOPIFY THEME EDITOR
+       ========================================================= */
+
+    document.addEventListener(
+      'shopify:section:load',
+      (event) => {
+
+        initAllGlobalProductCards(
+          event.target
+        );
+
+      }
+    );
+
+  })();
+{% endjavascript %}
+
+{% stylesheet %}
+
+.dummy-stars {
+    padding: 2.4rem 2.4rem 0 2.4rem;
+}
+
+slideshow-slide.bratz-product-match__slide {
+    background: var(--color-bunny-boo);
+}
+
+slideshow-container {
+    background: transparent !important;
+}
+
+/* =========================================================
+   GLOBAL PRODUCT CARD OPTIONS
+   ========================================================= */
+
+.global-product-card-options {
+  position: relative;
+  width: 100%;
+  z-index: 20;
+}
+
+
+/* =========================================================
+   HIDE HORIZON DEFAULT QUICK ADD
+   ========================================================= */
+
+/*
+  Horizon's native quick add is not necessarily a sibling
+  of our global options, so hide it from the product card itself.
+*/
+
+product-card .quick-add {
+  display: none !important;
+}
+
+
+/* =========================================================
+   SWATCH TRIGGER
+   ========================================================= */
+
+.global-product-card__swatch-trigger {
+    -webkit-appearance: none;
+    appearance: none;
+    position: relative;
+    z-index: 30;
+    width: 100%;
+    padding: 1.4rem 2.4rem 2.4rem 2.4rem;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    display: flex;
+    align-items: center;
+    gap: .8rem;
+    cursor: pointer;
+    text-align: left;
+    opacity: 1!important;
+    visibility: visible!important;
+}
+
+/* =========================================================
+   COMPACT SWATCHES
+   ========================================================= */
+
+.global-product-card__swatches {
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+  flex-shrink: 0;
+  opacity: 1 !important;
+}
+
+.global-product-card__swatch {
+  width: 2rem;
+  height: 2rem;
+  display: block;
+  flex: 0 0 2rem;
+  border-radius: 50%;
+  overflow: hidden;
+  opacity: 1 !important;
+}
+
+.global-product-card__swatch svg,
+.global-product-card__swatch img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  opacity: 1 !important;
+}
+
+/* =========================================================
+   SHADES COUNT
+   ========================================================= */
+
+.global-product-card__swatch-count {
+    font-size: 1.2rem;
+    text-decoration: underline;
+    white-space: nowrap;
+    opacity: 1!important;
+    color: inherit;
+    line-height: 1.6rem;
+}
+
+/* =========================================================
+   PLUS BUTTON
+   ========================================================= */
+
+.global-product-card__swatch-action {
+  margin-inline-start: auto;
+  font-size: 3.2rem;
+  line-height: 1;
+  font-weight: 400;
+  flex-shrink: 0;
+  opacity: 1 !important;
+  color: inherit;
+  transform: rotate(0deg);
+  transition:
+    transform 0.3s ease;
+}
+
+
+/*
+  When open, rotate + into ×
+*/
+
+.global-product-card__swatch-trigger[aria-expanded="true"]
+  .global-product-card__swatch-action {
+  transform: rotate(45deg);
+}
+
+
+/* =========================================================
+   DETAILS
+   ========================================================= */
+
+.product-card.is-details-open .details-wrapper {
+  z-index: 9999;
+  pointer-events: auto;
+}
+
+.product-card.is-details-open .global-product-card__details {
+  position: relative;
+  z-index: 9999;
+  pointer-events: auto;
+}
+
+.product-card.is-details-open .product-card__link {
+  pointer-events: none !important;
+}
+
+.product-card.is-details-open
+.global-product-card__details
+button,
+.product-card.is-details-open
+.global-product-card__details
+a {
+  pointer-events: auto;
+}
+
+
+.details-wrapper {
+    position: absolute;
+    bottom: 2.2rem;
+    inset-inline: clamp(2.2rem, 4vw, 1rem);
+}
+
+.global-product-card__details {
+
+  inset-block-start: 0;
+
+  inset-inline-start: 0;
+
+  inset-inline-end: 0;
+
+  z-index: 100;
+
+  width: 100%;
+
+  max-height: 0;
+
+  opacity: 0;
+
+  visibility: hidden;
+
+  overflow: hidden;
+
+  pointer-events: none;
+
+  transform: translateY(12px);
+
+  /* top: -26rem; */
+  
+  transition:
+    max-height 0.45s ease,
+    opacity 0.3s ease,
+    transform 0.4s ease,
+    visibility 0s linear 0.45s;
+}
+
+
+/*
+  IMPORTANT:
+  Do NOT force display:block on [hidden].
+  Horizon/browser needs hidden to actually hide the element.
+*/
+
+.global-product-card__details[hidden] {
+  display: none !important;
+}
+
+/* =========================================================
+   OPEN DETAILS
+   ========================================================= */
+
+.global-product-card__details.is-open {
+  display: block;
+  max-height: 70rem;
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateY(0);
+  transition:
+    max-height 0.5s ease,
+    opacity 0.3s ease,
+    transform 0.4s ease,
+    visibility 0s linear 0s;
+}
+
+/* =========================================================
+   DETAILS INNER
+   ========================================================= */
+
+.global-product-card__details-inner {
+    position: relative;
+    width: 100%;
+    box-sizing: border-box;
+    background: rgb(var(--color-background-rgb) / .97);
+    padding: 2.2rem 2.4rem 2.4rem;
+    box-shadow: 0 .8rem 2.5rem #00000014;
+    margin: 0 4rem;
+    margin: 0 auto;
+    max-width: 100%;
+}
+
+
+/* =========================================================
+   CLOSE
+   ========================================================= */
+
+.global-product-card__details-close {
+    position: absolute;
+    inset-block-start: .8rem;
+    inset-inline-end: .8rem;
+    z-index: 110;
+    -webkit-appearance: none;
+    appearance: none;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    padding: .5rem;
+    line-height: 1;
+    cursor: pointer;
+    opacity: 1;
+    transition: transform .2s ease;
+    width: 2.2rem;
+}
+
+
+.global-product-card__details-close:hover {
+  transform: scale(1.08);
+}
+
+
+/* =========================================================
+   PRODUCT SUMMARY
+   ========================================================= */
+
+.global-product-card__details-product {
+  display: flex;
+  align-items: center;
+  gap: 1.4rem;
+  padding-inline-end: 0;
+}
+
+
+.global-product-card__details-image {
+  width: 7.2rem;
+  flex: 0 0 7.2rem;
+}
+
+
+.global-product-card__details-image-element {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+
+.global-product-card__details-info {
+  min-width: 0;
+}
+
+.global-product-card__details-title {
+    margin: 0 0 .4rem;
+    font-size: 1.8rem;
+    line-height: 1.8rem;
+}
+
+.global-product-card__details-price {
+    margin: 0;
+     font-size: 1.8rem;
+    line-height: 1.8rem;
+    font-family: var(--font-subheading--family);
+    font-weight: var(--font-subheading--weight);
+    font-style: var(--font-subheading--style);
+}
+
+
+/* =========================================================
+   DIVIDER
+   ========================================================= */
+
+.global-product-card__details-divider {
+  width: 100%;
+  height: .1rem;
+  margin-block: 2rem;
+  background: currentColor;
+  opacity: 0.35;
+}
+
+
+/* =========================================================
+   VARIANT TITLE
+   ========================================================= */
+
+.global-product-card__details-variant-title {
+    margin-block-end: 1.4rem;
+    font-size: 1.4rem;
+    line-height: 1.2;
+}
+
+/* =========================================================
+   DETAIL SWATCHES
+   ========================================================= */
+
+.global-product-card__details-swatches {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0;
+  opacity: 1 !important;
+}
+
+.global-product-card__details-swatch.is-selected span.swatch {
+    width: 1.6rem;
+    height: 1.6rem;
+}
+
+
+.global-product-card__details-swatch {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  padding: 0;
+  width: 2.8rem;
+  height: 2.8rem;
+  cursor: pointer;
+  border-radius: 50%;
+  position: relative;
+  flex: 0 0 2.8rem;
+  opacity: 1 !important;
+  transition:
+    transform 0.2s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.global-product-card__details-swatch svg,
+.global-product-card__details-swatch img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  opacity: 1 !important;
+}
+
+
+.global-product-card__details-swatch:hover {
+  transform: scale(1.08);
+}
+
+
+/* =========================================================
+   SELECTED SWATCH
+   ========================================================= */
+
+.global-product-card__details-swatch.is-selected {
+  outline: .1rem solid currentColor;
+  outline-offset: -.4rem;
+}
+
+
+/* =========================================================
+   ADD TO CART
+   ========================================================= */
+
+.global-product-card__details-add-to-cart {
+  width: 100%;
+  margin-block-start: 2rem;
+}
+
+
+.global-product-card__product-form {
+  width: 100%;
+}
+
+.global-product-card__add-button {
+    width: 100%;
+    border: 0;
+    background: #000;
+    color: #fff;
+    padding: .65rem 1.6rem;
+    cursor: pointer;
+    transition: opacity .2s ease,transform .15s ease;
+    font-size: 1.2rem;
+    font-family: var(--font-druk-wide--family);
+    font-weight: 500;
+    line-height: 1.2rem;
+    letter-spacing: .1rem;
+}
+
+.global-product-card__add-button:hover:not(:disabled) {
+  opacity: 0.88;
+}
+
+.global-product-card__add-button:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.global-product-card__add-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.global-product-card-options button.global-product-card__swatch-trigger span.global-product-card__swatch:first-child {
+    outline: .1rem solid currentColor;
+    outline-offset: 0rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.global-product-card-options button.global-product-card__swatch-trigger span.global-product-card__swatch:first-child span.swatch {
+    width: 1.6rem;
+    height: 1.6rem;
+}
+
+/* =========================================================
+   PRODUCT CARD LAYER FIX
+   ========================================================= */
+
+/*
+  Horizon's product-card link can sit above custom controls.
+  Keep our controls above it.
+*/
+
+product-card .global-product-card-options {
+  position: relative;
+  z-index: 50;
+}
+
+product-card .global-product-card-options button {
+  position: relative;
+  z-index: 51;
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media screen and (max-width: 749px) {
+
+  .global-product-card__details-inner {
+    padding: 2rem 2.2rem 2.2rem;
+    max-width: 100%;
+  }
+
+  .global-product-card__details-image {
+    width: 7rem;
+    flex-basis: 7rem;
+  }
+
+  .global-product-card__swatch-action {
+    font-size: 2.8rem;
+  }
+
+  .global-product-card__add-button {
+    font-family: var( --font-body--family);
+  }
+
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .global-product-card__details,
+  .global-product-card__swatch-action,
+  .global-product-card__details-swatch,
+  .global-product-card__add-button,
+  .global-product-card__details-close {
+    transition: none;
+  }
+
+}
+
+{% endstylesheet %}

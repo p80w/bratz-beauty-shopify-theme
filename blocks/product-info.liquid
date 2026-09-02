@@ -1,0 +1,121 @@
+{% liquid
+  assign product = closest.product
+  assign product_highlight = product.metafields.p80.product_highlight.value
+%}
+
+<div class="bratz-product-info" {{ block.shopify_attributes }}>
+
+  <div class="bratz-product-info__header">
+
+    {% if product == blank %}
+      <p class="bratz-product-info__title">
+        {{ 'placeholders.product_title' | t }}
+      </p>
+    {% else %}
+      <a
+        class="bratz-product-info__title"
+        href="{{ product.url }}"
+      >
+        {{ product.title }}
+      </a>
+    {% endif %}
+
+    {% if product != blank %}
+      <div class="bratz-product-info__price">
+        {% render 'price',
+          product_resource: product,
+          show_unit_price: false,
+          show_sale_price_first: false
+        %}
+      </div>
+    {% endif %}
+
+  </div>
+
+  {% if product_highlight != blank %}
+    <div class="bratz-product-info__highlight">
+      {{ product_highlight | metafield_tag }}
+    </div>
+  {% endif %}
+
+</div>
+
+{% stylesheet %}
+
+  .bratz-product-info {
+    width: 100%;
+  }
+
+  .bratz-product-info__title {
+    margin: 0;
+    flex: 1 1 auto;
+    min-width: 0;
+    color: inherit;
+    text-decoration: none;
+    text-transform: uppercase;
+  }
+
+  .bratz-product-info__header {
+    font-family: var(--font-subheading--family);
+    font-size: 2.4rem;
+    font-weight: var(--font-subheading--weight);
+    font-style: var(--font-subheading--style);
+    padding: 0.5rem 2.4rem;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1.6rem;
+    width: 100%;
+  }
+
+  .bratz-product-info__highlight {
+    padding: 0 2.4rem;
+  }
+
+  .bratz-product-info__highlight span.metafield-string {
+    font-size: 1.2rem;
+    line-height: 1.6rem;
+  }
+
+  .bratz-product-info__price {
+    flex: 0 0 auto;
+    margin: 0;
+    white-space: nowrap;
+  }
+
+  .bratz-product-info__highlight p {
+    margin: 0;
+  }
+
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Product info",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Product info"
+    },
+    {
+      "type": "text",
+      "id": "highlight_namespace",
+      "label": "Highlight namespace",
+      "default": "custom"
+    },
+    {
+      "type": "text",
+      "id": "highlight_key",
+      "label": "Highlight key",
+      "default": "product_highlight"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product info",
+      "category": "Product"
+    }
+  ]
+}
+{% endschema %}
