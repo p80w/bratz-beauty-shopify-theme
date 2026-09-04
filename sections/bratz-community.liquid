@@ -1,0 +1,603 @@
+{% liquid
+  assign section_settings = section.settings
+  assign show_arrows = section_settings.show_arrows
+  assign slideshow_attributes = ''
+
+  if section_settings.slide_per_click == 'one'
+    assign slideshow_attributes = 'data-bratz-step-one'
+  endif
+%}
+
+<section
+  id="BratzCommunity-{{ section.id }}"
+  class="bratz-community__section section section--{{ section_settings.section_width }}"
+  style="
+    --bratz-community-columns: {{ section_settings.columns }};
+    --bratz-community-mobile-columns: 1;
+    --bratz-community-gap: {{ section_settings.columns_gap }}px;
+    --bratz-community-mobile-slide-gap: {{ section_settings.mobile_slide_gap }}px;
+    --bratz-community-padding-top: {{ section_settings.padding_top }}px;
+    --bratz-community-padding-bottom: {{ section_settings.padding_bottom }}px;
+    --bratz-community-peek-right: {{ section_settings.peek_right }}px;
+    --bratz-community-media-height: {{ section_settings.media_height }}px;
+    --bratz-community-mobile-media-height: {{ section_settings.mobile_media_height }}px;
+  "
+>
+  {% if section_settings.background_image != blank %}
+    <div class="bratz-community__background">
+      {{
+        section_settings.background_image
+        | image_url: width: 2400
+        | image_tag:
+          loading: 'lazy',
+          widths: '750, 1100, 1500, 2000, 2400',
+          sizes: '100vw',
+          class: 'bratz-community__background-image'
+      }}
+    </div>
+  {% endif %}
+
+  <div class="bratz-community__content">
+
+    {% if section_settings.heading != blank %}
+      <h2 class="bratz-community__heading">
+        {{ section_settings.heading }}
+      </h2>
+    {% endif %}
+
+    {% capture slides %}
+      {% for block in section.blocks %}
+
+        {% capture community_slide %}
+          <article
+            class="bratz-community__media"
+            {{ block.shopify_attributes }}
+          >
+
+            {% if block.settings.media_type == 'video' %}
+
+              {% if block.settings.video != blank %}
+                {{
+                  block.settings.video
+                  | video_tag:
+                    image_size: '1400x',
+                    autoplay: true,
+                    loop: true,
+                    muted: true,
+                    controls: false,
+                    playsinline: true,
+                    class: 'bratz-community__video'
+                }}
+              {% endif %}
+
+            {% elsif block.settings.image != blank %}
+
+              {{
+                block.settings.image
+                | image_url: width: 1400
+                | image_tag:
+                  loading: 'lazy',
+                  widths: '400, 600, 800, 1000, 1200, 1400',
+                  sizes: '(min-width: 750px) 33vw, 90vw',
+                  class: 'bratz-community__image'
+              }}
+
+            {% endif %}
+
+          </article>
+        {% endcapture %}
+
+        {% render 'slideshow-slide',
+          index: forloop.index0,
+          children: community_slide,
+          class: 'bratz-community__slide'
+        %}
+
+      {% endfor %}
+    {% endcapture %}
+
+    {% render 'slideshow',
+      class: 'bratz-community__slideshow',
+      show_arrows: show_arrows,
+      icon_style: section_settings.icons_style,
+      icon_shape: section_settings.icons_shape,
+      infinite: false,
+      initial_slide: 0,
+      slides: slides,
+      slide_count: section.blocks.size,
+      attributes: slideshow_attributes
+    %}
+
+  </div>
+</section>
+
+
+{% stylesheet %}
+
+/* =========================================================
+   BRATZ COMMUNITY
+   ========================================================= */
+
+.bratz-community__section {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+
+  padding-top: var(--bratz-community-padding-top);
+  padding-bottom: var(--bratz-community-padding-bottom);
+}
+
+
+/* =========================================================
+   BACKGROUND
+   ========================================================= */
+
+.bratz-community__background {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  overflow: hidden;
+}
+
+.bratz-community__background-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+
+/* =========================================================
+   CONTENT
+   ========================================================= */
+
+.bratz-community__content {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+}
+
+
+/* =========================================================
+   HEADING
+   ========================================================= */
+
+.bratz-community__heading {
+  margin: 0 0 3rem;
+  text-align: center;
+}
+
+
+/* =========================================================
+   HORIZON SLIDESHOW
+   ========================================================= */
+
+.bratz-community__slideshow {
+  width: 100%;
+  position: relative;
+  container-type: inline-size;
+  container-name: bratz-community-carousel;
+}
+
+
+/* =========================================================
+   SLIDE TRACK
+   ========================================================= */
+
+.bratz-community__slideshow slideshow-slides {
+  gap: var(--bratz-community-gap);
+
+  margin-block: -1.5rem;
+  padding-block: 1.5rem;
+
+  padding-inline: 0;
+}
+
+
+/* =========================================================
+   DESKTOP + TABLET
+   DYNAMIC COLUMNS
+   + RIGHT SLIDE PEEK
+   + FIXED HEIGHT
+   ========================================================= */
+
+@container bratz-community-carousel (min-width: 750px) {
+
+  .bratz-community__slide {
+    width: calc(
+      (
+        100% -
+        (
+          var(--bratz-community-gap) *
+          (var(--bratz-community-columns) - 1)
+        ) -
+        var(--bratz-community-peek-right)
+      ) / var(--bratz-community-columns)
+    );
+
+    flex: 0 0 calc(
+      (
+        100% -
+        (
+          var(--bratz-community-gap) *
+          (var(--bratz-community-columns) - 1)
+        ) -
+        var(--bratz-community-peek-right)
+      ) / var(--bratz-community-columns)
+    );
+
+    height: var(--bratz-community-media-height);
+
+    min-width: 0;
+    min-height: 0;
+
+    scroll-snap-align: start;
+  }
+}
+
+
+/* =========================================================
+   MEDIA
+   ========================================================= */
+
+.bratz-community__media {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+}
+
+
+/* =========================================================
+   IMAGE
+   ========================================================= */
+
+.bratz-community__image {
+  display: block;
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+  object-position: center;
+}
+
+
+/* =========================================================
+   VIDEO
+   ========================================================= */
+
+.bratz-community__video {
+  display: block;
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+  object-position: center;
+}
+
+
+/* =========================================================
+   ARROWS
+   ========================================================= */
+
+.bratz-community__slideshow slideshow-arrows {
+  padding-inline: 0;
+}
+
+.bratz-community__slideshow .slideshow-control {
+  z-index: 5;
+}
+
+
+@media screen and (min-width: 750px) and (max-width: 1199px) {
+  .bratz-community__section {
+    --bratz-community-columns: 3 !important;
+  }
+}
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media screen and (max-width: 749px) {
+  .bratz-community__section {
+    padding: 4.8rem 0;
+  }
+
+  .bratz-community__section {
+    padding-inline: 0;
+  }
+
+  .bratz-community__content {
+    width: 100%;
+  }
+
+  .bratz-community__heading {
+    margin-inline: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .bratz-community__slideshow slideshow-slides {
+    gap: var(--bratz-community-mobile-slide-gap);
+    padding-inline: 1.5rem;
+  }
+
+  .bratz-community__slide {
+    width: calc(100% - 1.5rem);
+
+    flex: 0 0 calc(100% - 1.5rem);
+
+    height: var(--bratz-community-mobile-media-height);
+
+    min-width: 0;
+    min-height: 0;
+
+    scroll-snap-align: start;
+  }
+
+  .bratz-community__media {
+    height: 100%;
+  }
+}
+
+{% endstylesheet %}
+
+
+{% schema %}
+{
+  "name": "Bratz Community",
+  "tag": "section",
+  "class": "bratz-community",
+
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Background image"
+    },
+
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "DISCOVER OUR COMMUNITY FAVORITES"
+    },
+
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Section width",
+      "options": [
+        {
+          "value": "page-width",
+          "label": "Page width"
+        },
+        {
+          "value": "full-width",
+          "label": "Full width"
+        }
+      ],
+      "default": "full-width"
+    },
+
+    {
+      "type": "range",
+      "id": "columns",
+      "label": "Desktop / tablet columns",
+      "min": 1,
+      "max": 5,
+      "step": 1,
+      "default": 5
+    },
+
+    {
+      "type": "range",
+      "id": "media_height",
+      "label": "Desktop / tablet media height",
+      "min": 200,
+      "max": 700,
+      "step": 10,
+      "unit": "px",
+      "default": 360
+    },
+
+    {
+      "type": "range",
+      "id": "mobile_media_height",
+      "label": "Mobile media height",
+      "min": 200,
+      "max": 700,
+      "step": 10,
+      "unit": "px",
+      "default": 420
+    },
+
+    {
+      "type": "range",
+      "id": "columns_gap",
+      "label": "Columns gap",
+      "min": 0,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "default": 16
+    },
+
+    {
+      "type": "range",
+      "id": "peek_right",
+      "label": "Right slide peek",
+      "min": 0,
+      "max": 300,
+      "step": 4,
+      "unit": "px",
+      "default": 100
+    },
+
+    {
+      "type": "range",
+      "id": "mobile_slide_gap",
+      "label": "Mobile slide gap",
+      "min": 0,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "default": 4
+    },
+
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding top",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 64
+    },
+
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding bottom",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 64
+    },
+
+    {
+      "type": "checkbox",
+      "id": "show_arrows",
+      "label": "Show arrows",
+      "default": true
+    },
+
+    {
+      "type": "select",
+      "id": "slide_per_click",
+      "label": "Arrow slide behavior",
+      "options": [
+        {
+          "value": "default",
+          "label": "Default"
+        },
+        {
+          "value": "one",
+          "label": "1 slide per click"
+        }
+      ],
+      "default": "one"
+    },
+
+    {
+      "type": "select",
+      "id": "icons_style",
+      "label": "Arrow style",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "chevron",
+          "label": "Chevron"
+        },
+        {
+          "value": "arrow",
+          "label": "Arrow"
+        }
+      ],
+      "default": "arrow"
+    },
+
+    {
+      "type": "select",
+      "id": "icons_shape",
+      "label": "Arrow shape",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "circle",
+          "label": "Circle"
+        },
+        {
+          "value": "square",
+          "label": "Square"
+        }
+      ],
+      "default": "none"
+    }
+  ],
+
+  "blocks": [
+    {
+      "type": "community_media",
+      "name": "Community media",
+
+      "settings": [
+        {
+          "type": "select",
+          "id": "media_type",
+          "label": "Media type",
+
+          "options": [
+            {
+              "value": "image",
+              "label": "Image"
+            },
+            {
+              "value": "video",
+              "label": "Video"
+            }
+          ],
+
+          "default": "image"
+        },
+
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+
+        {
+          "type": "video",
+          "id": "video",
+          "label": "Video"
+        }
+      ]
+    }
+  ],
+
+  "presets": [
+    {
+      "name": "Bratz Community",
+
+      "blocks": [
+        {
+          "type": "community_media"
+        },
+        {
+          "type": "community_media"
+        },
+        {
+          "type": "community_media"
+        },
+        {
+          "type": "community_media"
+        },
+        {
+          "type": "community_media"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

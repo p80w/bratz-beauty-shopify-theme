@@ -476,6 +476,20 @@
     --transparent-header-offset-boolean: 0; /* stylelint-disable-line declaration-property-value-disallowed-list */
   }
 
+
+  header-component#header-component[data-sticky-state="active"] .menu-list__link {
+    color: var(--color-foreground);
+  }
+
+  header-component#header-component[data-sticky-state="active"] span.header-logo__image-container {
+    -webkit-filter: inherit;
+    filter: inherit;
+  }
+
+  header-component#header-component[data-sticky-state="active"] .header-actions__action svg path {
+    fill: var(--color-foreground);
+  }
+
   .header {
     /* Set header paddings based on height setting */
     --header-padding: var(--padding-sm);

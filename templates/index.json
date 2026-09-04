@@ -249,11 +249,109 @@
         "padding-inline-start": 0,
         "padding-inline-end": 0
       }
+    },
+    "bratz_community_z6Hg3N": {
+      "type": "bratz-community",
+      "blocks": {
+        "community_media_HVrCW3": {
+          "type": "community_media",
+          "name": "Community 7",
+          "settings": {
+            "media_type": "image",
+            "image": "shopify://shop_images/Frame13.png"
+          }
+        },
+        "community_media_yxzU7K": {
+          "type": "community_media",
+          "name": "Community 1",
+          "settings": {
+            "media_type": "image",
+            "image": "shopify://shop_images/2f5a41bd0b92a9e9aba530fc39c9d8873d5154dc.png"
+          }
+        },
+        "community_media_YxybyX": {
+          "type": "community_media",
+          "name": "Community 2",
+          "settings": {
+            "media_type": "image",
+            "image": "shopify://shop_images/197e89d9f78dbe91c3fa46bf4db9a90e8bb0e505_1.png"
+          }
+        },
+        "community_media_kqcy3d": {
+          "type": "community_media",
+          "name": "Community 4",
+          "settings": {
+            "media_type": "video",
+            "video": "shopify://files/videos/13c15a20cf7840569ed6fc53e566de3f.HD-1080p-7.2Mbps-89436699.mp4"
+          }
+        },
+        "community_media_WHfQeC": {
+          "type": "community_media",
+          "name": "Community 6",
+          "settings": {
+            "media_type": "image",
+            "image": "shopify://shop_images/Frame13.png"
+          }
+        },
+        "community_media_Gy9yVA": {
+          "type": "community_media",
+          "name": "Community 3",
+          "settings": {
+            "media_type": "image",
+            "image": "shopify://shop_images/d7fef36506e6c5c4f582eb55b07e4c57c7cb79c0.png"
+          }
+        },
+        "community_media_xjrQJG": {
+          "type": "community_media",
+          "name": "Community 5",
+          "settings": {
+            "media_type": "image",
+            "image": "shopify://shop_images/7b301952502e110e2884830a0c8effadfe2dec19.png"
+          }
+        },
+        "community_media_WE3xg3": {
+          "type": "community_media",
+          "name": "Community 8",
+          "settings": {
+            "media_type": "image",
+            "image": "shopify://shop_images/Frame13.png"
+          }
+        }
+      },
+      "block_order": [
+        "community_media_HVrCW3",
+        "community_media_yxzU7K",
+        "community_media_YxybyX",
+        "community_media_kqcy3d",
+        "community_media_WHfQeC",
+        "community_media_Gy9yVA",
+        "community_media_xjrQJG",
+        "community_media_WE3xg3"
+      ],
+      "name": "Bratz Community",
+      "settings": {
+        "background_image": "shopify://shop_images/Rectangle_70.png",
+        "heading": "Discover Our Community Favorites",
+        "section_width": "full-width",
+        "columns": 5,
+        "media_height": 480,
+        "mobile_media_height": 380,
+        "columns_gap": 4,
+        "peek_right": 100,
+        "mobile_slide_gap": 4,
+        "padding_top": 80,
+        "padding_bottom": 80,
+        "show_arrows": true,
+        "slide_per_click": "one",
+        "icons_style": "arrow",
+        "icons_shape": "circle"
+      }
     }
   },
   "order": [
     "bratz_video_banner_8d7ipJ",
     "bratz_product_categories_m7CBUH",
-    "bratz_product_match_QV3Ue4"
+    "bratz_product_match_QV3Ue4",
+    "bratz_community_z6Hg3N"
   ]
 }
