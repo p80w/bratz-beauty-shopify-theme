@@ -325,7 +325,7 @@
 
 <header-component
   id="header-component"
-  class="{{ class }} {% if template.name == 'index' %} header--homepage-overlay{% endif %}"
+  class="{{ class }} {% if template.name == 'index' or template.name == 'collection' %} header--homepage-overlay{% endif %}"
   data-theme-color="rgb({{ section.settings.background_color_top.rgb | default: settings.page_background_color.rgb }})"
   data-bubble-style="{{ section.settings.bubble_style }}"
   {% if transparent %}

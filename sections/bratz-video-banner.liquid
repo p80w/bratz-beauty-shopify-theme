@@ -5,6 +5,10 @@
 <section
   class="bratz-video-banner"
   id="BratzVideoBanner-{{ section.id }}"
+  style="
+    --bratz-video-banner-desktop-height: {{ section_settings.desktop_height }}px;
+    --bratz-video-banner-mobile-height: {{ section_settings.mobile_height }}px;
+  "
 >
   {%- comment -%}
     VIDEO BACKGROUND
@@ -13,14 +17,19 @@
 
   {% if section_settings.video != blank %}
     <div class="bratz-video-banner__video">
-      {% render 'video',
-        video: section_settings.video,
-        video_autoplay: true,
-        video_loop: true,
-        disable_controls: true,
-        video_preview_image: section_settings.video.preview_image,
-        additional_attributes: 'aria-hidden="true"'
-      %}
+      {{
+        section_settings.video
+        | video_tag:
+          image_size: '2500x',
+          autoplay: true,
+          loop: true,
+          muted: true,
+          controls: false,
+          playsinline: true,
+          preload: 'auto',
+          class: 'bratz-video-banner__video-element',
+          aria_hidden: true
+      }}
     </div>
   {% endif %}
 
@@ -196,7 +205,8 @@
 .bratz-video-banner {
   position: relative;
   width: 100%;
-  min-height: 80rem;
+  min-height: var(--bratz-video-banner-desktop-height);
+  height: var(--bratz-video-banner-desktop-height);
   overflow: hidden;
 }
 
@@ -410,7 +420,7 @@
   align-items: center;
   justify-content: center;
   width: 100%;
-  min-height: 80rem;
+  min-height: var(--bratz-video-banner-desktop-height);
   text-align: center;
   color: var(--color-white);
   max-width: 53rem;
@@ -528,12 +538,13 @@ h2.bratz-video-banner__heading.h1 {
 @media screen and (max-width: 749px) {
 
   .bratz-video-banner {
-    min-height: 60rem;
-
+    min-height: var(--bratz-video-banner-mobile-height);
+    height: var(--bratz-video-banner-mobile-height);
   }
 
   .bratz-video-banner__content {
-    min-height: 60rem;
+    min-height: var(--bratz-video-banner-mobile-height);
+    height: var(--bratz-video-banner-mobile-height);
     padding-top: 5rem;
   }
 
@@ -629,6 +640,28 @@ h2.bratz-video-banner__heading.h1 {
       "type": "video",
       "id": "video",
       "label": "Background video"
+    },
+
+    {
+      "type": "range",
+      "id": "desktop_height",
+      "label": "Desktop video height",
+      "min": 400,
+      "max": 1200,
+      "step": 10,
+      "unit": "px",
+      "default": 800
+    },
+
+    {
+      "type": "range",
+      "id": "mobile_height",
+      "label": "Mobile video height",
+      "min": 400,
+      "max": 1000,
+      "step": 10,
+      "unit": "px",
+      "default": 600
     },
 
     {
@@ -812,4 +845,5 @@ h2.bratz-video-banner__heading.h1 {
   ]
 
 }
+
 {% endschema %}

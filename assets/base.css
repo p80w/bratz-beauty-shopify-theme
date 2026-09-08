@@ -104,6 +104,7 @@ select {
   transition: transform var(--hover-transition-duration) var(--hover-transition-timing),
     box-shadow var(--hover-transition-duration) var(--hover-transition-timing);
   z-index: var(--layer-flat);
+  background: var(--color-bunny-boo);
 }
 
 .product-card__link {
