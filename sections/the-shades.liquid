@@ -1,0 +1,1415 @@
+{% comment %}
+  THE SHADES
+  Reusable global shade showcase/gallery.
+  Data is managed entirely from the Theme Editor.
+{% endcomment %}
+
+<div
+  id="TheShades-{{ section.id }}"
+  class="the-shades"
+  data-the-shades
+>
+  <div class="the-shades__container section">
+    <div class="the-shades__header">
+      <div class="the-shades__heading-wrap">
+        {% if section.settings.eyebrow != blank %}
+          <p class="the-shades__eyebrow">{{ section.settings.eyebrow }}</p>
+        {% endif %}
+        {% if section.settings.heading != blank %}
+          <h2 class="the-shades__heading">{{ section.settings.heading }}</h2>
+        {% endif %}
+        {% if section.settings.description != blank %}
+          <div class="the-shades__description">{{ section.settings.description }}</div>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="the-shades__tabs-wrap">
+      <div class="the-shades__tabs" role="tablist" aria-label="Shade categories">
+        {% assign tab_labels = "ALL|FAIR|LIGHT|MEDIUM|TAN|DEEP" | split: "|" %}
+        {% for label in tab_labels %}
+          {% assign tab_value = label | downcase %}
+          <button
+            class="the-shades__tab{% if forloop.first %} is-active{% endif %}"
+            type="button"
+            role="tab"
+            aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
+            data-shade-tab="{{ tab_value }}"
+          >{{ label }}</button>
+        {% endfor %}
+        <span class="the-shades__tab-indicator" aria-hidden="true"></span>
+      </div>
+    </div>
+
+    <div class="the-shades__slider" data-shade-slider>
+      {% assign shade_categories = 'all|fair|light|medium|tan|deep' | split: '|' %}
+
+      {% for active_category in shade_categories %}
+        {% assign slide_count = 0 %}
+        {% capture slides %}
+          {% for block in section.blocks %}
+            {% if active_category == 'all' or block.type == active_category %}
+              {% for i in (1..7) %}
+                {% assign image_key = 'image_' | append: i %}
+                {% assign title_key = 'title_' | append: i %}
+                {% assign subtitle_key = 'subtitle_' | append: i %}
+                {% assign shade_image = block.settings[image_key] %}
+                {% assign shade_title = block.settings[title_key] %}
+                {% assign shade_subtitle = block.settings[subtitle_key] %}
+
+                {% if shade_image != blank %}
+                  {% assign slide_count = slide_count | plus: 1 %}
+                  {% capture slide_content %}
+                    <article class="the-shades__card">
+                      <div class="the-shades__image-wrap">
+                        {{
+                          shade_image
+                          | image_url: width: 1000
+                          | image_tag:
+                            class: 'the-shades__image',
+                            loading: 'lazy',
+                            widths: '320, 480, 640, 800, 1000',
+                            sizes: '(min-width: 990px) 25vw, 50vw',
+                            alt: shade_title
+                        }}
+                      </div>
+
+                      {% if shade_title != blank or shade_subtitle != blank %}
+                        <div class="the-shades__card-content">
+                          {% if shade_title != blank %}
+                            <h3 class="the-shades__card-title">{{ shade_title }}</h3>
+                          {% endif %}
+                          {% if shade_subtitle != blank %}
+                            <p class="the-shades__card-subtitle">{{ shade_subtitle }}</p>
+                          {% endif %}
+                        </div>
+                      {% endif %}
+                    </article>
+                  {% endcapture %}
+
+                  {% assign slide_index = slide_count | minus: 1 %}
+                  {% assign shade_slide_id = 'shade-' | append: active_category | append: '-' | append: slide_count %}
+
+                  {% render 'slideshow-slide',
+                    index: slide_index,
+                    children: slide_content,
+                    class: 'the-shades__slide',
+                    slide_id: shade_slide_id
+                  %}
+                {% endif %}
+              {% endfor %}
+            {% endif %}
+          {% endfor %}
+        {% endcapture %}
+
+        {% if slide_count > 0 %}
+          {% capture shade_arrows %}
+            {% render 'slideshow-arrows',
+              class: 'the-shades__arrows',
+              icon_style: 'arrow',
+              icon_shape: 'circle',
+              arrows_position: 'center'
+            %}
+          {% endcapture %}
+
+          {% assign shade_slideshow_class = 'the-shades__slideshow the-shades__slideshow--' | append: active_category %}
+          {% assign shade_slideshow_ref = 'shadeSlideshow-' | append: active_category %}
+          {% unless active_category == 'all' %}
+            {% assign shade_slideshow_class = shade_slideshow_class | append: ' is-hidden' %}
+          {% endunless %}
+
+          {% render 'slideshow',
+            ref: shade_slideshow_ref,
+            class: shade_slideshow_class,
+            slides: slides,
+            slide_count: slide_count,
+            infinite: false,
+            show_arrows: false,
+            slideshow_arrows: shade_arrows,
+            arrows_position: 'center',
+            animate_arrows: false
+          %}
+        {% endif %}
+      {% endfor %}
+    </div>
+
+    <div class="the-shades__empty" data-shade-empty hidden>
+      <p>No shades available yet.</p>
+    </div>
+  </div>
+</div>
+
+<style>
+  #TheShades-{{ section.id }} {
+    --shades-bg: {{ section.settings.background_color }};
+    --shades-text: {{ section.settings.text_color }};
+    --shades-muted: {{ section.settings.muted_color }};
+    --shades-accent: {{ section.settings.accent_color }};
+    background: var(--shades-bg);
+    color: var(--shades-text);
+    width: 100%;
+    overflow: hidden;
+  }
+
+  #TheShades-{{ section.id }} .the-shades__container {
+    width: 100%;
+    margin: 0;
+    padding: 8rem 0;
+  }
+
+  #TheShades-{{ section.id }} .the-shades__header {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    margin: 0 0 2.4rem;
+  }
+
+  #TheShades-{{ section.id }} .the-shades__heading-wrap {
+    max-width: 760px;
+  }
+
+  #TheShades-{{ section.id }} .the-shades__eyebrow,
+  #TheShades-{{ section.id }} .the-shades__description {
+    display: none;
+  }
+
+  #TheShades-{{ section.id }} .the-shades__heading {
+    margin: 0;
+    font-size: 1.8rem;
+    line-height: 1.6rem;
+    text-transform: uppercase;
+  }
+
+  #TheShades-{{ section.id }} .the-shades__tabs-wrap {
+    display: flex;
+    justify-content: center;
+    margin: 0 0 17px;
+  }
+
+  #TheShades-{{ section.id }} .the-shades__tabs {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 29px;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
+  #TheShades-{{ section.id }} .the-shades__tab {
+    position: relative;
+    z-index: 2;
+    min-width: 0;
+    padding: 3px 0 4px;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    color: var(--shades-text);
+    cursor: pointer;
+    font: inherit;
+    font-size: 1.2rem;
+    line-height: 1.2rem;
+    text-transform: uppercase;
+    transition: opacity 220ms ease, transform 220ms ease;
+    font-family: var(--font-heading--family);
+    font-style: var(--font-heading--style);
+    font-weight: var(--font-heading--weight);
+  }
+
+  #TheShades-{{ section.id }} .the-shades__tab:not(.is-active) {
+    opacity: 0.88;
+  }
+
+  #TheShades-{{ section.id }} .the-shades__tab:hover {
+    opacity: 1;
+  }
+
+  #TheShades-{{ section.id }} .the-shades__tab:active {
+    transform: translateY(1px);
+  }
+
+  #TheShades-{{ section.id }} .the-shades__tab.is-active {
+    opacity: 1;
+  }
+
+  #TheShades-{{ section.id }} .the-shades__tab-indicator {
+    position: absolute;
+    z-index: 1;
+    left: 0;
+    bottom: 0;
+    height: 1px;
+    width: 20px;
+    border-radius: 0;
+    background: var(--shades-text);
+    box-shadow: none;
+    pointer-events: none;
+    transition:
+      transform 360ms cubic-bezier(.22, 1, .36, 1),
+      width 360ms cubic-bezier(.22, 1, .36, 1);
+  }
+
+  #TheShades-{{ section.id }} .the-shades__slider {
+    position: relative;
+    margin: 0 -28px;
+  }
+
+  #TheShades-{{ section.id }} .the-shades__slideshow {
+    width: 100%;
+  }
+
+  #TheShades-{{ section.id }} .the-shades__slideshow.is-hidden {
+    display: none;
+  }
+
+  /* Smooth transition only when switching shade tabs. */
+  #TheShades-{{ section.id }} .the-shades__slideshow.tab-switch-enter {
+    animation: the-shades-tab-enter-{{ section.id }} 320ms cubic-bezier(.22, 1, .36, 1) both;
+  }
+
+  @keyframes the-shades-tab-enter-{{ section.id }} {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  #TheShades-{{ section.id }} .the-shades__slideshow slideshow-container {
+    overflow: visible;
+  }
+
+  #TheShades-{{ section.id }} .the-shades__slideshow slideshow-slides {
+    gap: 4px;
+    padding-inline: 28px;
+    scroll-padding-inline: 28px;
+    --slideshow-gap: 2px;
+  }
+
+  #TheShades-{{ section.id }} .the-shades__slide {
+    flex: 0 0 calc((100% - 6px) / 4.15);
+    width: calc((100% - 6px) / 4.15);
+    min-width: 0;
+    scroll-snap-align: start;
+  }
+
+  #TheShades-{{ section.id }} .the-shades__card {
+    width: 100%;
+  }
+
+  #TheShades-{{ section.id }} .the-shades__image-wrap {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 1 / 1;
+    background: #eee;
+  }
+
+  #TheShades-{{ section.id }} .the-shades__image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: scale(1.001);
+    transition: transform 700ms cubic-bezier(.22,1,.36,1);
+  }
+
+  #TheShades-{{ section.id }} .the-shades__card:hover .the-shades__image {
+    transform: scale(1.025);
+  }
+
+  #TheShades-{{ section.id }} .the-shades__card-content {
+    padding: 12px 2px 0;
+  }
+
+  #TheShades-{{ section.id }} .the-shades__card-title {
+    margin: 0;
+    font-size: 1.6rem;
+    line-height: 2.4rem;
+    font-family: var(--font-body--family);
+    font-style: var(--font-body--style);
+    font-weight: 700;
+  }
+
+  #TheShades-{{ section.id }} .the-shades__card-subtitle {
+    margin: 5px 0 0;
+    font-size: 1.6rem;
+    line-height: 2.4rem;
+  }
+
+  #TheShades-{{ section.id }} .the-shades__arrows {
+    z-index: 5;
+    align-items: center;
+    justify-content: space-between;
+    padding-inline: 28px;
+    mix-blend-mode: normal;
+    pointer-events: none;
+  }
+
+  #TheShades-{{ section.id }} .the-shades__arrows .slideshow-control {
+    pointer-events: auto;
+    opacity: 1;
+    min-width: 38px;
+    width: 38px;
+    min-height: 38px;
+    height: 38px;
+    padding: 0;
+    color: #fff;
+    background: #000;
+    border: 0;
+    border-radius: 50%;
+  }
+
+  #TheShades-{{ section.id }} .the-shades__arrows .slideshow-control svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  #TheShades-{{ section.id }} .the-shades__arrows .slideshow-control:hover {
+    transform: scale(1.05);
+  }
+
+  #TheShades-{{ section.id }} .the-shades__empty {
+    padding: 40px 20px;
+    text-align: center;
+    color: var(--shades-muted);
+    font-size: 12px;
+  }
+
+  #TheShades-{{ section.id }} .the-shades__empty p {
+    margin: 0;
+  }
+
+  @media screen and (max-width: 749px) {
+    #TheShades-{{ section.id }} .the-shades__container {
+      padding: 38px 0 44px;
+    }
+
+    #TheShades-{{ section.id }} .the-shades__tabs-wrap {
+      justify-content: center;
+      overflow-x: auto;
+      margin: 0 -16px 15px;
+      padding: 0 16px;
+      scrollbar-width: none;
+    }
+
+    #TheShades-{{ section.id }} .the-shades__tabs-wrap::-webkit-scrollbar {
+      display: none;
+    }
+
+    #TheShades-{{ section.id }} .the-shades__tabs {
+      flex: 0 0 max-content;
+      gap: 13px;
+    }
+
+
+    #TheShades-{{ section.id }} .the-shades__slider {
+      margin: 0 -16px;
+    }
+
+    /* Mobile: show 2 full cards + half of the third card, with no arrows. */
+    #TheShades-{{ section.id }} .the-shades__slideshow slideshow-slides {
+      padding-inline: 16px;
+      scroll-padding-inline: 16px;
+    }
+
+    #TheShades-{{ section.id }} .the-shades__slide {
+      flex: 0 0 calc((100% - 4px) / 2.2);
+      width: calc((100% - 4px) / 2.2);
+    }
+
+    #TheShades-{{ section.id }} .the-shades__arrows {
+      display: none !important;
+    }
+
+    #TheShades-{{ section.id }} .the-shades__card-content {
+      padding: 1.6rem 0 0;
+    }
+
+    #TheShades-{{ section.id }} .the-shades__card-subtitle {
+      margin: 0;
+    }
+
+    #TheShades-{{ section.id }} .the-shades__arrow {
+      top: 29vw;
+      right: 18px;
+      width: 34px;
+      height: 34px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #TheShades-{{ section.id }} .the-shades__viewport {
+      scroll-behavior: auto;
+    }
+
+    #TheShades-{{ section.id }} .the-shades__tab,
+    #TheShades-{{ section.id }} .the-shades__tab-indicator,
+    #TheShades-{{ section.id }} .the-shades__card,
+    #TheShades-{{ section.id }} .the-shades__image,
+    #TheShades-{{ section.id }} .the-shades__arrow,
+    #TheShades-{{ section.id }} .the-shades__arrow span {
+      transition: none !important;
+    }
+  }
+</style>
+
+<script>
+  (() => {
+    const section = document.getElementById('TheShades-{{ section.id }}');
+    if (!section || section.dataset.initialized === 'true') return;
+    section.dataset.initialized = 'true';
+
+    const tabs = [...section.querySelectorAll('[data-shade-tab]')];
+    const tabContainer = section.querySelector('.the-shades__tabs');
+    const indicator = section.querySelector('.the-shades__tab-indicator');
+    const slideshows = [...section.querySelectorAll('.the-shades__slideshow')];
+
+    if (!tabs.length || !indicator || !slideshows.length) return;
+
+    let activeCategory = 'all';
+
+    const moveIndicator = (tab, instant = false) => {
+      if (!tab || !tabContainer) return;
+
+      const tabRect = tab.getBoundingClientRect();
+      const containerRect = tabContainer.getBoundingClientRect();
+
+      if (instant) indicator.style.transition = 'none';
+      indicator.style.width = `${tabRect.width}px`;
+      indicator.style.transform = `translateX(${tabRect.left - containerRect.left}px)`;
+
+      if (instant) {
+        requestAnimationFrame(() => indicator.style.removeProperty('transition'));
+      }
+    };
+
+    const switchSlideshow = category => {
+      const nextSlideshow = slideshows.find(slideshow =>
+        slideshow.classList.contains(`the-shades__slideshow--${category}`)
+      );
+      const emptyState = section.querySelector('[data-shade-empty]');
+
+      slideshows.forEach(slideshow => {
+        slideshow.classList.add('is-hidden');
+        slideshow.classList.remove('tab-switch-enter');
+      });
+
+      if (!nextSlideshow) {
+        if (emptyState) {
+          emptyState.hidden = false;
+          emptyState.querySelector('p').textContent = `No ${category.toUpperCase()} shades available yet.`;
+        }
+        return;
+      }
+
+      if (emptyState) emptyState.hidden = true;
+
+      nextSlideshow.classList.remove('is-hidden');
+
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          nextSlideshow.classList.add('tab-switch-enter');
+        });
+      });
+    };
+
+    tabs.forEach(tab => {
+      const category = tab.dataset.shadeTab;
+      const slideshow = slideshows.find(item =>
+        item.classList.contains(`the-shades__slideshow--${category}`)
+      );
+
+      if (slideshow) slideshow.classList.add(`the-shades__slideshow--${category}`);
+    });
+
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        const category = tab.dataset.shadeTab;
+        if (!category || category === activeCategory) return;
+
+        activeCategory = category;
+
+        tabs.forEach(item => {
+          const active = item === tab;
+          item.classList.toggle('is-active', active);
+          item.setAttribute('aria-selected', active ? 'true' : 'false');
+        });
+
+        switchSlideshow(category);
+
+        moveIndicator(tab);
+
+        tab.scrollIntoView({
+          behavior: 'smooth',
+          block: 'nearest',
+          inline: 'center'
+        });
+      });
+    });
+
+    const positionIndicator = () => {
+      const activeTab = tabs.find(tab => tab.dataset.shadeTab === activeCategory) || tabs[0];
+      moveIndicator(activeTab, true);
+    };
+
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(positionIndicator, 100);
+    });
+
+    positionIndicator();
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "The Shades",
+  "tag": "section",
+  "class": "section-the-shades",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Find your shade"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "THE SHADES"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description",
+      "default": "<p>Explore our shades and find the perfect match for you.</p>"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text",
+      "default": "#111111"
+    },
+    {
+      "type": "color",
+      "id": "muted_color",
+      "label": "Muted text",
+      "default": "#777777"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Active tab background",
+      "default": "#FFFFFF"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "fair",
+      "name": "FAIR",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "header",
+          "content": "fair \u2014 Image 1"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_1",
+          "label": "Image 1"
+        },
+        {
+          "type": "text",
+          "id": "title_1",
+          "label": "Title 1",
+          "default": "Fair 01"
+        },
+        {
+          "type": "text",
+          "id": "subtitle_1",
+          "label": "Subtitle 1",
+          "default": "Fair tones"
+        },
+        {
+          "type": "header",
+          "content": "fair \u2014 Image 2"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_2",
+          "label": "Image 2"
+        },
+        {
+          "type": "text",
+          "id": "title_2",
+          "label": "Title 2",
+          "default": "Fair 02"
+        },
+        {
+          "type": "text",
+          "id": "subtitle_2",
+          "label": "Subtitle 2",
+          "default": "Fair tones"
+        },
+        {
+          "type": "header",
+          "content": "fair \u2014 Image 3"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_3",
+          "label": "Image 3"
+        },
+        {
+          "type": "text",
+          "id": "title_3",
+          "label": "Title 3",
+          "default": "Fair 03"
+        },
+        {
+          "type": "text",
+          "id": "subtitle_3",
+          "label": "Subtitle 3",
+          "default": "Fair tones"
+        },
+        {
+          "type": "header",
+          "content": "fair \u2014 Image 4"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_4",
+          "label": "Image 4"
+        },
+        {
+          "type": "text",
+          "id": "title_4",
+          "label": "Title 4",
+          "default": "Fair 04"
+        },
+        {
+          "type": "text",
+          "id": "subtitle_4",
+          "label": "Subtitle 4",
+          "default": "Fair tones"
+        },
+        {
+          "type": "header",
+          "content": "fair \u2014 Image 5"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_5",
+          "label": "Image 5"
+        },
+        {
+          "type": "text",
+          "id": "title_5",
+          "label": "Title 5",
+          "default": "Fair 05"
+        },
+        {
+          "type": "text",
+          "id": "subtitle_5",
+          "label": "Subtitle 5",
+          "default": "Fair tones"
+        },
+        {
+          "type": "header",
+          "content": "fair \u2014 Image 6"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_6",
+          "label": "Image 6"
+        },
+        {
+          "type": "text",
+          "id": "title_6",
+          "label": "Title 6",
+          "default": "Fair 06"
+        },
+        {
+          "type": "text",
+          "id": "subtitle_6",
+          "label": "Subtitle 6",
+          "default": "Fair tones"
+        },
+        {
+          "type": "header",
+          "content": "fair \u2014 Image 7"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_7",
+          "label": "Image 7"
+        },
+        {
+          "type": "text",
+          "id": "title_7",
+          "label": "Title 7",
+          "default": "Fair 07"
+        },
+        {
+          "type": "text",
+          "id": "subtitle_7",
+          "label": "Subtitle 7",
+          "default": "Fair tones"
+        }
+      ]
+    },
+    {
+      "type": "light",
+      "name": "LIGHT",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "header",
+          "content": "light \u2014 Image 1"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_1",
+          "label": "Image 1"
+        },
+        {
+          "type": "text",
+          "id": "title_1",
+          "label": "Title 1",
+          "default": "Light 01"
+        },
+        {
+          "type": "text",
+          "id": "subtitle_1",
+          "label": "Subtitle 1",
+          "default": "Light tones"
+        },
+        {
+          "type": "header",
+          "content": "light \u2014 Image 2"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_2",
+          "label": "Image 2"
+        },
+        {
+          "type": "text",
+          "id": "title_2",
+          "label": "Title 2",
+          "default": "Light 02"
+        },
+        {
+          "type": "text",
+          "id": "subtitle_2",
+          "label": "Subtitle 2",
+          "default": "Light tones"
+        },
+        {
+          "type": "header",
+          "content": "light \u2014 Image 3"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_3",
+          "label": "Image 3"
+        },
+        {
+          "type": "text",
+          "id": "title_3",
+          "label": "Title 3",
+          "default": "Light 03"
+        },
+        {
+          "type": "text",
+          "id": "subtitle_3",
+          "label": "Subtitle 3",
+          "default": "Light tones"
+        },
+        {
+          "type": "header",
+          "content": "light \u2014 Image 4"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_4",
+          "label": "Image 4"
+        },
+        {
+          "type": "text",
+          "id": "title_4",
+          "label": "Title 4",
+          "default": "Light 04"
+        },
+        {
+          "type": "text",
+          "id": "subtitle_4",
+          "label": "Subtitle 4",
+          "default": "Light tones"
+        },
+        {
+          "type": "header",
+          "content": "light \u2014 Image 5"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_5",
+          "label": "Image 5"
+        },
+        {
+          "type": "text",
+          "id": "title_5",
+          "label": "Title 5",
+          "default": "Light 05"
+        },
+        {
+          "type": "text",
+          "id": "subtitle_5",
+          "label": "Subtitle 5",
+          "default": "Light tones"
+        },
+        {
+          "type": "header",
+          "content": "light \u2014 Image 6"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_6",
+          "label": "Image 6"
+        },
+        {
+          "type": "text",
+          "id": "title_6",
+          "label": "Title 6",
+          "default": "Light 06"
+        },
+        {
+          "type": "text",
+          "id": "subtitle_6",
+          "label": "Subtitle 6",
+          "default": "Light tones"
+        },
+        {
+          "type": "header",
+          "content": "light \u2014 Image 7"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_7",
+          "label": "Image 7"
+        },
+        {
+          "type": "text",
+          "id": "title_7",
+          "label": "Title 7",
+          "default": "Light 07"
+        },
+        {
+          "type": "text",
+          "id": "subtitle_7",
+          "label": "Subtitle 7",
+          "default": "Light tones"
+        }
+      ]
+    },
+    {
+      "type": "medium",
+      "name": "MEDIUM",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "header",
+          "content": "medium \u2014 Image 1"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_1",
+          "label": "Image 1"
+        },
+        {
+          "type": "text",
+          "id": "title_1",
+          "label": "Title 1",
+          "default": "Medium 01"
+        },
+        {
+          "type": "text",
+          "id": "subtitle_1",
+          "label": "Subtitle 1",
+          "default": "Medium tones"
+        },
+        {
+          "type": "header",
+          "content": "medium \u2014 Image 2"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_2",
+          "label": "Image 2"
+        },
+        {
+          "type": "text",
+          "id": "title_2",
+          "label": "Title 2",
+          "default": "Medium 02"
+        },
+        {
+          "type": "text",
+          "id": "subtitle_2",
+          "label": "Subtitle 2",
+          "default": "Medium tones"
+        },
+        {
+          "type": "header",
+          "content": "medium \u2014 Image 3"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_3",
+          "label": "Image 3"
+        },
+        {
+          "type": "text",
+          "id": "title_3",
+          "label": "Title 3",
+          "default": "Medium 03"
+        },
+        {
+          "type": "text",
+          "id": "subtitle_3",
+          "label": "Subtitle 3",
+          "default": "Medium tones"
+        },
+        {
+          "type": "header",
+          "content": "medium \u2014 Image 4"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_4",
+          "label": "Image 4"
+        },
+        {
+          "type": "text",
+          "id": "title_4",
+          "label": "Title 4",
+          "default": "Medium 04"
+        },
+        {
+          "type": "text",
+          "id": "subtitle_4",
+          "label": "Subtitle 4",
+          "default": "Medium tones"
+        },
+        {
+          "type": "header",
+          "content": "medium \u2014 Image 5"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_5",
+          "label": "Image 5"
+        },
+        {
+          "type": "text",
+          "id": "title_5",
+          "label": "Title 5",
+          "default": "Medium 05"
+        },
+        {
+          "type": "text",
+          "id": "subtitle_5",
+          "label": "Subtitle 5",
+          "default": "Medium tones"
+        },
+        {
+          "type": "header",
+          "content": "medium \u2014 Image 6"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_6",
+          "label": "Image 6"
+        },
+        {
+          "type": "text",
+          "id": "title_6",
+          "label": "Title 6",
+          "default": "Medium 06"
+        },
+        {
+          "type": "text",
+          "id": "subtitle_6",
+          "label": "Subtitle 6",
+          "default": "Medium tones"
+        },
+        {
+          "type": "header",
+          "content": "medium \u2014 Image 7"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_7",
+          "label": "Image 7"
+        },
+        {
+          "type": "text",
+          "id": "title_7",
+          "label": "Title 7",
+          "default": "Medium 07"
+        },
+        {
+          "type": "text",
+          "id": "subtitle_7",
+          "label": "Subtitle 7",
+          "default": "Medium tones"
+        }
+      ]
+    },
+    {
+      "type": "tan",
+      "name": "TAN",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "header",
+          "content": "tan \u2014 Image 1"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_1",
+          "label": "Image 1"
+        },
+        {
+          "type": "text",
+          "id": "title_1",
+          "label": "Title 1",
+          "default": "Tan 01"
+        },
+        {
+          "type": "text",
+          "id": "subtitle_1",
+          "label": "Subtitle 1",
+          "default": "Tan tones"
+        },
+        {
+          "type": "header",
+          "content": "tan \u2014 Image 2"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_2",
+          "label": "Image 2"
+        },
+        {
+          "type": "text",
+          "id": "title_2",
+          "label": "Title 2",
+          "default": "Tan 02"
+        },
+        {
+          "type": "text",
+          "id": "subtitle_2",
+          "label": "Subtitle 2",
+          "default": "Tan tones"
+        },
+        {
+          "type": "header",
+          "content": "tan \u2014 Image 3"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_3",
+          "label": "Image 3"
+        },
+        {
+          "type": "text",
+          "id": "title_3",
+          "label": "Title 3",
+          "default": "Tan 03"
+        },
+        {
+          "type": "text",
+          "id": "subtitle_3",
+          "label": "Subtitle 3",
+          "default": "Tan tones"
+        },
+        {
+          "type": "header",
+          "content": "tan \u2014 Image 4"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_4",
+          "label": "Image 4"
+        },
+        {
+          "type": "text",
+          "id": "title_4",
+          "label": "Title 4",
+          "default": "Tan 04"
+        },
+        {
+          "type": "text",
+          "id": "subtitle_4",
+          "label": "Subtitle 4",
+          "default": "Tan tones"
+        },
+        {
+          "type": "header",
+          "content": "tan \u2014 Image 5"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_5",
+          "label": "Image 5"
+        },
+        {
+          "type": "text",
+          "id": "title_5",
+          "label": "Title 5",
+          "default": "Tan 05"
+        },
+        {
+          "type": "text",
+          "id": "subtitle_5",
+          "label": "Subtitle 5",
+          "default": "Tan tones"
+        },
+        {
+          "type": "header",
+          "content": "tan \u2014 Image 6"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_6",
+          "label": "Image 6"
+        },
+        {
+          "type": "text",
+          "id": "title_6",
+          "label": "Title 6",
+          "default": "Tan 06"
+        },
+        {
+          "type": "text",
+          "id": "subtitle_6",
+          "label": "Subtitle 6",
+          "default": "Tan tones"
+        },
+        {
+          "type": "header",
+          "content": "tan \u2014 Image 7"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_7",
+          "label": "Image 7"
+        },
+        {
+          "type": "text",
+          "id": "title_7",
+          "label": "Title 7",
+          "default": "Tan 07"
+        },
+        {
+          "type": "text",
+          "id": "subtitle_7",
+          "label": "Subtitle 7",
+          "default": "Tan tones"
+        }
+      ]
+    },
+    {
+      "type": "deep",
+      "name": "DEEP",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "header",
+          "content": "deep \u2014 Image 1"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_1",
+          "label": "Image 1"
+        },
+        {
+          "type": "text",
+          "id": "title_1",
+          "label": "Title 1",
+          "default": "Deep 01"
+        },
+        {
+          "type": "text",
+          "id": "subtitle_1",
+          "label": "Subtitle 1",
+          "default": "Deep tones"
+        },
+        {
+          "type": "header",
+          "content": "deep \u2014 Image 2"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_2",
+          "label": "Image 2"
+        },
+        {
+          "type": "text",
+          "id": "title_2",
+          "label": "Title 2",
+          "default": "Deep 02"
+        },
+        {
+          "type": "text",
+          "id": "subtitle_2",
+          "label": "Subtitle 2",
+          "default": "Deep tones"
+        },
+        {
+          "type": "header",
+          "content": "deep \u2014 Image 3"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_3",
+          "label": "Image 3"
+        },
+        {
+          "type": "text",
+          "id": "title_3",
+          "label": "Title 3",
+          "default": "Deep 03"
+        },
+        {
+          "type": "text",
+          "id": "subtitle_3",
+          "label": "Subtitle 3",
+          "default": "Deep tones"
+        },
+        {
+          "type": "header",
+          "content": "deep \u2014 Image 4"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_4",
+          "label": "Image 4"
+        },
+        {
+          "type": "text",
+          "id": "title_4",
+          "label": "Title 4",
+          "default": "Deep 04"
+        },
+        {
+          "type": "text",
+          "id": "subtitle_4",
+          "label": "Subtitle 4",
+          "default": "Deep tones"
+        },
+        {
+          "type": "header",
+          "content": "deep \u2014 Image 5"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_5",
+          "label": "Image 5"
+        },
+        {
+          "type": "text",
+          "id": "title_5",
+          "label": "Title 5",
+          "default": "Deep 05"
+        },
+        {
+          "type": "text",
+          "id": "subtitle_5",
+          "label": "Subtitle 5",
+          "default": "Deep tones"
+        },
+        {
+          "type": "header",
+          "content": "deep \u2014 Image 6"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_6",
+          "label": "Image 6"
+        },
+        {
+          "type": "text",
+          "id": "title_6",
+          "label": "Title 6",
+          "default": "Deep 06"
+        },
+        {
+          "type": "text",
+          "id": "subtitle_6",
+          "label": "Subtitle 6",
+          "default": "Deep tones"
+        },
+        {
+          "type": "header",
+          "content": "deep \u2014 Image 7"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_7",
+          "label": "Image 7"
+        },
+        {
+          "type": "text",
+          "id": "title_7",
+          "label": "Title 7",
+          "default": "Deep 07"
+        },
+        {
+          "type": "text",
+          "id": "subtitle_7",
+          "label": "Subtitle 7",
+          "default": "Deep tones"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "The Shades",
+      "blocks": [
+        {
+          "type": "fair"
+        },
+        {
+          "type": "light"
+        },
+        {
+          "type": "medium"
+        },
+        {
+          "type": "tan"
+        },
+        {
+          "type": "deep"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

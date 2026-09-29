@@ -146,24 +146,85 @@
     min-width: 100%;
   }
 
+  .product-information .product-information__media {
+     height: 70rem;
+  }
+
+  .product-information .bratz-product-info__highlight,
+  .product-information .dummy-stars {
+    padding: 0;
+  }
+
+  .product-information a.more-details {     
+    font-size: 1.4rem;
+    text-decoration: underline;
+    display: block;
+  }
+
+  .product-information span.metafield-string {
+      font-size: 1.6rem;
+      line-height: 2.4rem;
+      display: block;
+  }
+
+  .bratz-product-info__highlight {
+    margin-top: 2rem;
+  }
+
+  .product-information form.variant-picker__form {
+    margin-left: 0.4rem;
+  }
+
+  .product-information .variant-option--buttons legend {
+    margin-left: -.4rem;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+
+
+  .product-information .variant-option__swatch-value {
+    text-transform: capitalize;
+    font-weight: 400;
+  }
+
+  product-price span.price {
+    font-size: 2rem;
+    line-height: 2.4rem;
+    display: block;
+  }
+
+  product-price.text-block {
+      margin-top: 1.2rem;
+  }
+
   .product-information__media .product-media-gallery__placeholder-image {
     width: 100%;
     height: 100%;
   }
 
   /* Mobile styles */
-  @media screen and (max-width: 749px) {
+  @media screen and (max-width: 1199px) {
     .product-information__media {
       grid-column: 1 / -1;
     }
 
     .product-details {
-      grid-column: 2 / 3;
+      grid-column: inherit;
+      padding: 0 1.5rem;
     }
+
+    .product-information.section {
+      padding-top: 0;
+    }
+
+    .product-information .product-information__media {
+      height: auto;
+    }
+
   }
 
   /* Desktop styles */
-  @media screen and (min-width: 750px) {
+  @media screen and (min-width: 1200px) {
     .product-information__grid {
       grid-column: 2;
     }
@@ -299,7 +360,7 @@
         .product-information__grid--half,
         .product-information--media-none
       ).product-information--media-left {
-      grid-template-columns: 2fr 1fr;
+      grid-template-columns: 2fr 1.16fr;
     }
 
     .product-information__grid:not(

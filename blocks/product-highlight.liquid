@@ -1,0 +1,32 @@
+{% liquid
+  assign product = closest.product
+  assign product_highlight = product.metafields.p80.product_highlight.value
+%}
+
+{% if product_highlight != blank %}
+  <div class="bratz-product-info__highlight">
+    {{ product_highlight | metafield_tag }}
+  </div>
+{% endif %}
+
+<a href="#" class="more-details">More Details</a>
+
+
+{% schema %}
+{
+  "name": "Product Highlight",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Product Highlight"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product Highlight",
+      "category": "Product"
+    }
+  ]
+}
+{% endschema %}

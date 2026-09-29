@@ -212,26 +212,14 @@
             "product_info_xEmA8k": {
               "type": "product-info",
               "name": "Product info",
-              "settings": {
-                "highlight_namespace": "custom",
-                "highlight_key": "product_highlight"
-              },
-              "blocks": {}
-            },
-            "custom_liquid_Cqz4Yc": {
-              "type": "custom-liquid",
-              "name": "t:names.custom_liquid",
-              "settings": {
-                "custom_liquid": "{% assign product_highlight = closest.product.metafields.p80.product_highlight.value %}\n\n{% if product_highlight != blank %}\n<div class=\"p-highlight\"\n  {{ product_highlight }}\n</div>\n{% endif %}"
-              },
+              "settings": {},
               "blocks": {}
             }
           },
           "block_order": [
             "product_card_gallery_8WygPV",
             "review_j4Acjf",
-            "product_info_xEmA8k",
-            "custom_liquid_Cqz4Yc"
+            "product_info_xEmA8k"
           ]
         }
       },

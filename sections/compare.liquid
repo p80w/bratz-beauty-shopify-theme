@@ -1,0 +1,700 @@
+{% comment %}
+  COMPARE
+  Global comparison section for the Product Page.
+  Content is managed through the Shopify Theme Editor.
+  PRODUCT and MODEL tabs are included. Mobile is horizontally scrollable.
+{% endcomment %}
+
+<section id="Compare-{{ section.id }}" class="compare-section" data-compare-section>
+  <div class="compare-section__container section ">
+    {% if section.settings.heading != blank %}
+      <h2 class="compare-section__heading h4">{{ section.settings.heading }}</h2>
+    {% endif %}
+
+    <div class="compare-section__tabs-wrap">
+      <div class="compare-section__tabs" role="tablist" aria-label="Compare options">
+        <button type="button" class="compare-section__tab is-active" role="tab" aria-selected="true" data-compare-tab="product">
+          {{ section.settings.product_tab_label }}
+        </button>
+        <button type="button" class="compare-section__tab" role="tab" aria-selected="false" data-compare-tab="model">
+          {{ section.settings.model_tab_label }}
+        </button>
+        <span class="compare-section__tab-indicator" aria-hidden="true"></span>
+      </div>
+    </div>
+
+    {% assign product_count = 0 %}
+    {% assign model_count = 0 %}
+    {% for block in section.blocks %}
+      {% if block.type == 'product_compare' %}
+        {% assign product_count = product_count | plus: 1 %}
+      {% elsif block.type == 'model_compare' %}
+        {% assign model_count = model_count | plus: 1 %}
+      {% endif %}
+    {% endfor %}
+
+    {% assign row_labels = section.settings.row_labels | split: '|' %}
+
+    {% assign product_row_6_has_content = false %}
+    {% assign product_row_7_has_content = false %}
+    {% assign product_row_8_has_content = false %}
+    {% assign product_row_9_has_content = false %}
+    {% assign product_row_10_has_content = false %}
+
+    {% for block in section.blocks %}
+      {% if block.type == 'product_compare' %}
+        {% if block.settings.row_6 != blank %}{% assign product_row_6_has_content = true %}{% endif %}
+        {% if block.settings.row_7 != blank %}{% assign product_row_7_has_content = true %}{% endif %}
+        {% if block.settings.row_8 != blank %}{% assign product_row_8_has_content = true %}{% endif %}
+        {% if block.settings.row_9 != blank %}{% assign product_row_9_has_content = true %}{% endif %}
+        {% if block.settings.row_10 != blank %}{% assign product_row_10_has_content = true %}{% endif %}
+      {% endif %}
+    {% endfor %}
+
+    <div class="compare-section__panel is-active" data-compare-panel="product" role="tabpanel">
+      {% if product_count > 0 %}
+        <div class="compare-section__table-wrap">
+          <div class="compare-section__table">
+            <div class="compare-section__labels">
+              <div class="compare-section__label-spacer"></div>
+              {% for label in row_labels limit: 5 %}
+                <div class="compare-section__row-label h5">{{ label }}</div>
+              {% endfor %}
+              {% if product_row_6_has_content and row_labels[5] != blank %}<div class="compare-section__row-label h5">{{ row_labels[5] }}</div>{% endif %}
+              {% if product_row_7_has_content and row_labels[6] != blank %}<div class="compare-section__row-label h5">{{ row_labels[6] }}</div>{% endif %}
+              {% if product_row_8_has_content and row_labels[7] != blank %}<div class="compare-section__row-label h5">{{ row_labels[7] }}</div>{% endif %}
+              {% if product_row_9_has_content and row_labels[8] != blank %}<div class="compare-section__row-label h5">{{ row_labels[8] }}</div>{% endif %}
+              {% if product_row_10_has_content and row_labels[9] != blank %}<div class="compare-section__row-label h5">{{ row_labels[9] }}</div>{% endif %}
+            </div>
+
+            {% for block in section.blocks %}
+              {% if block.type == 'product_compare' %}
+                <article class="compare-section__item{% if block.settings.primary_product %} is-primary{% endif %}" {{ block.shopify_attributes }}>
+                  <div class="compare-section__product-card">
+                    {% if block.settings.primary_product %}
+                      <div class="compare-section__product-label">
+                        {{ block.settings.card_label }}
+                      </div>
+                    {% endif %}
+                    <div class="compare-section__image-wrap">
+                      {% if block.settings.image != blank %}
+                        {{ block.settings.image | image_url: width: 800 | image_tag: class: 'compare-section__image', loading: 'lazy', widths: '350, 400, 600, 800', sizes: '(min-width: 750px) 350px, 65vw', alt: block.settings.title }}
+                      {% else %}
+                        <div class="compare-section__image-placeholder">{{ 'product-1' | placeholder_svg_tag }}</div>
+                      {% endif %}
+                    </div>
+                    <div class="compare-wrap-title">
+                      <h3 class="compare-section__product-title h5">{{ block.settings.title }}</h3>
+                      <p class="compare-section__product-price">{{ block.settings.price }}</p>
+                    </div>
+                  </div>
+                  <div class="compare-section__value">{{ block.settings.what_it_is }}</div>
+                  <div class="compare-section__value">{{ block.settings.finish }}</div>
+                  <div class="compare-section__value">{{ block.settings.best_for }}</div>
+                  <div class="compare-section__value">{{ block.settings.what_it_is_2 }}</div>
+                  <div class="compare-section__value">{{ block.settings.finish_2 }}</div>
+                  {% if product_row_6_has_content %}<div class="compare-section__value">{{ block.settings.row_6 }}</div>{% endif %}
+                  {% if product_row_7_has_content %}<div class="compare-section__value">{{ block.settings.row_7 }}</div>{% endif %}
+                  {% if product_row_8_has_content %}<div class="compare-section__value">{{ block.settings.row_8 }}</div>{% endif %}
+                  {% if product_row_9_has_content %}<div class="compare-section__value">{{ block.settings.row_9 }}</div>{% endif %}
+                  {% if product_row_10_has_content %}<div class="compare-section__value">{{ block.settings.row_10 }}</div>{% endif %}
+                </article>
+              {% endif %}
+            {% endfor %}
+          </div>
+        </div>
+      {% else %}
+        <div class="compare-section__empty">{{ section.settings.product_empty_text }}</div>
+      {% endif %}
+    </div>
+
+    {% assign model_row_6_has_content = false %}
+    {% assign model_row_7_has_content = false %}
+    {% assign model_row_8_has_content = false %}
+    {% assign model_row_9_has_content = false %}
+    {% assign model_row_10_has_content = false %}
+
+    {% for block in section.blocks %}
+      {% if block.type == 'model_compare' %}
+        {% if block.settings.row_6 != blank %}{% assign model_row_6_has_content = true %}{% endif %}
+        {% if block.settings.row_7 != blank %}{% assign model_row_7_has_content = true %}{% endif %}
+        {% if block.settings.row_8 != blank %}{% assign model_row_8_has_content = true %}{% endif %}
+        {% if block.settings.row_9 != blank %}{% assign model_row_9_has_content = true %}{% endif %}
+        {% if block.settings.row_10 != blank %}{% assign model_row_10_has_content = true %}{% endif %}
+      {% endif %}
+    {% endfor %}
+
+    <div class="compare-section__panel" data-compare-panel="model" role="tabpanel" hidden>
+      {% if model_count > 0 %}
+        <div class="compare-section__table-wrap">
+          <div class="compare-section__table">
+            <div class="compare-section__labels">
+              <div class="compare-section__label-spacer"></div>
+              {% for label in row_labels limit: 5 %}
+                <div class="compare-section__row-label">{{ label }}</div>
+              {% endfor %}
+              {% if model_row_6_has_content and row_labels[5] != blank %}<div class="compare-section__row-label h5">{{ row_labels[5] }}</div>{% endif %}
+              {% if model_row_7_has_content and row_labels[6] != blank %}<div class="compare-section__row-label h5">{{ row_labels[6] }}</div>{% endif %}
+              {% if model_row_8_has_content and row_labels[7] != blank %}<div class="compare-section__row-label h5">{{ row_labels[7] }}</div>{% endif %}
+              {% if model_row_9_has_content and row_labels[8] != blank %}<div class="compare-section__row-label h5">{{ row_labels[8] }}</div>{% endif %}
+              {% if model_row_10_has_content and row_labels[9] != blank %}<div class="compare-section__row-label h5">{{ row_labels[9] }}</div>{% endif %}
+            </div>
+
+            {% for block in section.blocks %}
+              {% if block.type == 'model_compare' %}
+                <article class="compare-section__item" {{ block.shopify_attributes }}>
+                  <div class="compare-section__product-card">
+                    <div class="compare-section__product-label">{{ block.settings.card_label }}</div>
+                    <div class="compare-section__image-wrap">
+                      {% if block.settings.image != blank %}
+                        {{ block.settings.image | image_url: width: 800 | image_tag: class: 'compare-section__image', loading: 'lazy', widths: '350, 400, 600, 800', sizes: '(min-width: 750px) 350px, 65vw', alt: block.settings.title }}
+                      {% else %}
+                        <div class="compare-section__image-placeholder">{{ 'product-1' | placeholder_svg_tag }}</div>
+                      {% endif %}
+                    </div>
+                    <div class="compare-wrap-title">
+                      <h3 class="compare-section__product-title h5">{{ block.settings.title }}</h3>
+                      <p class="compare-section__product-price">{{ block.settings.price }}</p>
+                    </div>
+                  </div>
+                  <div class="compare-section__value">{{ block.settings.what_it_is }}</div>
+                  <div class="compare-section__value">{{ block.settings.finish }}</div>
+                  <div class="compare-section__value">{{ block.settings.best_for }}</div>
+                  <div class="compare-section__value">{{ block.settings.what_it_is_2 }}</div>
+                  <div class="compare-section__value">{{ block.settings.finish_2 }}</div>
+                  {% if model_row_6_has_content %}<div class="compare-section__value">{{ block.settings.row_6 }}</div>{% endif %}
+                  {% if model_row_7_has_content %}<div class="compare-section__value">{{ block.settings.row_7 }}</div>{% endif %}
+                  {% if model_row_8_has_content %}<div class="compare-section__value">{{ block.settings.row_8 }}</div>{% endif %}
+                  {% if model_row_9_has_content %}<div class="compare-section__value">{{ block.settings.row_9 }}</div>{% endif %}
+                  {% if model_row_10_has_content %}<div class="compare-section__value">{{ block.settings.row_10 }}</div>{% endif %}
+                </article>
+              {% endif %}
+            {% endfor %}
+          </div>
+        </div>
+      {% else %}
+        <div class="compare-section__empty">{{ section.settings.model_empty_text }}</div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+<style>
+  #Compare-{{ section.id }} {
+    --compare-bg: {{ section.settings.background_color }};
+    --compare-text: {{ section.settings.text_color }};
+    --compare-muted: {{ section.settings.muted_color }};
+    --compare-border: {{ section.settings.border_color }};
+    width: 100%;
+    background: var(--compare-bg);
+    color: var(--compare-text);
+    overflow: hidden;
+  }
+
+  #Compare-{{ section.id }} .compare-section__container {
+    padding: 8rem 0;
+  }
+
+  #Compare-{{ section.id }} .compare-section__heading {
+    text-align: center;
+    margin-bottom: 2.4rem;
+  }
+
+  #Compare-{{ section.id }} .compare-section__tabs-wrap {
+    display: flex;
+    justify-content: center;
+    margin: 0 0 2.4rem;
+  }
+
+  #Compare-{{ section.id }} .compare-section__tabs {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 4.8rem;
+  }
+
+  #Compare-{{ section.id }} .compare-section__tab {
+    position: relative;
+    z-index: 2;
+    padding: 0 0 6px;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    color: var(--compare-text);
+    cursor: pointer;
+    font: inherit;
+    font-size: 1.2rem;
+    line-height: 1;
+    text-transform: uppercase;
+    transition: opacity 220ms ease;
+    font-family: var(--font-heading--family);
+    font-weight: var(--font-heading--weight);
+    font-style: var(--font-heading--style);
+  }
+
+  #Compare-{{ section.id }} .compare-section__tab:hover,
+  #Compare-{{ section.id }} .compare-section__tab.is-active { opacity: 1; }
+
+  #Compare-{{ section.id }} .compare-section__tab-indicator {
+    position: absolute;
+    z-index: 1;
+    left: 0;
+    bottom: 0;
+    width: 36px;
+    height: 1px;
+    background: var(--compare-text);
+    pointer-events: none;
+    transition: transform 320ms cubic-bezier(.22,1,.36,1), width 320ms cubic-bezier(.22,1,.36,1);
+  }
+
+  #Compare-{{ section.id }} .compare-section__panel[hidden] { display: none; }
+
+  #Compare-{{ section.id }} .compare-section__panel.tab-switch-enter {
+    animation: compare-tab-enter-{{ section.id }} 280ms cubic-bezier(.22,1,.36,1) both;
+  }
+
+  @keyframes compare-tab-enter-{{ section.id }} {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  #Compare-{{ section.id }} .compare-section__table {
+    display: grid;
+    grid-template-columns: 25.8rem repeat(3, minmax(0, 1fr));
+    width: 100%;
+    padding: 0;
+  }
+
+  #Compare-{{ section.id }} .compare-section__labels,
+  #Compare-{{ section.id }} .compare-section__item {
+    min-width: 0;
+  }
+
+  #Compare-{{ section.id }} .compare-section__labels,
+  #Compare-{{ section.id }} .compare-section__item,
+  #Compare-{{ section.id }} .compare-section__product-card,
+  #Compare-{{ section.id }} .compare-section__row-label,
+  #Compare-{{ section.id }} .compare-section__value {
+    box-sizing: border-box;
+  }
+
+  /* Highlight the product marked as primary in the Theme Editor. */
+  #Compare-{{ section.id }} .compare-section__item.is-primary {
+    outline: 1px solid var(--compare-text);
+    outline-offset: -1px;
+  }
+
+  #Compare-{{ section.id }} .compare-section__item.is-primary .compare-section__product-card {
+    border-top: 0;
+    border-right: 0;
+  }
+
+  #Compare-{{ section.id }} .compare-section__label-spacer,
+  #Compare-{{ section.id }} .compare-section__product-card {
+    min-height: 222px;
+  }
+
+  .compare-wrap-title {
+    padding: 2.4rem;
+  }
+
+  #Compare-{{ section.id }} .compare-section__product-card {
+    padding: 0;
+  }
+
+  #Compare-{{ section.id }} .compare-section__product-label {
+    padding: .8rem;
+    text-align: center;
+    font-size: 8px;
+    line-height: 1.2rem;
+    border-bottom: .1rem solid #000;
+    font-size: 1.2rem;
+    font-family: var(--font-heading--family);
+    font-weight: var(--font-heading--weight);
+    font-style: var(--font-heading--style);
+  }
+
+  #Compare-{{ section.id }} .compare-section__image-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 32.2rem;
+    overflow: hidden;
+  }
+
+  #Compare-{{ section.id }} .compare-section__image,
+  #Compare-{{ section.id }} .compare-section__image-placeholder {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  #Compare-{{ section.id }} .compare-section__image { object-fit: contain; }
+  #Compare-{{ section.id }} .compare-section__image-placeholder { color: #aaa; }
+  #Compare-{{ section.id }} .compare-section__image-placeholder svg { width: 100%; height: 100%; }
+
+  #Compare-{{ section.id }} .compare-section__product-title {
+    margin: 0;
+  }
+
+  #Compare-{{ section.id }} .compare-section__product-price {
+    margin: .8rem 0 0;
+    font-size: 1.6rem;
+    line-height: 2.4rem;
+  }
+
+  #Compare-{{ section.id }} .compare-section__row-label,
+  #Compare-{{ section.id }} .compare-section__value {
+    min-height: 39px;
+    border-top: 1px solid var(--compare-border);
+  }
+
+  #Compare-{{ section.id }} .compare-section__row-label {
+    display: flex;
+    align-items: flex-start;
+    padding-top: 2.4rem;
+    font-family: var(--font-heading--family);
+    font-weight: var(--font-heading--weight);
+    font-style: var(--font-heading--style);
+    text-transform: uppercase;
+  }
+
+  #Compare-{{ section.id }} .compare-section__value {
+    padding: 2.4rem;
+    border-right: 1px solid var(--compare-border);
+    font-size: 1.6rem;
+    line-height: 2.4rem;
+  }
+
+  #Compare-{{ section.id }} .compare-section__item:last-child .compare-section__value { border-right: 0; }
+
+  /* Only the primary comparison column gets a full outline. */
+  #Compare-{{ section.id }} .compare-section__item:not(.is-primary) {
+    outline: none !important;
+    border: 0 !important;
+  }
+
+  #Compare-{{ section.id }} .compare-section__item:not(.is-primary) .compare-section__product-card {
+    padding-top: 2.9rem;
+  }
+
+  #Compare-{{ section.id }} .compare-section__item:not(.is-primary) .compare-section__product-card,
+  #Compare-{{ section.id }} .compare-section__item:not(.is-primary) .compare-section__value {
+    border-left: 0 !important;
+    border-right: 0 !important;
+  }
+
+  #Compare-template--27930595655978__compare_rQGaQt .compare-section__label-spacer {
+    min-height: 44.5rem;
+  }
+
+  #Compare-{{ section.id }} .compare-section__item.is-primary {
+    outline: 1px solid var(--compare-text);
+    outline-offset: -1px;
+  }
+
+  #Compare-{{ section.id }} .compare-section__empty {
+    padding: 45px 20px;
+    text-align: center;
+    color: var(--compare-muted);
+    font-size: 11px;
+  }
+
+  @media screen and (max-width: 749px) {
+    #Compare-{{ section.id }} .compare-section__container { padding: 25px 0 35px; }
+    #Compare-{{ section.id }} .compare-section__heading { font-size: 12px; }
+    #Compare-{{ section.id }} .compare-section__tabs-wrap { margin: 10px 0 13px; }
+    #Compare-{{ section.id }} .compare-section__tabs { gap: 22px; }
+    #Compare-{{ section.id }} .compare-section__tab { font-size: 9px; }
+
+    #Compare-{{ section.id }} .compare-section__table-wrap {
+      width: 100%;
+      overflow-x: auto;
+      overflow-y: hidden;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+
+    #Compare-{{ section.id }} .compare-section__table-wrap::-webkit-scrollbar { display: none; }
+
+    #Compare-{{ section.id }} .compare-section__table {
+      width: max-content;
+      min-width: 730px;
+      grid-template-columns: 110px repeat(3, 170px);
+    }
+
+    #Compare-{{ section.id }} .compare-section__label-spacer,
+    #Compare-{{ section.id }} .compare-section__product-card { min-height: 200px; }
+
+    #Compare-{{ section.id }} .compare-section__image-wrap { height: 118px; }
+    #Compare-{{ section.id }} .compare-section__product-title,
+    #Compare-{{ section.id }} .compare-section__product-price,
+    #Compare-{{ section.id }} .compare-section__row-label,
+    #Compare-{{ section.id }} .compare-section__value { 
+      font-size: 1.2rem;
+      line-height: 1.2rem;
+    }
+
+    .compare-wrap-title {
+      padding: 1.5rem;
+    }
+
+    #Compare-{{ section.id }} .compare-section__row-label {
+      display: block;
+      padding: 1.6rem 1.6rem 0 0;
+    }
+
+     #Compare-{{ section.id }} .compare-section__value {
+      padding: 1.6rem;
+    }
+  }
+
+
+  @media (prefers-reduced-motion: reduce) {
+    #Compare-{{ section.id }} .compare-section__tab,
+    #Compare-{{ section.id }} .compare-section__tab-indicator,
+    #Compare-{{ section.id }} .compare-section__panel {
+      transition: none !important;
+      animation: none !important;
+    }
+  }
+</style>
+
+<script>
+  (() => {
+    const section = document.getElementById('Compare-{{ section.id }}');
+    if (!section || section.dataset.initialized === 'true') return;
+    section.dataset.initialized = 'true';
+
+    const tabs = [...section.querySelectorAll('[data-compare-tab]')];
+    const panels = [...section.querySelectorAll('[data-compare-panel]')];
+    const tabContainer = section.querySelector('.compare-section__tabs');
+    const indicator = section.querySelector('.compare-section__tab-indicator');
+
+    if (!tabs.length || !panels.length || !tabContainer || !indicator) return;
+
+    let activeTab = 'product';
+
+    const getRows = panel => {
+      const table = panel.querySelector('.compare-section__table');
+      if (!table) return [];
+
+      const labels = table.querySelector('.compare-section__labels');
+      const items = [...table.querySelectorAll('.compare-section__item')];
+
+      if (!labels || !items.length) return [];
+
+      const rows = [
+        [
+          labels.querySelector('.compare-section__label-spacer'),
+          ...items.map(item => item.querySelector('.compare-section__product-card'))
+        ].filter(Boolean)
+      ];
+
+      const valueCount = Math.max(
+        0,
+        ...items.map(item => item.querySelectorAll('.compare-section__value').length)
+      );
+
+      for (let index = 0; index < valueCount; index += 1) {
+        rows.push([
+          labels.querySelectorAll('.compare-section__row-label')[index],
+          ...items.map(item => item.querySelectorAll('.compare-section__value')[index])
+        ].filter(Boolean));
+      }
+
+      return rows;
+    };
+
+    const syncRowHeights = panel => {
+      if (!panel || panel.hidden) return;
+
+      const rows = getRows(panel);
+
+      rows.forEach(row => {
+        row.forEach(cell => {
+          cell.style.removeProperty('height');
+        });
+
+        const height = Math.max(
+          ...row.map(cell => Math.ceil(cell.getBoundingClientRect().height))
+        );
+
+        row.forEach(cell => {
+          cell.style.height = `${height}px`;
+        });
+      });
+    };
+
+    const syncAllRows = () => {
+      panels.forEach(panel => {
+        if (!panel.hidden) syncRowHeights(panel);
+      });
+    };
+
+    const moveIndicator = (tab, instant = false) => {
+      if (!tab) return;
+
+      const tabRect = tab.getBoundingClientRect();
+      const containerRect = tabContainer.getBoundingClientRect();
+
+      if (instant) indicator.style.transition = 'none';
+
+      indicator.style.width = `${tabRect.width}px`;
+      indicator.style.transform = `translateX(${tabRect.left - containerRect.left}px)`;
+
+      if (instant) {
+        requestAnimationFrame(() => indicator.style.removeProperty('transition'));
+      }
+    };
+
+    const switchPanel = value => {
+      const nextPanel = panels.find(panel => panel.dataset.comparePanel === value);
+      if (!nextPanel) return;
+
+      panels.forEach(panel => {
+        panel.hidden = panel !== nextPanel;
+        panel.classList.remove('tab-switch-enter');
+      });
+
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          nextPanel.classList.add('tab-switch-enter');
+          syncRowHeights(nextPanel);
+        });
+      });
+    };
+
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        const value = tab.dataset.compareTab;
+        if (!value || value === activeTab) return;
+
+        activeTab = value;
+
+        tabs.forEach(item => {
+          const isActive = item === tab;
+          item.classList.toggle('is-active', isActive);
+          item.setAttribute('aria-selected', isActive ? 'true' : 'false');
+        });
+
+        switchPanel(value);
+        moveIndicator(tab);
+      });
+    });
+
+    const positionIndicator = () => {
+      const active = tabs.find(tab => tab.dataset.compareTab === activeTab) || tabs[0];
+      moveIndicator(active, true);
+    };
+
+    let resizeTimer;
+
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+
+      resizeTimer = setTimeout(() => {
+        panels.forEach(panel => {
+          panel.querySelectorAll(
+            '.compare-section__label-spacer, .compare-section__product-card, .compare-section__row-label, .compare-section__value'
+          ).forEach(cell => cell.style.removeProperty('height'));
+        });
+
+        syncAllRows();
+        positionIndicator();
+      }, 100);
+    });
+
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(syncAllRows);
+    }
+
+    positionIndicator();
+
+    requestAnimationFrame(() => {
+      requestAnimationFrame(syncAllRows);
+    });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Compare",
+  "tag": "section",
+  "class": "section-compare",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "COMPARE" },
+    { "type": "text", "id": "product_tab_label", "label": "Product tab label", "default": "PRODUCT" },
+    { "type": "text", "id": "model_tab_label", "label": "Model tab label", "default": "MODEL" },
+    { "type": "text", "id": "this_product_label", "label": "Default product card label", "default": "THIS PRODUCT" },
+    { "type": "text", "id": "product_empty_text", "label": "Product empty text", "default": "Add comparison products from the Theme Editor." },
+    { "type": "text", "id": "model_empty_text", "label": "Model empty text", "default": "Add model comparison content from the Theme Editor." },
+    { "type": "text", "id": "row_labels", "label": "Comparison row labels", "default": "WHAT IT IS|FINISH|BEST FOR|WHAT IT IS|FINISH" },
+    { "type": "color", "id": "background_color", "label": "Background", "default": "#F4F4F2" },
+    { "type": "color", "id": "text_color", "label": "Text", "default": "#111111" },
+    { "type": "color", "id": "muted_color", "label": "Muted text", "default": "#555555" },
+    { "type": "color", "id": "border_color", "label": "Border", "default": "#999999" }
+  ],
+  "blocks": [
+    {
+      "type": "product_compare",
+      "name": "Product Comparison",
+      "limit": 3,
+      "settings": [
+        { "type": "text", "id": "card_label", "label": "Card label", "default": "THIS PRODUCT" },
+        { "type": "checkbox", "id": "primary_product", "label": "Primary product", "default": false, "info": "Enable this for the product that should be highlighted. Keep only one product marked as primary." },
+        { "type": "image_picker", "id": "image", "label": "Product image" },
+        { "type": "text", "id": "title", "label": "Product title", "default": "LIP LINER PRODUCT TITLE" },
+        { "type": "text", "id": "price", "label": "Price", "default": "$19.99" },
+        { "type": "textarea", "id": "what_it_is", "label": "What it is", "default": "A unique lip liner that blurs as you apply." },
+        { "type": "textarea", "id": "finish", "label": "Finish", "default": "Diffused soft matte finish." },
+        { "type": "textarea", "id": "best_for", "label": "Best for", "default": "Natural fuller looking lips." },
+        { "type": "textarea", "id": "what_it_is_2", "label": "What it is — row 4", "default": "A unique lip liner that blurs as you apply." },
+        { "type": "textarea", "id": "finish_2", "label": "Finish — row 5", "default": "Diffused soft matte finish." }
+         ,{ "type": "textarea", "id": "row_6", "label": "Comparison row 6" }
+         ,{ "type": "textarea", "id": "row_7", "label": "Comparison row 7" }
+         ,{ "type": "textarea", "id": "row_8", "label": "Comparison row 8" }
+         ,{ "type": "textarea", "id": "row_9", "label": "Comparison row 9" }
+         ,{ "type": "textarea", "id": "row_10", "label": "Comparison row 10" }
+      ]
+    },
+    {
+      "type": "model_compare",
+      "name": "Model Comparison",
+      "limit": 3,
+      "settings": [
+        { "type": "text", "id": "card_label", "label": "Card label", "default": "MODEL" },
+        { "type": "image_picker", "id": "image", "label": "Model image" },
+        { "type": "text", "id": "title", "label": "Title", "default": "MODEL NAME" },
+        { "type": "text", "id": "price", "label": "Price / detail", "default": "DETAIL" },
+        { "type": "textarea", "id": "what_it_is", "label": "What it is", "default": "Comparison detail." },
+        { "type": "textarea", "id": "finish", "label": "Finish", "default": "Comparison detail." },
+        { "type": "textarea", "id": "best_for", "label": "Best for", "default": "Comparison detail." },
+        { "type": "textarea", "id": "what_it_is_2", "label": "What it is — row 4", "default": "Comparison detail." },
+        { "type": "textarea", "id": "finish_2", "label": "Finish — row 5", "default": "Comparison detail." }
+         ,{ "type": "textarea", "id": "row_6", "label": "Comparison row 6" }
+         ,{ "type": "textarea", "id": "row_7", "label": "Comparison row 7" }
+         ,{ "type": "textarea", "id": "row_8", "label": "Comparison row 8" }
+         ,{ "type": "textarea", "id": "row_9", "label": "Comparison row 9" }
+         ,{ "type": "textarea", "id": "row_10", "label": "Comparison row 10" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Compare",
+      "blocks": [
+        {
+          "type": "product_compare",
+          "settings": {
+            "primary_product": true
+          }
+        },
+        { "type": "product_compare" },
+        { "type": "product_compare" }
+      ]
+    }
+  ]
+}
+{% endschema %}

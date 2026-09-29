@@ -57,6 +57,15 @@
     text-wrap: balance;
   }
 
+  .text-block h1,
+  .text-block h2,
+  .text-block h3,
+  .text-block h4,
+  .text-block h5,
+  .text-block h6 {
+    text-wrap: wrap;
+  }
+
   /* Hide underline unless text is using paragraph styles. The doubled class beats the global paragraph-link styles in base.css. */
   .text-block.text-block:is(.h1, .h2, .h3, .h4, .h5, .h6) a {
     text-decoration-line: none;

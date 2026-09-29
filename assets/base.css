@@ -424,7 +424,7 @@ p:empty {
   display: none !important;
 }
 
-@media screen and (max-width: 749px) {
+@media screen and (max-width: 1199px) {
   .hidden--mobile,
   .mobile\:hidden {
     /* stylelint-disable-next-line declaration-no-important */
@@ -432,7 +432,7 @@ p:empty {
   }
 }
 
-@media screen and (min-width: 750px) {
+@media screen and (min-width: 1200px) {
   .hidden--desktop,
   .desktop\:hidden {
     /* stylelint-disable-next-line declaration-no-important */
@@ -893,7 +893,7 @@ button.shopify-payment-button__button--unbranded {
   font-style: var(--font-paragraph--style);
   font-weight: var(--font-paragraph--weight);
   font-size: var(--font-paragraph--size);
-  line-height: var(--font-paragraph--line-height);
+  line-height: 100%;
   margin-block: 0;
   transition: color var(--animation-speed) var(--animation-easing),
     box-shadow var(--animation-speed) var(--animation-easing),
@@ -1488,6 +1488,7 @@ input[type='radio'] {
 :where(input[type='checkbox']):checked {
   background-color: var(--color-foreground);
   border-color: var(--color-foreground);
+  opacity: 1 !important;
 }
 
 :where(input[type='checkbox']):checked::after {
@@ -1499,7 +1500,7 @@ input[type='radio'] {
   width: var(--checkbox-size);
   height: var(--checkbox-size);
   background-color: var(--color-background);
-  mask-image: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M4.75439 10.7485L7.68601 14.5888C7.79288 14.7288 7.84632 14.7988 7.91174 14.8242C7.96907 14.8466 8.03262 14.8469 8.09022 14.8253C8.15596 14.8007 8.21026 14.7314 8.31886 14.5927L15.2475 5.74658' stroke='black' stroke-width='1' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='17' height='9' viewBox='0 0 17 9' fill='none'%3E%3Cpath d='M16.1074 0L11.9639 4.25781L10.1533 6.01758L7.53027 8.72754H4.2002V8.72656L0 4.41113H3.62109L5.98535 6.89258L8.49414 4.31641L10.3506 2.55762L12.7881 0H16.1074Z' fill='white'/%3E%3C/svg%3E");
   mask-size: contain;
   mask-repeat: no-repeat;
   mask-position: center;

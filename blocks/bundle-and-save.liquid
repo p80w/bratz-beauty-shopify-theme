@@ -1,0 +1,2204 @@
+{% liquid
+
+  assign product_resource = closest.product
+
+  if request.visual_preview_mode and product_resource == blank
+
+    assign product_resource = collections.all.products.first
+
+  endif
+
+  assign bundle_enabled = product_resource.metafields.custom.bundle_save_enabled.value
+
+  assign bundle_price = product_resource.metafields.custom.bundle_save_price.value
+
+  assign bundle_quantity = product_resource.metafields.custom.bundle_save_quantity.value | default: 3
+
+  assign bundle_quantity = bundle_quantity | plus: 0
+
+  assign bundle_variants = product_resource.variants
+
+%}
+
+{% if bundle_enabled and bundle_price != blank and bundle_quantity > 0 and bundle_variants != blank %}
+
+  <div
+
+    class="bundle-and-save"
+
+    {{ block.shopify_attributes }}
+
+    data-bundle-and-save
+
+    data-money-format="{{ shop.money_format | escape }}"
+
+    data-bundle-price="{{ bundle_price }}"
+
+    data-bundle-quantity="{{ bundle_quantity }}"
+
+  >
+
+    <div class="bundle-and-save__inner">
+
+      {% comment %}
+
+        PRODUCT IMAGE
+
+      {% endcomment %}
+
+      <div class="bundle-and-save__media">
+
+        {% if product_resource.featured_image != blank %}
+
+          {{
+
+            product_resource.featured_image
+
+            | image_url: width: 700
+
+            | image_tag:
+
+              loading: 'lazy',
+
+              widths: '250, 400, 550, 700',
+
+              sizes: '(min-width: 750px) 16vw, 30vw',
+
+              class: 'bundle-and-save__image',
+
+              alt: product_resource.featured_image.alt | default: product_resource.title | escape
+
+          }}
+
+        {% endif %}
+
+      </div>
+
+
+
+      {% comment %}
+
+        CONTENT
+
+      {% endcomment %}
+
+      <div class="bundle-and-save__content">
+
+        <div class="bundle-and-save__heading-wrap">
+
+          <h2 class="bundle-and-save__heading">
+
+            {{ block.settings.heading }}
+
+          </h2>
+
+          {% if block.settings.subheading != blank %}
+
+            <p class="bundle-and-save__subheading">
+
+              -  {{ block.settings.subheading }}
+
+            </p>
+
+          {% endif %}
+
+        </div>
+
+        
+        <div class="bundle-and-save__bottom">
+          <div class="bundle-and-save__pricing">
+            <span
+              class="bundle-and-save__bundle-price"
+              data-bundle-and-save-price
+            >
+              {{ bundle_price | money }}
+            </span>
+            <span
+              class="bundle-and-save__regular-price"
+              data-bundle-and-save-regular-price
+            >
+              {{ 0 | money }}
+            </span>
+          </div>
+        </div>
+
+        {% comment %}
+
+          THREE VARIANT PICKERS
+
+        {% endcomment %}
+
+        <div
+
+          class="bundle-and-save__variants"
+
+          data-bundle-and-save-variants
+
+        >
+
+          {% for slot in (1..bundle_quantity) %}
+
+            <div class="bundle-and-save__variant">
+
+              <div class="bundle-and-save__select-wrap">
+
+                <span
+
+                  class="bundle-and-save__swatch"
+
+                  data-bundle-and-save-swatch
+
+                  aria-hidden="true"
+
+                ></span>
+
+                <select
+
+                  id="BundleAndSave-{{ block.id }}-{{ slot }}"
+
+                  class="bundle-and-save__select"
+
+                  data-bundle-and-save-select
+
+                  data-slot="{{ slot }}"
+
+                  aria-label="Choose variant {{ slot }}"
+
+                >
+
+                  {% for variant in bundle_variants %}
+
+                    <option
+
+                      value="{{ variant.id }}"
+
+                      data-price="{{ variant.price }}"
+
+                      data-available="{{ variant.available }}"
+
+                      data-title="{{ variant.title | escape }}"
+
+                      {% unless variant.available %}
+
+                        disabled
+
+                      {% endunless %}
+
+                    >
+
+                      {{ variant.title }}
+
+                      {% unless variant.available %}
+
+                        - Sold out
+
+                      {% endunless %}
+
+                    </option>
+
+                  {% endfor %}
+
+                </select>
+
+              </div>
+
+            </div>
+
+          {% endfor %}
+
+        </div>
+
+
+
+        {% comment %}
+
+          PRICE + ADD TO CART
+
+        {% endcomment %}
+
+
+<p
+  class="bundle-and-save__message"
+
+          data-bundle-and-save-message
+
+          role="status"
+
+          aria-live="polite"
+
+        ></p>
+
+      </div>
+
+      
+
+      <button
+        type="button"
+        class="bundle-and-save__add-button button button-primary"
+        data-bundle-and-save-add
+        disabled
+      >
+        <span data-bundle-and-save-add-label>
+          {{ block.settings.button_text }}
+        </span>
+      </button>
+
+    </div>
+
+
+
+    {% comment %}
+
+      VARIANT DATA
+
+    {% endcomment %}
+
+    <script
+
+      type="application/json"
+
+      data-bundle-and-save-product
+
+    >
+
+      {
+
+        "id": {{ product_resource.id | json }},
+
+        "title": {{ product_resource.title | json }},
+
+        "variants": {{ product_resource.variants | json }}
+
+      }
+
+    </script>
+
+  </div>
+
+{% endif %}
+
+
+
+{% stylesheet %}
+
+  /*
+
+   * BUNDLE AND SAVE
+
+   */
+
+  .bundle-and-save {
+
+    width: 100%;
+
+  }
+
+  .bundle-and-save__inner {
+    display: grid;
+    grid-template-columns: 18% minmax(0, 82%);
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    background: #fff;
+  }
+
+  /*
+
+   * PRODUCT IMAGE
+
+   */
+
+.bundle-and-save__media {
+    display: block;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+
+.bundle-and-save__image {
+  display: block;
+  height: 8.6rem;
+  object-fit: contain;
+}
+
+
+  /*
+
+   * CONTENT
+
+   */
+
+  .bundle-and-save__content {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+
+  /*
+
+   * HEADING
+
+   */
+
+  .bundle-and-save__heading-wrap {
+      min-width: 0;
+      display: flex;
+      align-items: center;
+      gap: .9rem;
+  }
+
+
+.bundle-and-save__heading {
+    font-size: 1.4rem;
+    line-height: 2rem;
+    margin-bottom: 0;
+    font-family: inherit;
+    font-weight: normal;
+    text-transform: capitalize;
+}
+
+
+
+.bundle-and-save__subheading {
+    font-size: 1.4rem;
+    line-height: 2rem;
+    margin: 0;
+}
+
+
+  /*
+
+   * VARIANT SELECTORS
+
+   */
+
+  .bundle-and-save__variants {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.2rem;
+    width: 100%;
+    margin-top: 1.2rem;
+  }
+
+
+
+  .bundle-and-save__variant {
+
+    min-width: 0;
+
+  }
+
+
+
+  .bundle-and-save__select-wrap {
+
+    position: relative;
+
+    min-width: 0;
+
+  }
+
+  .bundle-and-save__select {
+    width: 100%;
+    min-width: 0;
+    border: 1px solid currentColor;
+    border-radius: 0;
+    outline: none;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    appearance: auto;
+    cursor: pointer;
+    align-items: center;
+    min-height: 3.2rem;
+    padding: .25rem 2.1rem .25rem 2.3rem;
+    font-size: 1.4rem;
+  }
+
+
+  .bundle-and-save__select:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+
+  /*
+
+   * COLOR SWATCH
+
+   */
+
+  .bundle-and-save__swatch {
+    position: absolute;
+    top: 50%;
+    left: 0.5rem;
+    z-index: 2;
+    width: 1.7rem;
+    height: 1.7rem;
+    transform: translateY(-50%);
+    border: 1px solid rgb(var(--color-foreground-rgb) / 0.3);
+    border-radius: 50%;
+    background: #d9d9d9;
+    pointer-events: none;
+  }
+
+
+  /*
+
+   * PRICE + BUTTON
+
+   */
+
+  .bundle-and-save__bottom {
+    display: flex;
+    align-items: center;
+  }
+
+.bundle-and-save__pricing {
+    display: flex;
+    align-items: baseline;
+    gap: .55rem;
+    min-width: 0;
+    white-space: nowrap;
+    font-size: 1.4rem;
+    line-height: 2rem;
+}
+
+
+
+  .bundle-and-save__regular-price {
+
+    text-decoration: line-through;
+
+  }
+
+
+
+  .bundle-and-save__add-button {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-width: 0;
+    min-height: 4rem;
+    margin-top: 3.2rem;
+    padding: .8rem 1.2rem;
+    border-radius: 0;
+  }
+
+
+
+  .bundle-and-save__add-button:disabled {
+
+    opacity: 0.35;
+
+    cursor: not-allowed;
+
+  }
+
+
+
+  /*
+
+   * MESSAGE
+
+   */
+
+  .bundle-and-save__message {
+
+    display: none;
+
+    margin: 0.6rem 0 0;
+
+    font-size: 1rem;
+
+    line-height: 1.2;
+
+  }
+
+
+
+  .bundle-and-save__message.is-visible {
+
+    display: block;
+
+  }
+
+
+  /*
+
+   * MOBILE
+
+   */
+
+  @media screen and (max-width: 749px) {
+    .bundle-and-save__variants {
+      grid-template-columns: 1fr;
+      gap: 1.2rem;
+    }
+
+    .bundle-and-save__bottom {
+      align-items: flex-start;
+    }
+
+    .bundle-and-save__add-button {
+      width: 100%;
+      min-width: 0;
+      margin-top: 1.7rem;
+    }
+    .bundle-and-save__inner {
+      grid-template-columns: 29.16% minmax(0, 70.84%);
+    }
+
+    .bundle-and-save__image {
+      display: block;
+      height: 10rem;
+      object-fit: cover;
+    }
+    .bundle-and-save__content {
+      padding-left: 1.4rem;
+    }
+
+    .bundle-and-save__heading-wrap {
+      display: block;
+    }
+
+  }
+
+{% endstylesheet %}
+
+
+
+{% javascript %}
+
+  (() => {
+
+    const initBundleAndSave = (root) => {
+
+      if (
+
+        !root ||
+
+        root.dataset.bundleAndSaveInitialized === 'true'
+
+      ) {
+
+        return;
+
+      }
+
+
+
+      root.dataset.bundleAndSaveInitialized = 'true';
+
+
+
+      const selects = [
+
+        ...root.querySelectorAll(
+
+          '[data-bundle-and-save-select]'
+
+        )
+
+      ];
+
+
+
+      const addButton =
+
+        root.querySelector(
+
+          '[data-bundle-and-save-add]'
+
+        );
+
+
+
+      const bundlePriceElement =
+
+        root.querySelector(
+
+          '[data-bundle-and-save-price]'
+
+        );
+
+
+
+      const regularPriceElement =
+
+        root.querySelector(
+
+          '[data-bundle-and-save-regular-price]'
+
+        );
+
+
+
+      const messageElement =
+
+        root.querySelector(
+
+          '[data-bundle-and-save-message]'
+
+        );
+
+
+
+      const productDataElement =
+
+        root.querySelector(
+
+          '[data-bundle-and-save-product]'
+
+        );
+
+
+
+      if (
+
+        !selects.length ||
+
+        !addButton ||
+
+        !productDataElement
+
+      ) {
+
+        return;
+
+      }
+
+
+
+      let productData;
+
+
+
+      try {
+
+        productData =
+
+          JSON.parse(
+
+            productDataElement.textContent
+
+          );
+
+      } catch {
+
+        productData = null;
+
+      }
+
+
+
+      if (
+
+        !productData ||
+
+        !Array.isArray(productData.variants)
+
+      ) {
+
+        return;
+
+      }
+
+
+
+      const variants =
+
+        productData.variants;
+
+
+
+      const bundlePrice =
+
+        Number(
+
+          root.dataset.bundlePrice
+
+        ) || 0;
+
+
+
+      const moneyFormat =
+
+        root.dataset.moneyFormat || '';
+
+
+
+      /*
+
+       * MONEY
+
+       */
+
+      const formatMoney = (
+
+        cents
+
+      ) => {
+
+        cents =
+
+          Number(cents) || 0;
+
+        if (
+
+          typeof Shopify !== 'undefined' &&
+
+          typeof Shopify.formatMoney === 'function'
+
+        ) {
+
+          return Shopify
+
+            .formatMoney(
+
+              cents,
+
+              moneyFormat
+
+            )
+
+              .replace(/US\s*(?=\$)/g, '');
+
+        }
+
+        try {
+
+          return `$${(
+
+            cents / 100
+
+          ).toFixed(2)}`;
+
+        } catch {
+
+          return `${(
+
+            cents / 100
+
+          ).toFixed(2)}`;
+
+        }
+
+      };
+
+
+
+      /*
+
+       * GET VARIANT
+
+       */
+
+      const getVariant = (select) => {
+
+        const variantId =
+
+          Number(
+
+            select.value
+
+          );
+
+
+
+        return (
+
+          variants.find(
+
+            (variant) =>
+
+              Number(variant.id) ===
+
+              variantId
+
+          ) || null
+
+        );
+
+      };
+
+
+
+      /*
+
+       * FIRST AVAILABLE VARIANT
+
+       */
+
+      const setInitialVariants = () => {
+
+        selects.forEach(
+
+          (select) => {
+
+            const selectedOption =
+
+              select.selectedOptions[0];
+
+
+
+            if (
+
+              !selectedOption ||
+
+              selectedOption.disabled
+
+            ) {
+
+              const firstAvailable =
+
+                [
+
+                  ...select.options
+
+                ].find(
+
+                  (option) =>
+
+                    !option.disabled
+
+                );
+
+
+
+              if (firstAvailable) {
+
+                select.value =
+
+                  firstAvailable.value;
+
+              }
+
+            }
+
+          }
+
+        );
+
+      };
+
+
+
+      /*
+
+       * COLOR
+
+       */
+
+      const getColor = (variant) => {
+
+        const values =
+
+          Array.isArray(
+
+            variant?.options
+
+          )
+
+            ? variant.options
+
+            : [];
+
+
+
+        const text =
+
+          values
+
+            .join(' ')
+
+            .trim()
+
+            .toLowerCase();
+
+
+
+        const colorMap = {
+
+          red: '#d86f7c',
+
+          pink: '#d98999',
+
+          rose: '#d98999',
+
+          nude: '#c98e72',
+
+          beige: '#d4a77e',
+
+          brown: '#8b5a44',
+
+          blue: '#6e8fc4',
+
+          purple: '#a78ac4',
+
+          plum: '#774f72',
+
+          mauve: '#a87982',
+
+          orange: '#d8875d',
+
+          coral: '#e88b7d',
+
+          peach: '#e9a07f',
+
+          yellow: '#e3c76d',
+
+          green: '#7ca67d',
+
+          black: '#171717',
+
+          white: '#ffffff'
+
+        };
+
+
+
+        for (
+
+          const [
+
+            name,
+
+            color
+
+          ] of Object.entries(
+
+            colorMap
+
+          )
+
+        ) {
+
+          if (
+
+            text.includes(name)
+
+          ) {
+
+            return color;
+
+          }
+
+        }
+
+
+
+        return '#d98999';
+
+      };
+
+
+
+      /*
+
+       * SWATCHES
+
+       */
+
+      const updateSwatches = () => {
+
+        selects.forEach(
+
+          (select) => {
+
+            const wrapper =
+
+              select.closest(
+
+                '.bundle-and-save__select-wrap'
+
+              );
+
+
+
+            const swatch =
+
+              wrapper?.querySelector(
+
+                '[data-bundle-and-save-swatch]'
+
+              );
+
+
+
+            const variant =
+
+              getVariant(select);
+
+
+
+            if (
+
+              swatch &&
+
+              variant
+
+            ) {
+
+              swatch.style.backgroundColor =
+
+                getColor(
+
+                  variant
+
+                );
+
+            }
+
+          }
+
+        );
+
+      };
+
+
+
+      /*
+
+       * PRICING
+
+       */
+
+      const updatePricing = () => {
+
+        const selectedVariants =
+
+          selects
+
+            .map(
+
+              getVariant
+
+            )
+
+            .filter(
+
+              (variant) =>
+
+                variant &&
+
+                variant.available
+
+            );
+
+
+
+        const regularTotal =
+
+          selectedVariants.reduce(
+
+            (
+
+              total,
+
+              variant
+
+            ) =>
+
+              total +
+
+              Number(
+
+                variant.price || 0
+
+              ),
+
+            0
+
+          );
+
+
+
+        const complete =
+
+          selectedVariants.length ===
+
+          selects.length;
+
+
+
+        if (
+
+          bundlePriceElement
+
+        ) {
+
+          bundlePriceElement.textContent =
+
+            formatMoney(
+
+              bundlePrice
+
+            );
+
+        }
+
+
+
+        if (
+
+          regularPriceElement
+
+        ) {
+
+          regularPriceElement.textContent =
+
+            formatMoney(
+
+              regularTotal
+
+            );
+
+        }
+
+
+
+        addButton.disabled =
+
+          !complete ||
+
+          bundlePrice <= 0;
+
+
+
+        return {
+
+          selectedVariants,
+
+          regularTotal,
+
+          complete
+
+        };
+
+      };
+
+
+
+      /*
+
+       * MESSAGE
+
+       */
+
+      const hideMessage = () => {
+
+        if (!messageElement) {
+
+          return;
+
+        }
+
+
+
+        messageElement.textContent =
+
+          '';
+
+
+
+        messageElement.classList.remove(
+
+          'is-visible'
+
+        );
+
+      };
+
+
+
+      const showMessage = (
+
+        message
+
+      ) => {
+
+        if (!messageElement) {
+
+          return;
+
+        }
+
+
+
+        messageElement.textContent =
+
+          message;
+
+
+
+        messageElement.classList.add(
+
+          'is-visible'
+
+        );
+
+      };
+
+
+
+      /*
+
+       * CHANGE EVENTS
+
+       */
+
+      selects.forEach(
+
+        (select) => {
+
+          select.addEventListener(
+
+            'change',
+
+            () => {
+
+              hideMessage();
+
+              updateSwatches();
+
+              updatePricing();
+
+            }
+
+          );
+
+        }
+
+      );
+
+
+
+      /*
+
+       * HORIZON CART DEFERRED PROMISE
+
+       */
+
+      const createDeferred = () => {
+
+        let resolvePromise;
+
+        let rejectPromise;
+
+
+
+        const promise =
+
+          new Promise(
+
+            (
+
+              resolve,
+
+              reject
+
+            ) => {
+
+              resolvePromise =
+
+                resolve;
+
+              rejectPromise =
+
+                reject;
+
+            }
+
+          );
+
+
+
+        return {
+
+          promise,
+
+          resolve:
+
+            resolvePromise,
+
+          reject:
+
+            rejectPromise
+
+        };
+
+      };
+
+
+
+      /*
+
+       * HORIZON CART EVENT
+
+       */
+
+      const createCartLinesUpdateEvent = ({
+
+        action,
+
+        context,
+
+        lines,
+
+        promise
+
+      }) => {
+
+        const event =
+
+          new Event(
+
+            'shopify:cart:lines-update',
+
+            {
+
+              bubbles: true
+
+            }
+
+          );
+
+
+
+        Object.defineProperties(
+
+          event,
+
+          {
+
+            action: {
+
+              value: action,
+
+              enumerable: true
+
+            },
+
+            context: {
+
+              value: context,
+
+              enumerable: true
+
+            },
+
+            lines: {
+
+              value: lines,
+
+              enumerable: true
+
+            },
+
+            promise: {
+
+              value: promise,
+
+              enumerable: true
+
+            }
+
+          }
+
+        );
+
+
+
+        return event;
+
+      };
+
+
+
+      /*
+
+       * ADD TO CART
+
+       */
+
+      addButton.addEventListener(
+
+        'click',
+
+        async () => {
+
+          const pricing =
+
+            updatePricing();
+
+
+
+          if (
+
+            !pricing.complete ||
+
+            !pricing.selectedVariants.length
+
+          ) {
+
+            return;
+
+          }
+
+
+
+          addButton.disabled =
+
+            true;
+
+
+
+          const labelElement =
+
+            addButton.querySelector(
+
+              '[data-bundle-and-save-add-label]'
+
+            );
+
+
+
+          const originalLabel =
+
+            labelElement
+
+              ? labelElement.textContent.trim()
+
+              : 'ADD TO CART';
+
+
+
+          if (labelElement) {
+
+            labelElement.textContent =
+
+              'ADDING...';
+
+          }
+
+
+
+          hideMessage();
+
+
+
+          /*
+
+           * FIND HORIZON CART SECTIONS
+
+           */
+
+          const sectionIds =
+
+            new Set();
+
+
+
+          document
+
+            .querySelectorAll(
+
+              'cart-items-component'
+
+            )
+
+            .forEach(
+
+              (component) => {
+
+                const sectionId =
+
+                  component.dataset.sectionId;
+
+
+
+                if (sectionId) {
+
+                  sectionIds.add(
+
+                    sectionId
+
+                  );
+
+                }
+
+              }
+
+            );
+
+
+
+          sectionIds.add(
+
+            'cart-drawer-section'
+
+          );
+
+
+
+          /*
+
+           * CREATE HORIZON UPDATE
+
+           */
+
+          const deferredUpdate =
+
+            createDeferred();
+
+
+
+          const lines =
+
+            pricing.selectedVariants.map(
+
+              (variant) => ({
+
+                id:
+
+                  String(
+
+                    variant.id
+
+                  ),
+
+                quantity: 1
+
+              })
+
+            );
+
+
+
+          const cartUpdateEvent =
+
+            createCartLinesUpdateEvent({
+
+              action: 'add',
+
+              context: 'product',
+
+              lines,
+
+              promise:
+
+                deferredUpdate.promise
+
+            });
+
+
+
+          document.dispatchEvent(
+
+            cartUpdateEvent
+
+          );
+
+
+
+          try {
+
+            /*
+
+             * ACTUAL SHOPIFY CART ADD
+
+             */
+
+            const response =
+
+              await fetch(
+
+                `${Theme.routes.cart_add_url}`,
+
+                {
+
+                  method: 'POST',
+
+                  headers: {
+
+                    'Content-Type':
+
+                      'application/json',
+
+                    Accept:
+
+                      'application/json'
+
+                  },
+
+                  credentials:
+
+                    'same-origin',
+
+                  body:
+
+                    JSON.stringify({
+
+                      items:
+
+                        pricing.selectedVariants.map(
+
+                          (variant) => ({
+
+                            id:
+
+                              Number(
+
+                                variant.id
+
+                              ),
+
+                            quantity: 1
+
+                          })
+
+                        ),
+
+                      sections:
+
+                        Array.from(
+
+                          sectionIds
+
+                        ).join(','),
+
+                      sections_url:
+
+                        window.location.pathname
+
+                    })
+
+                }
+
+              );
+
+
+
+            const responseText =
+
+              await response.text();
+
+
+
+            let data;
+
+
+
+            try {
+
+              data =
+
+                JSON.parse(
+
+                  responseText
+
+                );
+
+            } catch {
+
+              throw new Error(
+
+                'Invalid response from Shopify cart.'
+
+              );
+
+            }
+
+
+
+            if (
+
+              !response.ok ||
+
+              data.status ||
+
+              data.errors
+
+            ) {
+
+              throw new Error(
+
+                data.description ||
+
+                data.message ||
+
+                data.errors ||
+
+                'Unable to add bundle to cart.'
+
+              );
+
+            }
+
+
+
+            const sections =
+
+              data.sections || {};
+
+
+
+            let itemCount =
+
+              Number(
+
+                data.item_count
+
+              );
+
+
+
+            /*
+
+             * FALLBACK ITEM COUNT
+
+             */
+
+            if (
+
+              !Number.isFinite(
+
+                itemCount
+
+              )
+
+            ) {
+
+              try {
+
+                const sectionHTML =
+
+                  sections[
+
+                    'cart-drawer-section'
+
+                  ];
+
+
+
+                if (sectionHTML) {
+
+                  const parser =
+
+                    new DOMParser();
+
+
+
+                  const parsed =
+
+                    parser.parseFromString(
+
+                      sectionHTML,
+
+                      'text/html'
+
+                    );
+
+
+
+                  const countElement =
+
+                    parsed.querySelector(
+
+                      '[ref="cartItemCount"]'
+
+                    );
+
+
+
+                  itemCount =
+
+                    countElement
+
+                      ? parseInt(
+
+                          countElement.textContent,
+
+                          10
+
+                        )
+
+                      : 0;
+
+                }
+
+              } catch {
+
+                itemCount =
+
+                  0;
+
+              }
+
+            }
+
+
+
+            /*
+
+             * RESOLVE HORIZON UPDATE
+
+             */
+
+            deferredUpdate.resolve({
+
+              cart:
+
+                data,
+
+              detail: {
+
+                sections,
+
+                items:
+
+                  data.items || [],
+
+                itemCount,
+
+                source:
+
+                  'bundle-and-save',
+
+                didError:
+
+                  false
+
+              }
+
+            });
+
+
+
+            await deferredUpdate.promise;
+
+
+
+            /*
+
+             * WAIT FOR HORIZON
+
+             */
+
+            await new Promise(
+
+              (resolve) =>
+
+                requestAnimationFrame(
+
+                  () => resolve()
+
+                )
+
+            );
+
+
+
+            await new Promise(
+
+              (resolve) =>
+
+                requestAnimationFrame(
+
+                  () => resolve()
+
+                )
+
+            );
+
+
+
+            /*
+
+             * OPEN CART DRAWER
+
+             */
+
+            const cartDrawer =
+
+              document.querySelector(
+
+                'theme-drawer#cart-drawer'
+
+              );
+
+
+
+            if (
+
+              cartDrawer &&
+
+              typeof cartDrawer.open ===
+
+                'function'
+
+            ) {
+
+              cartDrawer.open();
+
+            } else if (
+
+              typeof Shopify !==
+
+                'undefined' &&
+
+              Shopify.actions &&
+
+              typeof Shopify.actions.openCart ===
+
+                'function'
+
+            ) {
+
+              Shopify.actions.openCart();
+
+            }
+
+
+
+            /*
+
+             * SUCCESS
+
+             */
+
+            if (labelElement) {
+
+              labelElement.textContent =
+
+                'ADDED';
+
+            }
+
+
+
+            setTimeout(
+
+              () => {
+
+                if (labelElement) {
+
+                  labelElement.textContent =
+
+                    originalLabel;
+
+                }
+
+
+
+                updatePricing();
+
+              },
+
+              900
+
+            );
+
+          } catch (
+
+            error
+
+          ) {
+
+            console.error(
+
+              '[Bundle & Save] Add to cart failed:',
+
+              error
+
+            );
+
+
+
+            try {
+
+              deferredUpdate.reject(
+
+                error
+
+              );
+
+            } catch {
+
+              // Ignore promise cleanup errors.
+
+            }
+
+
+
+            if (labelElement) {
+
+              labelElement.textContent =
+
+                originalLabel;
+
+            }
+
+
+
+            showMessage(
+
+              error?.message ||
+
+                'Something went wrong. Please try again.'
+
+            );
+
+
+
+            updatePricing();
+
+          }
+
+        }
+
+      );
+
+
+
+      /*
+
+       * INITIALIZE
+
+       */
+
+      setInitialVariants();
+
+      updateSwatches();
+
+      updatePricing();
+
+    };
+
+
+
+    /*
+
+     * INITIALIZE ALL BLOCKS
+
+     */
+
+    const initAllBundleAndSave = () => {
+
+      document
+
+        .querySelectorAll(
+
+          '[data-bundle-and-save]'
+
+        )
+
+        .forEach(
+
+          initBundleAndSave
+
+        );
+
+    };
+
+
+
+    /*
+
+     * INITIAL LOAD
+
+     */
+
+    initAllBundleAndSave();
+
+
+
+    /*
+
+     * THEME EDITOR SUPPORT
+
+     */
+
+    document.addEventListener(
+
+      'shopify:section:load',
+
+      initAllBundleAndSave
+
+    );
+
+  })();
+
+{% endjavascript %}
+
+
+
+{% schema %}
+
+{
+
+  "name": "Bundle & Save",
+
+  "tag": "div",
+
+  "class": "bundle-and-save-block",
+
+  "settings": [
+
+    {
+
+      "type": "text",
+
+      "id": "heading",
+
+      "label": "Heading",
+
+      "default": "PICK YOUR TRIO"
+
+    },
+
+    {
+
+      "type": "text",
+
+      "id": "subheading",
+
+      "label": "Subheading",
+
+      "default": "Bundle and save"
+
+    },
+
+    {
+
+      "type": "text",
+
+      "id": "button_text",
+
+      "label": "Button text",
+
+      "default": "ADD TO CART"
+
+    }
+
+  ],
+
+  "presets": [
+
+    {
+
+      "name": "Bundle & Save",
+
+      "category": "Product"
+
+    }
+
+  ]
+
+}
+
+{% endschema %}

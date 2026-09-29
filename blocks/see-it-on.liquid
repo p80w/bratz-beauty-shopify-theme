@@ -1,0 +1,800 @@
+{% liquid
+  assign block_settings = block.settings
+  assign slideshow_attributes = 'data-bratz-step-one'
+%}
+
+<div
+  class="see-it-on"
+  {{ block.shopify_attributes }}
+  style="
+    --see-it-on-columns: {{ block_settings.columns }};
+    --see-it-on-gap: {{ block_settings.columns_gap }}px;
+    --see-it-on-mobile-slide-gap: {{ block_settings.mobile_slide_gap }}px;
+  "
+>
+  {% if block_settings.heading != blank %}
+    <div class="see-it-on__header">
+      <h2 class="see-it-on__heading h4">
+        {{ block_settings.heading }}
+      </h2>
+    </div>
+  {% endif %}
+
+  {% capture slides %}
+
+    {% for i in (1..10) %}
+      {% liquid
+        assign media_type_key = 'media_' | append: i | append: '_type'
+        assign image_key = 'media_' | append: i | append: '_image'
+        assign video_key = 'media_' | append: i | append: '_video'
+        assign alt_key = 'media_' | append: i | append: '_alt'
+
+        assign media_type = block_settings[media_type_key]
+        assign image = block_settings[image_key]
+        assign video = block_settings[video_key]
+        assign alt_text = block_settings[alt_key]
+
+        assign has_media = false
+
+        if media_type == 'video' and video != blank
+          assign has_media = true
+        elsif media_type == 'image' and image != blank
+          assign has_media = true
+        endif
+      %}
+
+      {% if has_media %}
+        {% capture children %}
+          <article class="see-it-on__media">
+
+            {% if media_type == 'video' %}
+              {{
+                video
+                | video_tag:
+                  class: 'see-it-on__video',
+                  autoplay: true,
+                  loop: true,
+                  muted: true,
+                  controls: false,
+                  playsinline: true,
+                  preload: 'auto'
+              }}
+
+            {% elsif media_type == 'image' %}
+              {% render 'image',
+                image: image,
+                class: 'see-it-on__image',
+                alt_text_fallback: alt_text
+              %}
+            {% endif %}
+
+          </article>
+        {% endcapture %}
+
+        {% render 'slideshow-slide',
+          index: forloop.index0,
+          children: children,
+          class: 'see-it-on__slide'
+        %}
+      {% endif %}
+    {% endfor %}
+
+  {% endcapture %}
+
+  {% liquid
+    assign media_count = 0
+
+    for i in (1..10)
+      assign media_type_key = 'media_' | append: i | append: '_type'
+      assign image_key = 'media_' | append: i | append: '_image'
+      assign video_key = 'media_' | append: i | append: '_video'
+
+      assign media_type = block_settings[media_type_key]
+      assign image = block_settings[image_key]
+      assign video = block_settings[video_key]
+
+      if media_type == 'video' and video != blank
+        assign media_count = media_count | plus: 1
+      elsif media_type == 'image' and image != blank
+        assign media_count = media_count | plus: 1
+      endif
+    endfor
+  %}
+
+  {% if media_count > 0 %}
+    <div class="see-it-on__carousel">
+
+      {% render 'slideshow',
+        class: 'see-it-on__slideshow',
+        show_arrows: block_settings.show_arrows,
+        icon_style: block_settings.icons_style,
+        icon_shape: block_settings.icons_shape,
+        infinite: false,
+        initial_slide: 0,
+        slides: slides,
+        slide_count: media_count,
+        attributes: slideshow_attributes
+      %}
+
+    </div>
+  {% endif %}
+</div>
+
+{% stylesheet %}
+
+/* =========================================================
+   SEE IT ON
+   ========================================================= */
+
+.see-it-on {
+  width: 100%;
+  overflow: hidden;
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.see-it-on__header {
+  width: 100%;
+  margin-block-end: 1.6rem;
+  text-align: left;
+}
+
+.see-it-on__heading {
+  margin: 0;
+  text-transform: uppercase;
+}
+
+
+/* =========================================================
+   CAROUSEL
+   ========================================================= */
+
+.see-it-on__carousel {
+  width: 100%;
+  position: relative;
+}
+
+.see-it-on__slideshow {
+  width: 100%;
+  position: relative;
+  container-type: inline-size;
+  container-name: see-it-on-carousel;
+}
+
+.see-it-on__slideshow slideshow-arrows {
+  padding-inline: 0;
+}
+
+.see-it-on__slideshow .slideshow-control {
+  z-index: 5;
+}
+
+
+/* =========================================================
+   SLIDES
+   ========================================================= */
+
+.see-it-on__slideshow slideshow-slides {
+  gap: var(--see-it-on-gap, 4px);
+}
+
+@media screen and (min-width: 750px) {
+  .see-it-on__slide {
+    /*
+     * Desktop shows 4 full media items + half of the next item.
+     * The 4.5 visible slides include 4 gaps, so each slide uses:
+     * (100% - 4 gaps) / 4.5
+     */
+    width: calc(
+      (
+        100% -
+        (var(--see-it-on-gap) * 4)
+      ) / 4.5
+    );
+
+    flex: 0 0 calc(
+      (
+        100% -
+        (var(--see-it-on-gap) * 4)
+      ) / 4.5
+    );
+
+    min-width: 0;
+    scroll-snap-align: start;
+  }
+}
+
+
+/* =========================================================
+   MEDIA
+   ========================================================= */
+
+.see-it-on__media {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+
+/* =========================================================
+   IMAGE
+   ========================================================= */
+
+.see-it-on__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+
+/* =========================================================
+   VIDEO
+   ========================================================= */
+
+.see-it-on__video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media screen and (max-width: 749px) {
+  .see-it-on__slideshow slideshow-slides {
+    gap: var(--see-it-on-mobile-slide-gap, 4px);
+    padding-inline: 0;
+  }
+
+  .see-it-on__slide {
+    /* 3 full media items + half of the 4th item */
+    width: calc(
+      (
+        100% -
+        (var(--see-it-on-mobile-slide-gap, 4px) * 3)
+      ) / 3.5
+    );
+
+    flex: 0 0 calc(
+      (
+        100% -
+        (var(--see-it-on-mobile-slide-gap, 4px) * 3)
+      ) / 3.5
+    );
+
+    min-width: 0;
+    scroll-snap-align: start;
+  }
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .see-it-on__video {
+    animation: none;
+  }
+}
+
+{% endstylesheet %}
+
+
+{% schema %}
+{
+  "name": "See It On",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "See It On"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "SEE IT ON"
+    },
+
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "columns",
+      "label": "Desktop columns",
+      "min": 1,
+      "max": 5,
+      "step": 1,
+      "default": 5
+    },
+    {
+      "type": "range",
+      "id": "columns_gap",
+      "label": "Column gap",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "mobile_slide_gap",
+      "label": "Mobile slide gap",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 40
+    },
+
+    {
+      "type": "header",
+      "content": "Media 1"
+    },
+    {
+      "type": "select",
+      "id": "media_1_type",
+      "label": "Media type",
+      "options": [
+        {
+          "value": "image",
+          "label": "Image"
+        },
+        {
+          "value": "video",
+          "label": "Video"
+        }
+      ],
+      "default": "image"
+    },
+    {
+      "type": "image_picker",
+      "id": "media_1_image",
+      "label": "Image",
+      "visible_if": "{{ block.settings.media_1_type == 'image' }}"
+    },
+    {
+      "type": "video",
+      "id": "media_1_video",
+      "label": "Video",
+      "visible_if": "{{ block.settings.media_1_type == 'video' }}"
+    },
+    {
+      "type": "text",
+      "id": "media_1_alt",
+      "label": "Alt text",
+      "default": "See It On"
+    },
+
+    {
+      "type": "header",
+      "content": "Media 2"
+    },
+    {
+      "type": "select",
+      "id": "media_2_type",
+      "label": "Media type",
+      "options": [
+        {
+          "value": "image",
+          "label": "Image"
+        },
+        {
+          "value": "video",
+          "label": "Video"
+        }
+      ],
+      "default": "image"
+    },
+    {
+      "type": "image_picker",
+      "id": "media_2_image",
+      "label": "Image",
+      "visible_if": "{{ block.settings.media_2_type == 'image' }}"
+    },
+    {
+      "type": "video",
+      "id": "media_2_video",
+      "label": "Video",
+      "visible_if": "{{ block.settings.media_2_type == 'video' }}"
+    },
+    {
+      "type": "text",
+      "id": "media_2_alt",
+      "label": "Alt text",
+      "default": "See It On"
+    },
+
+    {
+      "type": "header",
+      "content": "Media 3"
+    },
+    {
+      "type": "select",
+      "id": "media_3_type",
+      "label": "Media type",
+      "options": [
+        {
+          "value": "image",
+          "label": "Image"
+        },
+        {
+          "value": "video",
+          "label": "Video"
+        }
+      ],
+      "default": "image"
+    },
+    {
+      "type": "image_picker",
+      "id": "media_3_image",
+      "label": "Image",
+      "visible_if": "{{ block.settings.media_3_type == 'image' }}"
+    },
+    {
+      "type": "video",
+      "id": "media_3_video",
+      "label": "Video",
+      "visible_if": "{{ block.settings.media_3_type == 'video' }}"
+    },
+    {
+      "type": "text",
+      "id": "media_3_alt",
+      "label": "Alt text",
+      "default": "See It On"
+    },
+
+    {
+      "type": "header",
+      "content": "Media 4"
+    },
+    {
+      "type": "select",
+      "id": "media_4_type",
+      "label": "Media type",
+      "options": [
+        {
+          "value": "image",
+          "label": "Image"
+        },
+        {
+          "value": "video",
+          "label": "Video"
+        }
+      ],
+      "default": "image"
+    },
+    {
+      "type": "image_picker",
+      "id": "media_4_image",
+      "label": "Image",
+      "visible_if": "{{ block.settings.media_4_type == 'image' }}"
+    },
+    {
+      "type": "video",
+      "id": "media_4_video",
+      "label": "Video",
+      "visible_if": "{{ block.settings.media_4_type == 'video' }}"
+    },
+    {
+      "type": "text",
+      "id": "media_4_alt",
+      "label": "Alt text",
+      "default": "See It On"
+    },
+
+    {
+      "type": "header",
+      "content": "Media 5"
+    },
+    {
+      "type": "select",
+      "id": "media_5_type",
+      "label": "Media type",
+      "options": [
+        {
+          "value": "image",
+          "label": "Image"
+        },
+        {
+          "value": "video",
+          "label": "Video"
+        }
+      ],
+      "default": "image"
+    },
+    {
+      "type": "image_picker",
+      "id": "media_5_image",
+      "label": "Image",
+      "visible_if": "{{ block.settings.media_5_type == 'image' }}"
+    },
+    {
+      "type": "video",
+      "id": "media_5_video",
+      "label": "Video",
+      "visible_if": "{{ block.settings.media_5_type == 'video' }}"
+    },
+    {
+      "type": "text",
+      "id": "media_5_alt",
+      "label": "Alt text",
+      "default": "See It On"
+    },
+
+    {
+      "type": "header",
+      "content": "Media 6"
+    },
+    {
+      "type": "select",
+      "id": "media_6_type",
+      "label": "Media type",
+      "options": [
+        {
+          "value": "image",
+          "label": "Image"
+        },
+        {
+          "value": "video",
+          "label": "Video"
+        }
+      ],
+      "default": "image"
+    },
+    {
+      "type": "image_picker",
+      "id": "media_6_image",
+      "label": "Image",
+      "visible_if": "{{ block.settings.media_6_type == 'image' }}"
+    },
+    {
+      "type": "video",
+      "id": "media_6_video",
+      "label": "Video",
+      "visible_if": "{{ block.settings.media_6_type == 'video' }}"
+    },
+    {
+      "type": "text",
+      "id": "media_6_alt",
+      "label": "Alt text",
+      "default": "See It On"
+    },
+
+    {
+      "type": "header",
+      "content": "Media 7"
+    },
+    {
+      "type": "select",
+      "id": "media_7_type",
+      "label": "Media type",
+      "options": [
+        {
+          "value": "image",
+          "label": "Image"
+        },
+        {
+          "value": "video",
+          "label": "Video"
+        }
+      ],
+      "default": "image"
+    },
+    {
+      "type": "image_picker",
+      "id": "media_7_image",
+      "label": "Image",
+      "visible_if": "{{ block.settings.media_7_type == 'image' }}"
+    },
+    {
+      "type": "video",
+      "id": "media_7_video",
+      "label": "Video",
+      "visible_if": "{{ block.settings.media_7_type == 'video' }}"
+    },
+    {
+      "type": "text",
+      "id": "media_7_alt",
+      "label": "Alt text",
+      "default": "See It On"
+    },
+
+    {
+      "type": "header",
+      "content": "Media 8"
+    },
+    {
+      "type": "select",
+      "id": "media_8_type",
+      "label": "Media type",
+      "options": [
+        {
+          "value": "image",
+          "label": "Image"
+        },
+        {
+          "value": "video",
+          "label": "Video"
+        }
+      ],
+      "default": "image"
+    },
+    {
+      "type": "image_picker",
+      "id": "media_8_image",
+      "label": "Image",
+      "visible_if": "{{ block.settings.media_8_type == 'image' }}"
+    },
+    {
+      "type": "video",
+      "id": "media_8_video",
+      "label": "Video",
+      "visible_if": "{{ block.settings.media_8_type == 'video' }}"
+    },
+    {
+      "type": "text",
+      "id": "media_8_alt",
+      "label": "Alt text",
+      "default": "See It On"
+    },
+
+    {
+      "type": "header",
+      "content": "Media 9"
+    },
+    {
+      "type": "select",
+      "id": "media_9_type",
+      "label": "Media type",
+      "options": [
+        {
+          "value": "image",
+          "label": "Image"
+        },
+        {
+          "value": "video",
+          "label": "Video"
+        }
+      ],
+      "default": "image"
+    },
+    {
+      "type": "image_picker",
+      "id": "media_9_image",
+      "label": "Image",
+      "visible_if": "{{ block.settings.media_9_type == 'image' }}"
+    },
+    {
+      "type": "video",
+      "id": "media_9_video",
+      "label": "Video",
+      "visible_if": "{{ block.settings.media_9_type == 'video' }}"
+    },
+    {
+      "type": "text",
+      "id": "media_9_alt",
+      "label": "Alt text",
+      "default": "See It On"
+    },
+
+    {
+      "type": "header",
+      "content": "Media 10"
+    },
+    {
+      "type": "select",
+      "id": "media_10_type",
+      "label": "Media type",
+      "options": [
+        {
+          "value": "image",
+          "label": "Image"
+        },
+        {
+          "value": "video",
+          "label": "Video"
+        }
+      ],
+      "default": "image"
+    },
+    {
+      "type": "image_picker",
+      "id": "media_10_image",
+      "label": "Image",
+      "visible_if": "{{ block.settings.media_10_type == 'image' }}"
+    },
+    {
+      "type": "video",
+      "id": "media_10_video",
+      "label": "Video",
+      "visible_if": "{{ block.settings.media_10_type == 'video' }}"
+    },
+    {
+      "type": "text",
+      "id": "media_10_alt",
+      "label": "Alt text",
+      "default": "See It On"
+    },
+
+    {
+      "type": "header",
+      "content": "Carousel navigation"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_arrows",
+      "label": "Show arrows",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "icons_style",
+      "label": "Arrow style",
+      "options": [
+        {
+          "value": "arrow",
+          "label": "Arrows"
+        },
+        {
+          "value": "chevron",
+          "label": "Chevrons"
+        },
+        {
+          "value": "arrows_large",
+          "label": "Large arrows"
+        },
+        {
+          "value": "chevron_large",
+          "label": "Large chevrons"
+        },
+        {
+          "value": "none",
+          "label": "None"
+        }
+      ],
+      "default": "arrow",
+      "visible_if": "{{ block.settings.show_arrows }}"
+    },
+    {
+      "type": "select",
+      "id": "icons_shape",
+      "label": "Arrow background",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "circle",
+          "label": "Circle"
+        },
+        {
+          "value": "square",
+          "label": "Square"
+        }
+      ],
+      "default": "none",
+      "visible_if": "{{ block.settings.show_arrows }}"
+    }
+  ],
+  "presets": [
+    {
+      "name": "See It On",
+      "category": "Product"
+    }
+  ]
+}
+{% endschema %}
