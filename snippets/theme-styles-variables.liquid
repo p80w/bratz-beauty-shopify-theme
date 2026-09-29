@@ -39,15 +39,12 @@
     --font-subheading--family: 'Druk', sans-serif;
     --font-subheading--style: normal;
     --font-subheading--weight: 700;
-    --font-heading--family: 'Druk', sans-serif;
+    --font-heading--family: 'Druk Wide Web', sans-serif;
     --font-heading--style: normal;
-    --font-heading--weight: 700;
+    --font-heading--weight: 500;
     --font-accent--family: 'Sloop', cursive;
     --font-accent--style: normal;
     --font-accent--weight: 400;
-    --font-druk-wide--family: 'Druk Wide Web', sans-serif;
-    --font-druk-wide--style: normal;
-    --font-druk-wide--weight: 500;
 
     /* Margin sizes */
     --font-heading--spacing: 0.25em;
@@ -118,17 +115,6 @@
       for preset_name in type_presets
 
         if preset_name == 'h1'
-          assign preset_size_rem = 12.0
-          assign preset_mobile_size_rem = 4.0
-
-          assign preset_line_height_rem = 11.0
-          assign preset_mobile_line_height_rem = 3.6
-
-          assign preset_font = '--font-heading--family'
-          assign preset_style = '--font-heading--style'
-          assign preset_weight = '--font-heading--weight'
-
-        elsif preset_name == 'h2'
           assign preset_size_rem = 4.8
           assign preset_mobile_size_rem = 3.0
 
@@ -139,7 +125,7 @@
           assign preset_style = '--font-heading--style'
           assign preset_weight = '--font-heading--weight'
 
-        elsif preset_name == 'h3'
+        elsif preset_name == 'h2'
           assign preset_size_rem = 4.0
           assign preset_mobile_size_rem = 2.4
 
@@ -150,22 +136,33 @@
           assign preset_style = '--font-heading--style'
           assign preset_weight = '--font-heading--weight'
 
-        elsif preset_name == 'h4'
+        elsif preset_name == 'h3'
           assign preset_size_rem = 2.4
           assign preset_mobile_size_rem = 1.6
 
-          assign preset_line_height_rem = 2.2
+          assign preset_line_height_rem = 2.0
           assign preset_mobile_line_height_rem = 1.4
 
           assign preset_font = '--font-heading--family'
           assign preset_style = '--font-heading--style'
           assign preset_weight = '--font-heading--weight'
 
-        elsif preset_name == 'h5'
+        elsif preset_name == 'h4'
           assign preset_size_rem = 1.8
           assign preset_mobile_size_rem = 1.4
 
           assign preset_line_height_rem = 1.6
+          assign preset_mobile_line_height_rem = 1.2
+
+          assign preset_font = '--font-heading--family'
+          assign preset_style = '--font-heading--style'
+          assign preset_weight = '--font-heading--weight'
+
+        elsif preset_name == 'h5'
+          assign preset_size_rem = 1.6
+          assign preset_mobile_size_rem = 1.2
+
+          assign preset_line_height_rem = 1.4
           assign preset_mobile_line_height_rem = 1.2
 
           assign preset_font = '--font-heading--family'
@@ -333,7 +330,7 @@
     --color-white-rgb: 255 255 255;
 
     /* Notification */
-    --color-error: #FF0059;
+    --color-error: #E90051;
     --color-attention: #D9FF00;
     --color-success: #00FF84;
 
@@ -478,7 +475,7 @@
     --view-transition-new-main-content: var(--animation-speed) var(--animation-easing) both fadeIn, var(--animation-speed) var(--animation-easing) both slideInTopViewTransition;
 
     /* Focus */
-    --focus-outline-width: 0.15rem;
+    --focus-outline-width: 0.1rem;
     --focus-outline-offset: 0.2em;
 
     /* Badges */

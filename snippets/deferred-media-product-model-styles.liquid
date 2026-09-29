@@ -13,16 +13,25 @@
     min-width: 0;
   }
 
+  .product-information .product-media {
+    height: 48rem;
+  }
+
   .product-media__image {
     object-position: var(--focal-point, center center);
   }
 
   /*** Media border-radius feature ****/
   @media screen and (min-width: 750px) {
+
+    .product-information .product-media {
+      height: 70rem;
+    }
+
     .media-gallery--carousel slideshow-container,
     .media-gallery--grid .product-media > * {
       border-radius: var(--media-radius, 0);
-      overflow: hidden;
+      overflow: inherit;
     }
 
     /* When the CAROUSEL is on the LEFT side */

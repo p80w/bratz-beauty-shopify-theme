@@ -6,14 +6,27 @@
  * or related systems. Please exercise caution as any changes
  * made to this file may be overwritten.
  * ------------------------------------------------------------
- */{
+ */
+{
   "sections": {
     "main": {
       "type": "product-information",
       "blocks": {
+        "bundle_and_save_XbEgW9": {
+          "type": "bundle-and-save",
+          "name": "Bundle & Save",
+          "disabled": true,
+          "settings": {
+            "heading": "PICK YOUR TRIO",
+            "subheading": "Bundle and save",
+            "button_text": "ADD TO CART"
+          },
+          "blocks": {}
+        },
         "disclosures_g9mWze": {
           "type": "disclosures",
           "name": "t:names.disclosures",
+          "disabled": true,
           "settings": {
             "heading": "Disclosures",
             "heading_preset": "h5",
@@ -34,21 +47,21 @@
           "type": "_product-media-gallery",
           "static": true,
           "settings": {
-            "media_presentation": "grid",
+            "media_presentation": "carousel",
             "media_columns": "two",
             "image_gap": 4,
             "large_first_image": false,
-            "slideshow_controls_style": "counter",
+            "icons_style": "arrow",
+            "slideshow_controls_style": "thumbnails",
             "slideshow_mobile_controls_style": "dots",
-            "thumbnail_position": "right",
-            "thumbnail_width": 44,
+            "thumbnail_position": "left",
             "thumbnail_radius": 0,
             "aspect_ratio": "adapt",
             "constrain_to_viewport": true,
-            "media_fit": "contain",
+            "media_fit": "cover",
             "media_radius": 0,
             "extend_media": false,
-            "zoom": true,
+            "zoom": false,
             "video_loop": false,
             "hide_variants": true,
             "padding-block-start": 0,
@@ -79,8 +92,8 @@
             "border_opacity": 100,
             "border_color": "",
             "border_radius": 0,
-            "padding-block-start": 24,
-            "padding-block-end": 24,
+            "padding-block-start": 0,
+            "padding-block-end": 80,
             "padding-inline-start": 0,
             "padding-inline-end": 0
           },
@@ -116,6 +129,7 @@
                 "border_opacity": 100,
                 "border_color": "",
                 "border_radius": 0,
+                "link": "",
                 "open_in_new_tab": false,
                 "placeholder": "",
                 "padding-block-start": 0,
@@ -124,6 +138,19 @@
                 "padding-inline-end": 0
               },
               "blocks": {
+                "review_U7whLh": {
+                  "type": "review",
+                  "name": "t:names.product_review_stars",
+                  "settings": {
+                    "stars_style": "shaded",
+                    "show_number": true,
+                    "text_color": "",
+                    "type_preset": "paragraph",
+                    "width": "100%",
+                    "alignment": "left"
+                  },
+                  "blocks": {}
+                },
                 "text_xrnftG": {
                   "type": "text",
                   "name": "t:names.product_title",
@@ -132,7 +159,7 @@
                     "width": "100%",
                     "max_width": "normal",
                     "alignment": "left",
-                    "type_preset": "h3",
+                    "type_preset": "h2",
                     "font": "var(--font-body--family)",
                     "font_size": "1rem",
                     "line_height": "normal",
@@ -150,13 +177,20 @@
                   },
                   "blocks": {}
                 },
-                "price_tVjtKg": {
+                "product_highlight_apjjCC": {
+                  "type": "product-highlight",
+                  "name": "Product Highlight",
+                  "settings": {},
+                  "blocks": {}
+                },
+                "price_a7tU8z": {
                   "type": "price",
+                  "name": "t:names.product_price",
                   "settings": {
                     "show_sale_price_first": true,
                     "show_installments": false,
                     "show_tax_info": false,
-                    "type_preset": "paragraph",
+                    "type_preset": "",
                     "width": "100%",
                     "alignment": "left",
                     "font": "var(--font-body--family)",
@@ -165,7 +199,7 @@
                     "letter_spacing": "normal",
                     "case": "none",
                     "text_color": "",
-                    "padding-block-start": 4,
+                    "padding-block-start": 0,
                     "padding-block-end": 0,
                     "padding-inline-start": 0,
                     "padding-inline-end": 0
@@ -174,28 +208,17 @@
                 }
               },
               "block_order": [
+                "review_U7whLh",
                 "text_xrnftG",
-                "price_tVjtKg"
+                "product_highlight_apjjCC",
+                "price_a7tU8z"
               ]
-            },
-            "divider_VJhene": {
-              "type": "_divider",
-              "name": "t:names.divider",
-              "settings": {
-                "thickness": 1,
-                "corner_radius": "square",
-                "divider_color": "{{ settings.color_palette.color2 }}",
-                "width_percent": 100,
-                "padding-block-start": 0,
-                "padding-block-end": 0
-              },
-              "blocks": {}
             },
             "variant_picker_R3rGDr": {
               "type": "variant-picker",
               "settings": {
                 "variant_style": "buttons",
-                "show_swatches": false,
+                "show_swatches": true,
                 "option_label_text_color": "",
                 "variant_style_class": "default",
                 "custom_variant_background": "{{ settings.color_palette.background }}",
@@ -242,6 +265,7 @@
               "blocks": {
                 "quantity": {
                   "type": "quantity",
+                  "disabled": true,
                   "static": true,
                   "settings": {
                     "input_style": "default",
@@ -266,6 +290,7 @@
                 },
                 "accelerated-checkout": {
                   "type": "accelerated-checkout",
+                  "disabled": true,
                   "static": true,
                   "settings": {},
                   "blocks": {}
@@ -273,109 +298,58 @@
               },
               "block_order": []
             },
-            "text_aEtTtq": {
-              "type": "text",
-              "name": "t:names.product_description",
+            "see_it_on_6tMjbP": {
+              "type": "see-it-on",
+              "name": "See It On",
               "settings": {
-                "text": "{{ closest.product.description }}",
-                "width": "100%",
-                "max_width": "normal",
-                "alignment": "left",
-                "type_preset": "rte",
-                "font": "var(--font-body--family)",
-                "font_size": "1rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "text_color": "",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
+                "heading": "SEE IT ON",
+                "columns": 5,
+                "columns_gap": 4,
+                "mobile_slide_gap": 4,
+                "media_1_type": "image",
+                "media_1_image": "shopify://shop_images/7b301952502e110e2884830a0c8effadfe2dec19.png",
+                "media_1_alt": "See It On",
+                "media_2_type": "image",
+                "media_2_image": "shopify://shop_images/d7fef36506e6c5c4f582eb55b07e4c57c7cb79c0.png",
+                "media_2_alt": "See It On",
+                "media_3_type": "image",
+                "media_3_image": "shopify://shop_images/197e89d9f78dbe91c3fa46bf4db9a90e8bb0e505.png",
+                "media_3_alt": "See It On",
+                "media_4_type": "video",
+                "media_4_video": "shopify://files/videos/13c15a20cf7840569ed6fc53e566de3f.HD-1080p-7.2Mbps-89436699.mp4",
+                "media_4_alt": "See It On",
+                "media_5_type": "image",
+                "media_5_image": "shopify://shop_images/2f5a41bd0b92a9e9aba530fc39c9d8873d5154dc.png",
+                "media_5_alt": "See It On",
+                "media_6_type": "image",
+                "media_6_image": "shopify://shop_images/197e89d9f78dbe91c3fa46bf4db9a90e8bb0e505_1_d90e708a-f9ed-4755-8877-a3a9a4645043.png",
+                "media_6_alt": "See It On",
+                "media_7_type": "image",
+                "media_7_image": "shopify://shop_images/2f5a41bd0b92a9e9aba530fc39c9d8873d5154dc_923497b9-ffa7-467b-ae32-e2c7df74b43a.png",
+                "media_7_alt": "See It On",
+                "media_8_type": "image",
+                "media_8_image": "shopify://shop_images/d7fef36506e6c5c4f582eb55b07e4c57c7cb79c0.png",
+                "media_8_alt": "See It On",
+                "media_9_type": "image",
+                "media_9_alt": "See It On",
+                "media_10_type": "image",
+                "media_10_alt": "See It On",
+                "show_arrows": false,
+                "icons_style": "arrow",
+                "icons_shape": "none"
               },
               "blocks": {}
-            }
-          },
-          "block_order": [
-            "group_icgrde",
-            "divider_VJhene",
-            "variant_picker_R3rGDr",
-            "buy_buttons_eYQEYi",
-            "text_aEtTtq"
-          ]
-        }
-      },
-      "block_order": [
-        "disclosures_g9mWze"
-      ],
-      "settings": {
-        "content_width": "content-center-aligned",
-        "desktop_media_position": "left",
-        "equal_columns": false,
-        "limit_details_width": false,
-        "gap": 48,
-        "enable_sticky_add_to_cart": true,
-        "background_color": "{{ settings.color_palette.background }}",
-        "padding-block-start": 0,
-        "padding-block-end": 0
-      }
-    },
-    "product_recommendations_qggXJq": {
-      "type": "product-recommendations",
-      "blocks": {
-        "text_cbcgyb": {
-          "type": "text",
-          "name": "t:names.header",
-          "settings": {
-            "text": "<h3>You may also like </h3>",
-            "width": "fit-content",
-            "max_width": "normal",
-            "alignment": "left",
-            "type_preset": "h4",
-            "font": "var(--font-body--family)",
-            "font_size": "1rem",
-            "line_height": "normal",
-            "letter_spacing": "normal",
-            "case": "none",
-            "wrap": "pretty",
-            "text_color": "",
-            "background": false,
-            "background_color": "#00000026",
-            "corner_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {}
-        },
-        "static-product-card": {
-          "type": "_product-card",
-          "name": "t:names.product_card",
-          "static": true,
-          "settings": {
-            "product_card_gap": 8,
-            "background_color": "",
-            "border": "none",
-            "border_width": 1,
-            "border_opacity": 100,
-            "border_color": "",
-            "border_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 8,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {
-            "product_card_gallery_DNizbJ": {
-              "type": "_product-card-gallery",
-              "name": "t:names.product_card_media",
+            },
+            "accordion_MERnaY": {
+              "type": "accordion",
+              "name": "t:names.accordion",
               "settings": {
-                "image_ratio": "adapt",
+                "icon": "caret",
+                "dividers": true,
+                "divider_color": "",
+                "type_preset": "h6",
+                "background_color": "",
+                "text_color": "",
                 "border": "none",
                 "border_width": 1,
                 "border_opacity": 100,
@@ -386,89 +360,532 @@
                 "padding-inline-start": 0,
                 "padding-inline-end": 0
               },
-              "blocks": {}
-            },
-            "product_title_M7MJkb": {
-              "type": "product-title",
-              "name": "t:names.product_title",
-              "settings": {
-                "width": "100%",
-                "max_width": "normal",
-                "alignment": "left",
-                "type_preset": "rte",
-                "font": "var(--font-body--family)",
-                "font_size": "1rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "text_color": "",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 4,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
+              "blocks": {
+                "accordion_row_J3jwCh": {
+                  "type": "_accordion-row",
+                  "name": "t:names.accordion_row",
+                  "settings": {
+                    "heading": "Build Your Pack",
+                    "open_by_default": false,
+                    "icon": "none",
+                    "width": 20
+                  },
+                  "blocks": {
+                    "build_your_pack_TPffty": {
+                      "type": "build-your-pack",
+                      "name": "Build Your Pack",
+                      "settings": {
+                        "heading": "BUILD YOUR PACK",
+                        "description": "<p>Choose your favorites and build your perfect pack.</p>",
+                        "button_text": "ADD TO CART"
+                      },
+                      "blocks": {}
+                    }
+                  },
+                  "block_order": [
+                    "build_your_pack_TPffty"
+                  ]
+                },
+                "accordion_row_cPUKiM": {
+                  "type": "_accordion-row",
+                  "settings": {
+                    "heading": "Bundle and save",
+                    "open_by_default": false,
+                    "icon": "none",
+                    "width": 20
+                  },
+                  "blocks": {
+                    "bundle_and_save_DXxX4x": {
+                      "type": "bundle-and-save",
+                      "name": "Bundle & Save",
+                      "settings": {
+                        "heading": "Pick Your Trio",
+                        "subheading": "Bundle and save",
+                        "button_text": "ADD TO CART"
+                      },
+                      "blocks": {}
+                    }
+                  },
+                  "block_order": [
+                    "bundle_and_save_DXxX4x"
+                  ]
+                },
+                "accordion_row_P4JXgp": {
+                  "type": "_accordion-row",
+                  "settings": {
+                    "heading": "Benefits",
+                    "open_by_default": false,
+                    "icon": "none",
+                    "width": 20
+                  },
+                  "blocks": {
+                    "text_nz7JLM": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>Our products are manufactured both locally and globally. We carefully select our manufacturing partners to ensure our products are high quality and a fair value.</p>",
+                        "width": "100%",
+                        "max_width": "normal",
+                        "alignment": "left",
+                        "type_preset": "rte",
+                        "font": "var(--font-body--family)",
+                        "font_size": "1rem",
+                        "line_height": "normal",
+                        "letter_spacing": "normal",
+                        "case": "none",
+                        "wrap": "pretty",
+                        "text_color": "",
+                        "background": false,
+                        "background_color": "#00000026",
+                        "corner_radius": 0,
+                        "padding-block-start": 0,
+                        "padding-block-end": 0,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0
+                      },
+                      "blocks": {}
+                    }
+                  },
+                  "block_order": [
+                    "text_nz7JLM"
+                  ]
+                },
+                "accordion_row_JbpHXA": {
+                  "type": "_accordion-row",
+                  "name": "t:names.accordion_row",
+                  "settings": {
+                    "heading": "Application",
+                    "open_by_default": false,
+                    "icon": "none",
+                    "width": 20
+                  },
+                  "blocks": {
+                    "text_AEpLxK": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>We will work quickly to ship your order as soon as possible. Once your order has shipped, you will receive an email with further information. Delivery times vary depending on your location.</p>",
+                        "width": "100%",
+                        "max_width": "normal",
+                        "alignment": "left",
+                        "type_preset": "rte",
+                        "font": "var(--font-body--family)",
+                        "font_size": "1rem",
+                        "line_height": "normal",
+                        "letter_spacing": "normal",
+                        "case": "none",
+                        "wrap": "pretty",
+                        "text_color": "",
+                        "background": false,
+                        "background_color": "#00000026",
+                        "corner_radius": 0,
+                        "padding-block-start": 0,
+                        "padding-block-end": 0,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0
+                      },
+                      "blocks": {}
+                    }
+                  },
+                  "block_order": [
+                    "text_AEpLxK"
+                  ]
+                },
+                "accordion_row_CBkRyG": {
+                  "type": "_accordion-row",
+                  "name": "t:names.accordion_row",
+                  "settings": {
+                    "heading": "Ingredients",
+                    "open_by_default": false,
+                    "icon": "none",
+                    "width": 20
+                  },
+                  "blocks": {
+                    "text_6miiLY": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>We will work quickly to ship your order as soon as possible. Once your order has shipped, you will receive an email with further information. Delivery times vary depending on your location.</p>",
+                        "width": "100%",
+                        "max_width": "normal",
+                        "alignment": "left",
+                        "type_preset": "rte",
+                        "font": "var(--font-body--family)",
+                        "font_size": "1rem",
+                        "line_height": "normal",
+                        "letter_spacing": "normal",
+                        "case": "none",
+                        "wrap": "pretty",
+                        "text_color": "",
+                        "background": false,
+                        "background_color": "#00000026",
+                        "corner_radius": 0,
+                        "padding-block-start": 0,
+                        "padding-block-end": 0,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0
+                      },
+                      "blocks": {}
+                    }
+                  },
+                  "block_order": [
+                    "text_6miiLY"
+                  ]
+                }
               },
-              "blocks": {}
-            },
-            "price_gLWgA6": {
-              "type": "price",
-              "settings": {
-                "show_sale_price_first": true,
-                "show_installments": false,
-                "show_tax_info": false,
-                "type_preset": "h6",
-                "width": "100%",
-                "alignment": "left",
-                "font": "var(--font-body--family)",
-                "font_size": "1rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "text_color": "",
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
+              "block_order": [
+                "accordion_row_J3jwCh",
+                "accordion_row_cPUKiM",
+                "accordion_row_P4JXgp",
+                "accordion_row_JbpHXA",
+                "accordion_row_CBkRyG"
+              ]
             }
           },
           "block_order": [
-            "product_card_gallery_DNizbJ",
-            "product_title_M7MJkb",
-            "price_gLWgA6"
+            "group_icgrde",
+            "variant_picker_R3rGDr",
+            "buy_buttons_eYQEYi",
+            "see_it_on_6tMjbP",
+            "accordion_MERnaY"
           ]
         }
       },
       "block_order": [
-        "text_cbcgyb"
+        "bundle_and_save_XbEgW9",
+        "disclosures_g9mWze"
       ],
-      "name": "t:names.product_recommendations",
       "settings": {
-        "product": "{{ closest.product }}",
-        "recommendation_type": "related",
-        "layout_type": "grid",
-        "carousel_on_mobile": false,
-        "max_products": 4,
-        "columns": 4,
-        "mobile_columns": "2",
-        "columns_gap": 12,
-        "rows_gap": 24,
-        "icons_style": "arrow",
-        "icons_shape": "none",
-        "section_width": "page-width",
-        "gap": 28,
+        "content_width": "content-center-aligned",
+        "desktop_media_position": "left",
+        "equal_columns": false,
+        "limit_details_width": false,
+        "gap": 72,
+        "enable_sticky_add_to_cart": false,
         "background_color": "{{ settings.color_palette.background }}",
-        "padding-block-start": 48,
-        "padding-block-end": 48
+        "padding-block-start": 24,
+        "padding-block-end": 0
+      }
+    },
+    "the_shades_Y4BKYc": {
+      "type": "the-shades",
+      "blocks": {
+        "fair_GGwMUP": {
+          "type": "fair",
+          "settings": {
+            "image_1": "shopify://shop_images/Variant_Image.png",
+            "title_1": "Fair 01",
+            "subtitle_1": "Fair tones",
+            "image_2": "shopify://shop_images/Variant_Image_1.png",
+            "title_2": "Fair 02",
+            "subtitle_2": "Fair tones",
+            "image_3": "shopify://shop_images/Variant_Image_2.png",
+            "title_3": "Fair 03",
+            "subtitle_3": "Fair tones",
+            "image_4": "shopify://shop_images/Variant_Image_3.png",
+            "title_4": "Fair 04",
+            "subtitle_4": "Fair tones",
+            "image_5": "shopify://shop_images/f718ef568dd3afbc8f485186552539ff53de8afe.png",
+            "title_5": "Fair 05",
+            "subtitle_5": "Fair tones",
+            "title_6": "Fair 06",
+            "subtitle_6": "Fair tones",
+            "title_7": "Fair 07",
+            "subtitle_7": "Fair tones"
+          }
+        },
+        "light_dLnHrr": {
+          "type": "light",
+          "settings": {
+            "title_1": "Light 01",
+            "subtitle_1": "Light tones",
+            "title_2": "Light 02",
+            "subtitle_2": "Light tones",
+            "title_3": "Light 03",
+            "subtitle_3": "Light tones",
+            "title_4": "Light 04",
+            "subtitle_4": "Light tones",
+            "title_5": "Light 05",
+            "subtitle_5": "Light tones",
+            "title_6": "Light 06",
+            "subtitle_6": "Light tones",
+            "title_7": "Light 07",
+            "subtitle_7": "Light tones"
+          }
+        },
+        "medium_3mKctr": {
+          "type": "medium",
+          "settings": {
+            "title_1": "Medium 01",
+            "subtitle_1": "Medium tones",
+            "title_2": "Medium 02",
+            "subtitle_2": "Medium tones",
+            "title_3": "Medium 03",
+            "subtitle_3": "Medium tones",
+            "title_4": "Medium 04",
+            "subtitle_4": "Medium tones",
+            "title_5": "Medium 05",
+            "subtitle_5": "Medium tones",
+            "title_6": "Medium 06",
+            "subtitle_6": "Medium tones",
+            "title_7": "Medium 07",
+            "subtitle_7": "Medium tones"
+          }
+        },
+        "tan_McGhW9": {
+          "type": "tan",
+          "settings": {
+            "title_1": "Tan 01",
+            "subtitle_1": "Tan tones",
+            "title_2": "Tan 02",
+            "subtitle_2": "Tan tones",
+            "title_3": "Tan 03",
+            "subtitle_3": "Tan tones",
+            "title_4": "Tan 04",
+            "subtitle_4": "Tan tones",
+            "title_5": "Tan 05",
+            "subtitle_5": "Tan tones",
+            "title_6": "Tan 06",
+            "subtitle_6": "Tan tones",
+            "title_7": "Tan 07",
+            "subtitle_7": "Tan tones"
+          }
+        },
+        "deep_U8YRww": {
+          "type": "deep",
+          "settings": {
+            "title_1": "Deep 01",
+            "subtitle_1": "Deep tones",
+            "title_2": "Deep 02",
+            "subtitle_2": "Deep tones",
+            "title_3": "Deep 03",
+            "subtitle_3": "Deep tones",
+            "title_4": "Deep 04",
+            "subtitle_4": "Deep tones",
+            "title_5": "Deep 05",
+            "subtitle_5": "Deep tones",
+            "title_6": "Deep 06",
+            "subtitle_6": "Deep tones",
+            "title_7": "Deep 07",
+            "subtitle_7": "Deep tones"
+          }
+        }
+      },
+      "block_order": [
+        "fair_GGwMUP",
+        "light_dLnHrr",
+        "medium_3mKctr",
+        "tan_McGhW9",
+        "deep_U8YRww"
+      ],
+      "name": "The Shades",
+      "settings": {
+        "eyebrow": "",
+        "heading": "THE SHADES",
+        "description": "",
+        "background_color": "#f2f2f2",
+        "text_color": "#111111",
+        "muted_color": "#777777",
+        "accent_color": "#f1f1ee"
+      }
+    },
+    "build_your_routine_WbadDW": {
+      "type": "build-your-routine",
+      "blocks": {
+        "routine_step_tbcPNn": {
+          "type": "routine_step",
+          "settings": {
+            "step_image": "shopify://shop_images/Product_Thumbnail_Image.png",
+            "step_number": "01.",
+            "step_title": "PREP",
+            "step_description": "Exfoliate and moisturize lips ready for application.",
+            "product": ""
+          }
+        }
+      },
+      "block_order": [
+        "routine_step_tbcPNn"
+      ],
+      "name": "Build Your Routine",
+      "settings": {
+        "heading": "BUILD YOUR ROUTINE",
+        "next_button_text": "NEXT STEP",
+        "background_color": "{{ settings.color_palette.background }}",
+        "text_color": "#111111",
+        "muted_color": "#555555",
+        "button_color": "#000000",
+        "button_text_color": "#ffffff"
+      }
+    },
+    "compare_rQGaQt": {
+      "type": "compare",
+      "blocks": {
+        "product_compare_EdPaQQ": {
+          "type": "product_compare",
+          "settings": {
+            "card_label": "THIS PRODUCT",
+            "primary_product": true,
+            "image": "shopify://shop_images/Product_Image.png",
+            "title": "LIP LINER PRODUCT TITLE",
+            "price": "$19.99",
+            "what_it_is": "A unique lip liner that blurs as you apply.",
+            "finish": "Diffused soft matte finish.",
+            "best_for": "Natural fuller looking lips.",
+            "what_it_is_2": "A unique lip liner that blurs as you apply.",
+            "finish_2": "Diffused soft matte finish.",
+            "row_6": "Comparison detail.",
+            "row_7": "",
+            "row_8": "",
+            "row_9": "",
+            "row_10": ""
+          }
+        },
+        "product_compare_3cNdKe": {
+          "type": "product_compare",
+          "settings": {
+            "card_label": "THIS PRODUCT",
+            "primary_product": false,
+            "image": "shopify://shop_images/Product_Image_1.png",
+            "title": "LIP LINER PRODUCT TITLE",
+            "price": "$19.99",
+            "what_it_is": "A unique lip liner that blurs as you apply.",
+            "finish": "Diffused soft matte finish.",
+            "best_for": "Natural fuller looking lips.",
+            "what_it_is_2": "A unique lip liner that blurs as you apply.",
+            "finish_2": "Diffused soft matte finish.",
+            "row_6": "Comparison detail.",
+            "row_7": "",
+            "row_8": "",
+            "row_9": "",
+            "row_10": ""
+          }
+        },
+        "product_compare_3RDUef": {
+          "type": "product_compare",
+          "settings": {
+            "card_label": "THIS PRODUCT",
+            "primary_product": false,
+            "image": "shopify://shop_images/Product_Image_2.png",
+            "title": "LIP LINER PRODUCT TITLE",
+            "price": "$19.99",
+            "what_it_is": "A unique lip liner that blurs as you apply.",
+            "finish": "Diffused soft matte finish.",
+            "best_for": "Natural fuller looking lips.",
+            "what_it_is_2": "A unique lip liner that blurs as you apply.",
+            "finish_2": "Diffused soft matte finish.",
+            "row_6": "Comparison detail.",
+            "row_7": "",
+            "row_8": "",
+            "row_9": "",
+            "row_10": ""
+          }
+        }
+      },
+      "block_order": [
+        "product_compare_EdPaQQ",
+        "product_compare_3cNdKe",
+        "product_compare_3RDUef"
+      ],
+      "name": "Compare",
+      "settings": {
+        "heading": "COMPARE",
+        "product_tab_label": "PRODUCT",
+        "model_tab_label": "MODEL",
+        "this_product_label": "THIS PRODUCT",
+        "product_empty_text": "Add comparison products from the Theme Editor.",
+        "model_empty_text": "Add model comparison content from the Theme Editor.",
+        "row_labels": "What It Is | Finish | Best For | What It Is | Finish | Best For",
+        "background_color": "#f4f4f2",
+        "text_color": "#111111",
+        "muted_color": "#555555",
+        "border_color": "#999999"
+      }
+    },
+    "product_reviews_VdzYkj": {
+      "type": "product-reviews",
+      "blocks": {
+        "review_pQKqhi": {
+          "type": "review",
+          "settings": {
+            "reviewer_name": "JAY B.",
+            "verified_buyer": true,
+            "stars": "★★★★★",
+            "date": "2 DAYS AGO",
+            "title": "DOLL-FACE ACHIEVED",
+            "body": "Placeholder review body — one to three sentences of customer copy pulled from Bazaarvoice.",
+            "helpful_text": "Was this review helpful?",
+            "helpful_count": "0",
+            "not_helpful_count": "0"
+          }
+        },
+        "review_T9bEpY": {
+          "type": "review",
+          "settings": {
+            "reviewer_name": "JAY B.",
+            "verified_buyer": true,
+            "stars": "★★★★★",
+            "date": "2 DAYS AGO",
+            "title": "DOLL-FACE ACHIEVED",
+            "body": "Placeholder review body — one to three sentences of customer copy pulled from Bazaarvoice.",
+            "helpful_text": "Was this review helpful?",
+            "helpful_count": "0",
+            "not_helpful_count": "0"
+          }
+        },
+        "review_jHhAYV": {
+          "type": "review",
+          "settings": {
+            "reviewer_name": "JAY B.",
+            "verified_buyer": true,
+            "stars": "★★★★★",
+            "date": "2 DAYS AGO",
+            "title": "DOLL-FACE ACHIEVED",
+            "body": "Placeholder review body — one to three sentences of customer copy pulled from Bazaarvoice.",
+            "helpful_text": "Was this review helpful?",
+            "helpful_count": "0",
+            "not_helpful_count": "0"
+          }
+        },
+        "review_UjYiRj": {
+          "type": "review",
+          "settings": {
+            "reviewer_name": "JAY B.",
+            "verified_buyer": true,
+            "stars": "★★★★★",
+            "date": "2 DAYS AGO",
+            "title": "DOLL-FACE ACHIEVED",
+            "body": "Placeholder review body — one to three sentences of customer copy pulled from Bazaarvoice.",
+            "helpful_text": "Was this review helpful?",
+            "helpful_count": "0",
+            "not_helpful_count": "0"
+          }
+        }
+      },
+      "block_order": [
+        "review_pQKqhi",
+        "review_T9bEpY",
+        "review_jHhAYV",
+        "review_UjYiRj"
+      ],
+      "name": "Product Reviews",
+      "settings": {
+        "heading": "PRODUCT REVIEWS",
+        "rating": "4.8",
+        "stars": "★★★★★",
+        "based_on_text": "Based on 24 reviews",
+        "write_review_text": "WRITE A REVIEW",
+        "verified_text": "VERIFIED BUYER",
+        "load_more_text": "LOAD MORE REVIEWS",
+        "background_color": "#ffffff",
+        "text_color": "#111111",
+        "border_color": "#999999",
+        "button_color": "#000000",
+        "button_text_color": "#ffffff"
       }
     }
   },
   "order": [
     "main",
-    "product_recommendations_qggXJq"
+    "the_shades_Y4BKYc",
+    "build_your_routine_WbadDW",
+    "compare_rQGaQt",
+    "product_reviews_VdzYkj"
   ]
 }

@@ -406,21 +406,30 @@
     {% if sorted_media.size > 1 %}
       {% capture controls %}
         {% if render_slideshow_controls %}
+          {% liquid
+            assign product_media_controls_class = slideshow_controls_class
+
+            if slideshow_controls_style == 'thumbnails' and sorted_media.size > 6
+              assign product_media_controls_class = product_media_controls_class | append: ' bratz-product-media__thumbnail-controls'
+            endif
+          %}
+
           {%- render 'slideshow-controls',
-            class: slideshow_controls_class,
+            class: product_media_controls_class,
             style: slideshow_controls_style,
             item_count: sorted_media.size,
             thumbnails: sorted_media,
             controls_on_media: controls_on_media,
             pagination_position: pagination_position,
             aspect_ratio: block_settings.aspect_ratio,
-            thumbnail_radius: block_settings.thumbnail_radius
+            thumbnail_radius: block_settings.thumbnail_radius,
+            bratz_thumbnail_navigation: true
           -%}
         {% endif %}
 
         {% if render_mobile_slideshow_controls %}
           {%- render 'slideshow-controls',
-            class: 'desktop:hidden media-gallery__mobile-controls',
+            class: 'desktop:hidden media-gallery__mobile-controls bratz-mobile-progress',
             style: block_settings.slideshow_mobile_controls_style,
             item_count: sorted_media.size,
             thumbnails: sorted_media,
@@ -645,6 +654,149 @@
 {% render 'product-media-container-styles' %}
 {% render 'product-media-gallery-content-styles' %}
 
+
+{% javascript %}
+  (() => {
+    const setupBratzMobileProgress = (root = document) => {
+      root.querySelectorAll('.bratz-mobile-progress').forEach((controls) => {
+        if (controls.dataset.bratzMobileProgressReady === 'true') return;
+
+        const dots = controls.querySelector('.slideshow-controls__dots');
+        if (!dots) return;
+
+        const updateProgress = () => {
+          const dotButtons = Array.from(
+            dots.querySelectorAll('button, [role="button"]')
+          );
+
+          if (!dotButtons.length) return;
+
+          const selectedIndex = dotButtons.findIndex(
+            (button) => button.getAttribute('aria-selected') === 'true'
+          );
+
+          const currentIndex = selectedIndex >= 0 ? selectedIndex : 0;
+          const progress = ((currentIndex + 1) / dotButtons.length) * 100;
+
+          dots.style.setProperty('--bratz-mobile-progress', `${progress}%`);
+        };
+
+        controls.dataset.bratzMobileProgressReady = 'true';
+
+        const observer = new MutationObserver(updateProgress);
+
+        observer.observe(dots, {
+          attributes: true,
+          subtree: true,
+          attributeFilter: ['aria-selected'],
+        });
+
+        updateProgress();
+      });
+    };
+
+    const setupBratzThumbnailArrows = (root = document) => {
+      root.querySelectorAll('slideshow-controls.bratz-product-media__thumbnail-controls').forEach((controls) => {
+        if (controls.dataset.bratzThumbnailArrowsReady === 'true') return;
+
+        const scroller = controls.querySelector('.slideshow-controls__thumbnails-container');
+        const previousButton = controls.querySelector('[data-bratz-thumbnail-arrow="previous"]');
+        const nextButton = controls.querySelector('[data-bratz-thumbnail-arrow="next"]');
+
+        if (!scroller || !previousButton || !nextButton) return;
+
+        const thumbnails = scroller.querySelector('.slideshow-controls__thumbnails');
+        const thumbnail = scroller.querySelector('.slideshow-controls__thumbnail');
+
+        if (!thumbnails || !thumbnail) return;
+
+        controls.dataset.bratzThumbnailArrowsReady = 'true';
+
+        const visibleThumbnailCount = 5.5;
+
+        const updateScrollerHeight = () => {
+          const thumbnailHeight = thumbnail.getBoundingClientRect().height;
+          if (!thumbnailHeight) return;
+
+          const thumbnailStyles = window.getComputedStyle(thumbnails);
+          const gap = parseFloat(thumbnailStyles.rowGap || thumbnailStyles.gap || '0') || 0;
+          const paddingTop = parseFloat(thumbnailStyles.paddingTop || '0') || 0;
+          const paddingBottom = parseFloat(thumbnailStyles.paddingBottom || '0') || 0;
+
+          const visibleHeight =
+            thumbnailHeight * visibleThumbnailCount +
+            gap * (visibleThumbnailCount - 1) +
+            paddingTop +
+            paddingBottom;
+
+          scroller.style.height = `${visibleHeight}px`;
+          scroller.style.maxHeight = `${visibleHeight}px`;
+          scroller.style.overflowY = 'auto';
+          scroller.style.overflowX = 'hidden';
+
+          // Keep the native thumbnail strip from adding extra vertical space.
+          thumbnails.style.height = 'fit-content';
+
+          updateArrowVisibility();
+        };
+
+        const updateArrowVisibility = () => {
+          const maxScrollTop = Math.max(0, scroller.scrollHeight - scroller.clientHeight);
+
+          if (maxScrollTop <= 2) {
+            previousButton.hidden = true;
+            nextButton.hidden = true;
+            return;
+          }
+
+          previousButton.hidden = scroller.scrollTop <= 2;
+          nextButton.hidden = scroller.scrollTop >= maxScrollTop - 2;
+        };
+
+        const scrollByThumbnailPage = (direction) => {
+          const thumbnailHeight = thumbnail.getBoundingClientRect().height;
+          if (!thumbnailHeight) return;
+
+          const styles = window.getComputedStyle(thumbnails);
+          const gap = parseFloat(styles.rowGap || styles.gap || '0') || 0;
+
+          const step = thumbnailHeight + gap;
+
+          scroller.scrollBy({
+            top: step * direction,
+            behavior: 'smooth',
+          });
+        };
+
+        previousButton.addEventListener('click', () => {
+          scrollByThumbnailPage(-1);
+        });
+
+        nextButton.addEventListener('click', () => {
+          scrollByThumbnailPage(1);
+        });
+
+        scroller.addEventListener('scroll', updateArrowVisibility, { passive: true });
+
+        const resizeObserver = new ResizeObserver(() => {
+          updateScrollerHeight();
+        });
+        resizeObserver.observe(thumbnail);
+
+        updateScrollerHeight();
+      });
+    };
+
+    setupBratzMobileProgress();
+    setupBratzThumbnailArrows();
+
+    document.addEventListener('shopify:section:load', (event) => {
+      setupBratzMobileProgress(event.target);
+      setupBratzThumbnailArrows(event.target);
+    });
+  })();
+{% endjavascript %}
+
 {% stylesheet %}
   .dialog-thumbnails-list-container {
     position: fixed;
@@ -708,7 +860,7 @@
 
     &:is([aria-selected='true']) {
       outline: var(--focus-outline-width) solid currentcolor;
-      outline-offset: calc(var(--focus-outline-offset) / 2);
+      outline-offset: 0;
       border: var(--style-border-width) solid var(--active-thumbnail-border-color);
     }
   }
@@ -787,7 +939,7 @@
     opacity: 0;
   }
 
-  @media screen and (max-width: 749px) {
+  @media screen and (max-width: 1199px) {
     .dialog-zoomed-gallery {
       /* Prevent scroll wheel or swipe scrolling */
       overscroll-behavior: none;
@@ -875,8 +1027,61 @@
     z-index: var(--layer-raised);
   }
 
+  /* Bratz mobile product media progress bar */
+  @media screen and (max-width: 1199px) {
+    .media-gallery__mobile-controls.bratz-mobile-progress {
+      width: min(84%, 360px);
+      margin-inline: auto;
+      top: 100%;
+      position: inherit;
+    }
+
+    .media-gallery__mobile-controls.bratz-mobile-progress .slideshow-controls__dots {
+      position: relative;
+      display: block;
+      width: 100%;
+      height: 4px;
+      min-height: 4px;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background: #e5e5e5;
+      border: 0;
+      border-radius: 0;
+    }
+
+    .media-gallery__mobile-controls.bratz-mobile-progress .slideshow-controls__dots::before {
+      content: '';
+      position: absolute;
+      inset: 0 auto 0 0;
+      width: var(--bratz-mobile-progress, 0%);
+      height: 4px;
+      background: #000;
+      border-radius: 0;
+      transition: width 180ms ease;
+      z-index: 2;
+    }
+
+    .media-gallery__mobile-controls.bratz-mobile-progress .slideshow-controls__dots > li {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 4px;
+      min-height: 4px;
+      margin: 0;
+      padding: 0;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .product-details {
+      padding-top: 1.4rem;
+    }
+  }
+
   /* Mobile thumbnails styling */
-  @media screen and (max-width: 749px) {
+  @media screen and (max-width: 1200px) {
     .media-gallery__mobile-controls[thumbnails] {
       --thumbnail-width: 44px;
     }
@@ -978,19 +1183,19 @@
    * Product media gallery slideshow context styles
    */
   .product-media-gallery__slideshow--single-media slideshow-container {
-    @media screen and (max-width: 749px) {
+    @media screen and (max-width: 1199px) {
       grid-area: unset;
     }
   }
 
   /* Display grid view as a carousel on mobile, grid on desktop */
   media-gallery:is(.media-gallery--grid) slideshow-component {
-    @media screen and (min-width: 750px) {
+    @media screen and (min-width: 1200px) {
       display: none;
     }
   }
 
-  @media screen and (max-width: 749px) {
+  @media screen and (max-width: 1199px) {
     /* Media gallery has a peeking slide on the right side always, and on the left side when the current slide is the last one */
     .media-gallery--hint
       :is(
@@ -1005,7 +1210,7 @@
     }
   }
 
-  @media screen and (min-width: 750px) {
+  @media screen and (min-width: 1200px) {
     .media-gallery--carousel slideshow-component:has(slideshow-controls[thumbnails]) {
       &:has(slideshow-controls[pagination-position='right']) {
         display: grid;
@@ -1034,15 +1239,20 @@
     opacity: 1;
   }
 
-  @media screen and (max-width: 749px) {
+  @media screen and (max-width: 1199px) {
     slideshow-component:has(:not(.mobile\:hidden) :is(.slideshow-controls__dots, .slideshow-controls__counter))
       .shopify-model-viewer-ui__controls-area {
       /* Position the controls just above the counter */
       bottom: calc(var(--minimum-touch-target) + var(--padding-sm));
     }
+
+    .product-information__media slideshow-controls {
+      min-height: 2rem;
+      padding: 0 1.5rem;
+    }
   }
 
-  @media screen and (min-width: 750px) {
+  @media screen and (min-width: 1200px) {
     slideshow-component:has(:not(.desktop\:hidden) :is(.slideshow-controls__dots, .slideshow-controls__counter))
       .shopify-model-viewer-ui__controls-area {
       /* Position the controls just above the counter */
@@ -1053,4 +1263,114 @@
   slideshow-slide.product-media-container--tallest {
     content-visibility: visible;
   }
-{% endstylesheet %}
+
+/* Bratz product media thumbnail navigation */
+  slideshow-controls.bratz-mobile-progress:has(.slideshow-controls__dots) {
+      mix-blend-mode: inherit;
+  }
+
+  .media-gallery--carousel slideshow-arrows .slideshow-control {
+    display: none;
+  }
+
+  @media screen and (min-width: 1200px) {
+    slideshow-controls.bratz-product-media__thumbnail-controls {
+      position: relative;
+    }
+
+    slideshow-controls.bratz-product-media__thumbnail-controls
+      .slideshow-controls__thumbnails-container {
+      position: relative;
+    }
+
+    slideshow-controls.bratz-product-media__thumbnail-controls
+      .slideshow-controls__thumbnails {
+      row-gap: 2.4rem
+    }
+
+    slideshow-controls.bratz-product-media__thumbnail-controls
+      .slideshow-controls__thumbnail {
+      width: 96px;
+      height: 120px;
+      min-width: 96px;
+      min-height: 120px;
+      flex: 0 0 96px;
+      aspect-ratio: 96 / 120;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      padding: 0;
+    }
+
+    slideshow-controls.bratz-product-media__thumbnail-controls
+      .slideshow-controls__thumbnail img {
+      width: 96px;
+      height: 120px;
+      object-fit: cover;
+      display: block;
+    }
+
+    slideshow-controls.bratz-product-media__thumbnail-controls
+      .bratz-product-media__thumbnail-arrows {
+      position: absolute;
+      inset: 0;
+      z-index: 5;
+      pointer-events: none;
+    }
+
+    slideshow-controls.bratz-product-media__thumbnail-controls
+      .bratz-product-media__thumbnail-arrow {
+      position: absolute;
+      left: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      border: 0;
+      border-radius: 50%;
+      background: #000;
+      color: #fff;
+      transform: translateX(-50%);
+      cursor: pointer;
+      pointer-events: auto;
+    }
+
+    slideshow-controls.bratz-product-media__thumbnail-controls
+      .bratz-product-media__thumbnail-arrow svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    /* TOP ARROW */
+    slideshow-controls.bratz-product-media__thumbnail-controls
+      .bratz-product-media__thumbnail-arrow--previous {
+      top: 0;
+    }
+
+    slideshow-controls.bratz-product-media__thumbnail-controls
+      .bratz-product-media__thumbnail-arrow--previous svg {
+      transform: rotate(-90deg);
+    }
+
+    /* BOTTOM ARROW */
+    slideshow-controls.bratz-product-media__thumbnail-controls
+      .bratz-product-media__thumbnail-arrow--next {
+      bottom: 0;
+      top: auto;
+    }
+
+    slideshow-controls.bratz-product-media__thumbnail-controls
+      .bratz-product-media__thumbnail-arrow--next svg {
+      transform: rotate(90deg);
+    }
+
+    slideshow-controls.bratz-product-media__thumbnail-controls
+      .bratz-product-media__thumbnail-arrow[hidden] {
+      display: none;
+    }
+  }
+
+  {% endstylesheet %}

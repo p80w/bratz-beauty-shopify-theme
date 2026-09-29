@@ -35,7 +35,7 @@
   }
 
   .accordion--dividers .details-content {
-    padding-block-end: var(--padding-sm);
+    padding-block-end: var(--padding-lg);
   }
 
   .accordion--caret .icon-plus,
@@ -45,17 +45,28 @@
 
   /* because we can't pass apply a specific class on a block based on its parent block setting */
   .accordion .details__header {
-    font-family: var(--summary-font-family);
-    font-style: var(--summary-font-style);
-    font-weight: var(--summary-font-weight);
-    font-size: var(--summary-font-size);
-    line-height: var(--summary-font-line-height);
+    font-family: var(--font-heading--family);
+    font-style: var(--font-heading--style);
+    font-weight: var(--font-heading--weight);
+    font-size: 1.8rem;
+    line-height: 1.6rem;
     text-transform: var(--summary-font-case);
     min-height: var(--minimum-touch-target);
+    padding-block: 3.2rem;
   }
 
   .details__icon {
     height: auto;
     margin-inline-end: var(--margin-xs);
   }
+
+
+  @media screen and (max-width: 749px) {
+    .accordion .details__header {
+        font-size: 1.4rem;
+        line-height: 1.2rem;
+        padding-block: 1.7rem;
+    }
+  }
+
 {% endstylesheet %}

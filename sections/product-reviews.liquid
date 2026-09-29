@@ -1,0 +1,545 @@
+{% comment %}
+  PRODUCT REVIEWS
+  Static Product Page review section.
+
+  Current phase:
+  - Static UI only.
+  - Content is managed through the Shopify Theme Editor.
+  - Review app functionality can be integrated later.
+  - Desktop and mobile layouts follow the supplied design.
+{% endcomment %}
+
+<section
+  id="ProductReviews-{{ section.id }}"
+  class="product-reviews"
+>
+  <div class="product-reviews__container section">
+
+    <header class="product-reviews__header">
+      <div class="product-reviews__summary">
+        <h2 class="product-reviews__heading h4">
+          {{ section.settings.heading }}
+        </h2>
+
+        <div class="product-reviews__rating-row">
+          <div class="product-reviews__score h1">
+            {{ section.settings.rating }}
+          </div>
+
+          <div class="product-reviews__rating-details">
+            <div
+              class="product-reviews__stars"
+              aria-label="{{ section.settings.rating }} out of 5 stars"
+            >
+              {{ section.settings.stars }}
+            </div>
+
+            <div class="product-reviews__based-on">
+              {{ section.settings.based_on_text }}
+            </div>
+          </div>
+
+          <button
+            type="button"
+            class="product-reviews__write-button button button-primary"
+          >
+            {{ section.settings.write_review_text }}
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <div class="product-reviews__list">
+      {% for block in section.blocks %}
+        <article
+          class="product-review"
+          {{ block.shopify_attributes }}
+        >
+          <div class="product-review__author">
+            <div class="product-review__name h5">
+              {{ block.settings.reviewer_name }}
+            </div>
+
+            {% if block.settings.verified_buyer %}
+              <div class="product-review__verified h5">
+                {{ section.settings.verified_text }}
+              </div>
+            {% endif %}
+          </div>
+
+          <div class="product-review__body">
+            <div class="product-review__meta">
+              <div class="product-review__stars">
+                {{ block.settings.stars }}
+              </div>
+
+              <div class="product-review__date">
+                {{ block.settings.date }}
+              </div>
+            </div>
+
+            {% if block.settings.title != blank %}
+              <h3 class="product-review__title h5">
+                {{ block.settings.title }}
+              </h3>
+            {% endif %}
+
+            {% if block.settings.body != blank %}
+              <div class="product-review__text">
+                {{ block.settings.body }}
+              </div>
+            {% endif %}
+
+            <div class="product-review__helpful">
+              <span>{{ block.settings.helpful_text }}</span>
+
+              <button
+                type="button"
+                class="product-review__icon-button"
+                aria-label="Helpful"
+              >
+                ♡
+              </button>
+
+              <span class="product-review__count">
+                {{ block.settings.helpful_count }}
+              </span>
+
+              <button
+                type="button"
+                class="product-review__icon-button"
+                aria-label="Not helpful"
+              >
+                ♧
+              </button>
+
+              <span class="product-review__count">
+                {{ block.settings.not_helpful_count }}
+              </span>
+            </div>
+          </div>
+        </article>
+      {% endfor %}
+    </div>
+
+    <div class="product-reviews__load-more-wrap">
+      <button
+        type="button"
+        class="product-reviews__load-more button button-primary"
+      >
+        {{ section.settings.load_more_text }}
+      </button>
+    </div>
+
+  </div>
+</section>
+
+<style>
+  #ProductReviews-{{ section.id }} {
+    --reviews-background: {{ section.settings.background_color }};
+    --reviews-text: {{ section.settings.text_color }};
+    --reviews-border: {{ section.settings.border_color }};
+    --reviews-button: {{ section.settings.button_color }};
+    --reviews-button-text: {{ section.settings.button_text_color }};
+    width: 100%;
+    background: var(--reviews-background);
+    color: var(--reviews-text);
+  }
+
+  #ProductReviews-{{ section.id }} .product-reviews__container {
+    padding: 8rem 0;
+  }
+
+  #ProductReviews-{{ section.id }} .product-reviews__header {
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--reviews-border);
+  }
+
+  #ProductReviews-{{ section.id }} .product-reviews__summary {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  #ProductReviews-{{ section.id }} .product-reviews__heading {
+    margin: 0 0 2.4rem;
+    text-transform: uppercase;
+    text-align: center;
+  }
+
+  #ProductReviews-{{ section.id }} .product-reviews__rating-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  #ProductReviews-{{ section.id }} .product-reviews__rating-details {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  #ProductReviews-{{ section.id }} .product-reviews__stars {
+    white-space: nowrap;
+    font-size: 12px;
+    line-height: 1;
+    letter-spacing: 1px;
+  }
+
+  #ProductReviews-{{ section.id }} .product-reviews__based-on {
+    font-size: 1.6rem;
+    line-height: 2.4rem;
+  }
+
+
+  #ProductReviews-{{ section.id }} .product-reviews__list {
+    width: 100%;
+  }
+
+  #ProductReviews-{{ section.id }} .product-review {
+    display: grid;
+    grid-template-columns: 25rem minmax(0, 1fr);
+    gap: 10px;
+    min-height: 120px;
+    padding: 3.2rem 0;
+    border-bottom: 1px solid var(--reviews-border);
+  }
+
+  #ProductReviews-{{ section.id }} .product-review__author {
+    min-width: 0;
+  }
+
+  #ProductReviews-{{ section.id }} .product-review__verified {
+    display: inline-block;
+    padding: 2px 4px;
+    border: 1px solid var(--reviews-text);
+    font-size: 1.4rem;
+    line-height: 1.6rem;
+  }
+
+  #ProductReviews-{{ section.id }} .product-review__name.h5 {
+    font-size: 1.4rem;
+    line-height: 1.6rem;
+    margin-bottom: 1.6rem;
+  }
+
+  #ProductReviews-{{ section.id }} .product-review__body {
+    min-width: 0;
+  }
+
+  #ProductReviews-{{ section.id }} .product-review__meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  #ProductReviews-{{ section.id }} .product-review__date {
+    flex: 0 0 auto;
+    font-size: 7px;
+    line-height: 1;
+    text-transform: uppercase;
+  }
+
+  #ProductReviews-{{ section.id }} .product-review__title {
+    margin: 0 0 1rem;
+    text-transform: uppercase;
+  }
+
+  #ProductReviews-{{ section.id }} .product-review__text {
+    font-size: 1.6rem;
+    line-height: 2.4rem;
+  }
+
+  #ProductReviews-{{ section.id }} .product-review__helpful {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 4px;
+    margin-top: 12px;
+    font-size: 7px;
+    line-height: 1;
+  }
+
+  #ProductReviews-{{ section.id }} .product-review__icon-button {
+    width: 13px;
+    height: 13px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--reviews-text);
+    font: inherit;
+    font-size: 11px;
+    line-height: 13px;
+    cursor: default;
+  }
+
+  #ProductReviews-{{ section.id }} .product-review__count {
+    margin-right: 5px;
+  }
+
+  #ProductReviews-{{ section.id }} .product-reviews__load-more-wrap {
+    display: flex;
+    justify-content: center;
+    padding-top: 13px;
+  }
+
+  #ProductReviews-{{ section.id }} .product-reviews__load-more {
+    min-width: 238px;
+    min-height: 28px;
+  }
+
+  @media screen and (max-width: 749px) {
+
+    #ProductReviews-{{ section.id }} .product-reviews__container {
+      padding: 4.8rem 0;
+    }
+
+    #ProductReviews-{{ section.id }} .product-reviews__header {
+      padding-bottom: 13px;
+    }
+
+    #ProductReviews-{{ section.id }} .product-reviews__heading {
+      margin-bottom: 9px;
+      font-size: 11px;
+    }
+
+    #ProductReviews-{{ section.id }} .product-reviews__rating-row {
+      flex-wrap: wrap;
+      gap: 7px 9px;
+    }
+
+    #ProductReviews-{{ section.id }} .product-reviews__score {
+      font-size: 27px;
+    }
+
+    #ProductReviews-{{ section.id }} .product-reviews__stars {
+      font-size: 11px;
+    }
+
+    #ProductReviews-{{ section.id }} .product-reviews__write-button {
+      width: 100%;
+      min-height: 27px;
+      margin-top: 2px;
+    }
+
+    #ProductReviews-{{ section.id }} .product-review {
+      display: block;
+      min-height: 0;
+      padding: 13px 0 15px;
+    }
+
+    #ProductReviews-{{ section.id }} .product-review__author {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 9px;
+    }
+
+    #ProductReviews-{{ section.id }} .product-review__name {
+      margin-bottom: 5px;
+    }
+
+    #ProductReviews-{{ section.id }} .product-review__meta {
+      display: block;
+    }
+
+    #ProductReviews-{{ section.id }} .product-review__date {
+      float: right;
+      margin-top: -14px;
+    }
+
+    #ProductReviews-{{ section.id }} .product-review__title {
+      margin-top: 5px;
+      margin-bottom: 6px;
+    }
+
+    #ProductReviews-{{ section.id }} .product-review__text {
+      max-width: none;
+    }
+
+    #ProductReviews-{{ section.id }} .product-review__helpful {
+      justify-content: flex-start;
+      margin-top: 12px;
+    }
+
+    #ProductReviews-{{ section.id }} .product-reviews__load-more {
+      width: 100%;
+      min-width: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #ProductReviews-{{ section.id }} * {
+      scroll-behavior: auto !important;
+      transition: none !important;
+      animation: none !important;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Product Reviews",
+  "tag": "section",
+  "class": "section-product-reviews",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "PRODUCT REVIEWS"
+    },
+    {
+      "type": "text",
+      "id": "rating",
+      "label": "Rating",
+      "default": "4.8"
+    },
+    {
+      "type": "text",
+      "id": "stars",
+      "label": "Stars",
+      "default": "★★★★★"
+    },
+    {
+      "type": "text",
+      "id": "based_on_text",
+      "label": "Rating subtext",
+      "default": "Based on 24 reviews"
+    },
+    {
+      "type": "text",
+      "id": "write_review_text",
+      "label": "Write review button",
+      "default": "WRITE A REVIEW"
+    },
+    {
+      "type": "text",
+      "id": "verified_text",
+      "label": "Verified buyer label",
+      "default": "VERIFIED BUYER"
+    },
+    {
+      "type": "text",
+      "id": "load_more_text",
+      "label": "Load more button",
+      "default": "LOAD MORE REVIEWS"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text",
+      "default": "#111111"
+    },
+    {
+      "type": "color",
+      "id": "border_color",
+      "label": "Border",
+      "default": "#999999"
+    },
+    {
+      "type": "color",
+      "id": "button_color",
+      "label": "Button background",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Button text",
+      "default": "#FFFFFF"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "review",
+      "name": "Review",
+      "limit": 8,
+      "settings": [
+        {
+          "type": "text",
+          "id": "reviewer_name",
+          "label": "Reviewer name",
+          "default": "JAY B."
+        },
+        {
+          "type": "checkbox",
+          "id": "verified_buyer",
+          "label": "Verified buyer",
+          "default": true
+        },
+        {
+          "type": "text",
+          "id": "stars",
+          "label": "Stars",
+          "default": "★★★★★"
+        },
+        {
+          "type": "text",
+          "id": "date",
+          "label": "Date",
+          "default": "2 DAYS AGO"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Review title",
+          "default": "DOLL-FACE ACHIEVED"
+        },
+        {
+          "type": "textarea",
+          "id": "body",
+          "label": "Review body",
+          "default": "Placeholder review body — one to three sentences of customer copy pulled from Bazaarvoice."
+        },
+        {
+          "type": "text",
+          "id": "helpful_text",
+          "label": "Helpful text",
+          "default": "Was this review helpful?"
+        },
+        {
+          "type": "text",
+          "id": "helpful_count",
+          "label": "Helpful count",
+          "default": "0"
+        },
+        {
+          "type": "text",
+          "id": "not_helpful_count",
+          "label": "Not helpful count",
+          "default": "0"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product Reviews",
+      "blocks": [
+        {
+          "type": "review"
+        },
+        {
+          "type": "review"
+        },
+        {
+          "type": "review"
+        },
+        {
+          "type": "review"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

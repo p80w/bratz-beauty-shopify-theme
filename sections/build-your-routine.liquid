@@ -1,0 +1,491 @@
+{% comment %}
+  BUILD YOUR ROUTINE
+  Product Page routine builder — UI/static version.
+
+  Current phase:
+  - Displays the first routine step only.
+  - NEXT STEP is visual only for now.
+  - ADD is visual only for now.
+  - Steps are managed through Theme Editor blocks.
+  - Functionality can be added once the Product Manager confirms the intended flow.
+{% endcomment %}
+
+<div
+  id="BuildYourRoutine-{{ section.id }}"
+  class="build-your-routine"
+  data-build-your-routine
+>
+  {% assign routine_block = section.blocks.first %}
+
+  {% if routine_block != blank %}
+    <div class="build-your-routine__container section">
+      <div class="build-your-routine__grid">
+
+        <div class="build-your-routine__media">
+          {% if routine_block.settings.step_image != blank %}
+            {{
+              routine_block.settings.step_image
+              | image_url: width: 1600
+              | image_tag:
+                class: 'build-your-routine__image',
+                loading: 'lazy',
+                widths: '600, 800, 1000, 1200, 1400, 1600',
+                sizes: '(min-width: 750px) 50vw, 100vw',
+                alt: routine_block.settings.step_title
+            }}
+          {% else %}
+            <div class="build-your-routine__image-placeholder">
+              {{ 'product-1' | placeholder_svg_tag }}
+            </div>
+          {% endif %}
+        </div>
+
+        <div class="build-your-routine__content">
+          {% if section.settings.heading != blank %}
+            <p class="build-your-routine__eyebrow">
+              {{ section.settings.heading }}
+            </p>
+          {% endif %}
+
+          <div class="build-your-routine__step">
+            <h2 class="build-your-routine__step-title">
+              <span class="build-your-routine__step-number">
+                {{ routine_block.settings.step_number }}
+              </span>
+              {{ routine_block.settings.step_title }}
+            </h2>
+
+            {% if routine_block.settings.step_description != blank %}
+              <div class="build-your-routine__description">
+                {{ routine_block.settings.step_description }}
+              </div>
+            {% endif %}
+          </div>
+
+          {% assign routine_product = routine_block.settings.product %}
+
+          {% if routine_product != blank %}
+            {% assign routine_variant = routine_product.selected_or_first_available_variant %}
+
+            <div class="build-your-routine__product">
+              <div class="build-your-routine__product-image-wrap">
+                {% if routine_product.featured_image != blank %}
+                  {{
+                    routine_product.featured_image
+                    | image_url: width: 180
+                    | image_tag:
+                      class: 'build-your-routine__product-image',
+                      loading: 'lazy',
+                      widths: '80, 120, 160, 180',
+                      sizes: '80px',
+                      alt: routine_product.title
+                  }}
+                {% endif %}
+              </div>
+
+              <div class="build-your-routine__product-info">
+                <div class="build-your-routine__product-name">
+                  {{ routine_product.title }}
+                </div>
+
+                <div class="build-your-routine__product-price">
+                  {{ routine_variant.price | money }}
+                </div>
+
+                {% if routine_product.has_only_default_variant == false %}
+                  <label
+                    class="build-your-routine__variant-label"
+                    for="BuildYourRoutineVariant-{{ section.id }}"
+                  >
+                    {{ 'products.product.variant' | t | default: 'Variant' }}
+                  </label>
+
+                  <select
+                    id="BuildYourRoutineVariant-{{ section.id }}"
+                    class="build-your-routine__variant-select"
+                    aria-label="{{ routine_product.title }} variant"
+                  >
+                    {% for variant in routine_product.variants %}
+                      <option
+                        value="{{ variant.id }}"
+                        {% if variant.id == routine_variant.id %}selected{% endif %}
+                        {% unless variant.available %}disabled{% endunless %}
+                      >
+                        {{ variant.title }}{% unless variant.available %} — Sold out{% endunless %}
+                      </option>
+                    {% endfor %}
+                  </select>
+                {% endif %}
+              </div>
+
+              <button
+                type="button"
+                class="build-your-routine__add-button"
+                aria-label="Add {{ routine_product.title }}"
+              >
+                ADD
+              </button>
+            </div>
+          {% endif %}
+
+          <button
+            type="button"
+            class="build-your-routine__next-button"
+            aria-label="Next routine step"
+          >
+            {{ section.settings.next_button_text }}
+          </button>
+        </div>
+
+      </div>
+    </div>
+  {% else %}
+    <div class="build-your-routine__empty">
+      Add a Build Your Routine step from the Theme Editor.
+    </div>
+  {% endif %}
+</div>
+
+<style>
+  #BuildYourRoutine-{{ section.id }} {
+    --routine-background: {{ section.settings.background_color }};
+    --routine-text: {{ section.settings.text_color }};
+    --routine-muted: {{ section.settings.muted_color }};
+    --routine-button: {{ section.settings.button_color }};
+    --routine-button-text: {{ section.settings.button_text_color }};
+
+    width: 100%;
+    background: var(--routine-background);
+    color: var(--routine-text);
+  }
+
+  #BuildYourRoutine-{{ section.id }} .build-your-routine__container {
+    width: 100%;
+    padding: 0;
+  }
+
+  #BuildYourRoutine-{{ section.id }} .build-your-routine__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    width: 100%;
+    min-height: 0;
+    background: #fff;
+  }
+
+  #BuildYourRoutine-{{ section.id }} .build-your-routine__media {
+    position: relative;
+    min-width: 0;
+    overflow: hidden;
+    aspect-ratio: 1 / 1;
+    background: #eee;
+  }
+
+  #BuildYourRoutine-{{ section.id }} .build-your-routine__image,
+  #BuildYourRoutine-{{ section.id }} .build-your-routine__image-placeholder {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  #BuildYourRoutine-{{ section.id }} .build-your-routine__image {
+    object-fit: cover;
+  }
+
+  #BuildYourRoutine-{{ section.id }} .build-your-routine__image-placeholder {
+    color: #999;
+  }
+
+  #BuildYourRoutine-{{ section.id }} .build-your-routine__image-placeholder svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  #BuildYourRoutine-{{ section.id }} .build-your-routine__content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-width: 0;
+    padding: 48px 10%;
+    text-align: center;
+  }
+
+  #BuildYourRoutine-{{ section.id }} .build-your-routine__eyebrow {
+    margin: 0 0 18px;
+    font-size: 12px;
+    line-height: 1;
+    font-weight: 700;
+    letter-spacing: 0;
+    text-transform: uppercase;
+  }
+
+  #BuildYourRoutine-{{ section.id }} .build-your-routine__step {
+    width: 100%;
+    max-width: 430px;
+  }
+
+  #BuildYourRoutine-{{ section.id }} .build-your-routine__step-title {
+    margin: 0;
+  }
+
+  #BuildYourRoutine-{{ section.id }} .build-your-routine__step-number {
+    margin-right: 5px;
+  }
+
+  #BuildYourRoutine-{{ section.id }} .build-your-routine__description {
+    max-width: 310px;
+    margin: 10px auto 0;
+    color: var(--routine-muted);
+    font-size: 10px;
+    line-height: 1.35;
+  }
+
+  #BuildYourRoutine-{{ section.id }} .build-your-routine__product {
+    display: grid;
+    grid-template-columns: 52px minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 9px;
+    width: 100%;
+    max-width: 330px;
+    margin-top: 22px;
+    text-align: left;
+  }
+
+  #BuildYourRoutine-{{ section.id }} .build-your-routine__product-image-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 52px;
+    height: 52px;
+  }
+
+  #BuildYourRoutine-{{ section.id }} .build-your-routine__product-image {
+    display: block;
+    width: 52px;
+    height: 52px;
+    object-fit: contain;
+  }
+
+  #BuildYourRoutine-{{ section.id }} .build-your-routine__product-info {
+    min-width: 0;
+  }
+
+  #BuildYourRoutine-{{ section.id }} .build-your-routine__product-name {
+    margin: 0 0 2px;
+    font-size: 9px;
+    line-height: 1.2;
+  }
+
+  #BuildYourRoutine-{{ section.id }} .build-your-routine__product-price {
+    margin-bottom: 4px;
+    font-size: 9px;
+    line-height: 1.2;
+  }
+
+  #BuildYourRoutine-{{ section.id }} .build-your-routine__variant-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  #BuildYourRoutine-{{ section.id }} .build-your-routine__variant-select {
+    display: block;
+    width: 100%;
+    min-height: 22px;
+    padding: 2px 22px 2px 7px;
+    border: 1px solid #111;
+    border-radius: 0;
+    background: #fff;
+    color: #111;
+    font: inherit;
+    font-size: 8px;
+    line-height: 1;
+    cursor: pointer;
+  }
+
+  #BuildYourRoutine-{{ section.id }} .build-your-routine__add-button {
+    min-width: 44px;
+    min-height: 22px;
+    padding: 4px 8px;
+    border: 0;
+    border-radius: 0;
+    background: var(--routine-button);
+    color: var(--routine-button-text);
+    font: inherit;
+    font-size: 9px;
+    line-height: 1;
+    font-weight: 700;
+    cursor: default;
+  }
+
+  #BuildYourRoutine-{{ section.id }} .build-your-routine__next-button {
+    width: 100%;
+    max-width: 330px;
+    min-height: 38px;
+    margin-top: 28px;
+    padding: 10px 16px;
+    border: 0;
+    border-radius: 0;
+    background: var(--routine-button);
+    color: var(--routine-button-text);
+    font: inherit;
+    font-size: 10px;
+    line-height: 1;
+    font-weight: 700;
+    letter-spacing: .02em;
+    text-transform: uppercase;
+    cursor: default;
+  }
+
+  #BuildYourRoutine-{{ section.id }} .build-your-routine__empty {
+    padding: 60px 20px;
+    text-align: center;
+    color: var(--routine-muted);
+    font-size: 12px;
+  }
+
+  @media screen and (max-width: 749px) {
+    #BuildYourRoutine-{{ section.id }} .build-your-routine__grid {
+      grid-template-columns: 1fr;
+    }
+
+    #BuildYourRoutine-{{ section.id }} .build-your-routine__media {
+      aspect-ratio: 1 / 1;
+    }
+
+    #BuildYourRoutine-{{ section.id }} .build-your-routine__content {
+      padding: 38px 24px 42px;
+    }
+
+    #BuildYourRoutine-{{ section.id }} .build-your-routine__eyebrow {
+      margin-bottom: 15px;
+    }
+
+    #BuildYourRoutine-{{ section.id }} .build-your-routine__step-title {
+      font-size: 30px;
+    }
+
+    #BuildYourRoutine-{{ section.id }} .build-your-routine__product,
+    #BuildYourRoutine-{{ section.id }} .build-your-routine__next-button {
+      max-width: 50%;
+    }
+
+    .build-your-routine__container {
+      --full-page-grid-with-margins: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #BuildYourRoutine-{{ section.id }} *,
+    #BuildYourRoutine-{{ section.id }} *::before,
+    #BuildYourRoutine-{{ section.id }} *::after {
+      scroll-behavior: auto !important;
+      transition: none !important;
+      animation: none !important;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Build Your Routine",
+  "tag": "section",
+  "class": "section-build-your-routine",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "BUILD YOUR ROUTINE"
+    },
+    {
+      "type": "text",
+      "id": "next_button_text",
+      "label": "Next button text",
+      "default": "NEXT STEP"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background",
+      "default": "#F4F4F2"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text",
+      "default": "#111111"
+    },
+    {
+      "type": "color",
+      "id": "muted_color",
+      "label": "Muted text",
+      "default": "#555555"
+    },
+    {
+      "type": "color",
+      "id": "button_color",
+      "label": "Button background",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Button text",
+      "default": "#FFFFFF"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "routine_step",
+      "name": "Routine Step",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "step_image",
+          "label": "Step image"
+        },
+        {
+          "type": "text",
+          "id": "step_number",
+          "label": "Step number",
+          "default": "01."
+        },
+        {
+          "type": "text",
+          "id": "step_title",
+          "label": "Step title",
+          "default": "PREP"
+        },
+        {
+          "type": "textarea",
+          "id": "step_description",
+          "label": "Step description",
+          "default": "Exfoliate and moisturize lips ready for application."
+        },
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Routine product"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Build Your Routine",
+      "blocks": [
+        {
+          "type": "routine_step"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,3558 @@
+{% stylesheet %}
+
+  .build-your-pack {
+
+    width: 100%;
+
+  }
+
+  .build-your-pack__inner {
+
+    width: 100%;
+
+  }
+
+  .build-your-pack__description {
+
+    display: none;
+
+  }
+
+
+
+  /*
+
+   * ACCORDION MODE
+
+   *
+
+   * When Build Your Pack is nested inside
+
+   * an existing Accordion Row, the Accordion Row
+
+   * already provides the heading + caret.
+
+   *
+
+   * Therefore we hide only the Build Your Pack
+
+   * internal heading.
+
+   */
+
+  .details-content .build-your-pack {
+
+    width: 100%;
+
+  }
+
+  .details-content .build-your-pack__inner {
+
+    width: 100%;
+
+  }
+
+
+
+  /*
+
+   * PRODUCT GRID
+
+   */
+
+  .build-your-pack__products {
+
+    display: grid;
+
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    gap: 0.4rem;
+
+  }
+
+
+
+  /*
+
+   * PRODUCT CARD
+
+   *
+
+   * Figma layout:
+
+   *
+
+   * IMAGE LEFT
+
+   * CONTENT RIGHT
+
+   */
+
+  .build-your-pack__product {
+
+    position: relative;
+
+    display: grid;
+
+    grid-template-columns: 45% 55%;
+
+    min-width: 0;
+
+    min-height: 14.4rem;
+
+    background: var(--color-bunny-boo);
+
+  }
+
+
+  /*
+   * PRODUCT IMAGE
+   */
+
+  .build-your-pack__product-media {
+    position: relative;
+    min-width: 0;
+    width: 100%;
+    height: 100%;
+    min-height: auto;
+    overflow: hidden;
+    display: block;
+    object-fit: contain;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /*
+
+   * PRODUCT CONTENT
+
+   */
+
+  .build-your-pack__product-content {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+
+
+  /*
+
+   * TITLE + HIGHLIGHT
+
+   */
+
+  .build-your-pack__product-top {
+
+    display: block;
+
+    min-width: 0;
+
+  }
+
+  .build-your-pack__product-copy {
+
+    min-width: 0;
+
+  }
+
+  .build-your-pack__product-title {
+      display: block;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      font-size: 1.4rem;
+      line-height: 2rem;
+  }
+
+  .build-your-pack__product-highlight {
+
+    margin-top: 0.3rem;
+
+    overflow: hidden;
+
+    font-size: 1.15rem;
+
+    line-height: 1.1;
+
+    white-space: nowrap;
+
+    text-overflow: ellipsis;
+
+  }
+
+  .build-your-pack__product-highlight p {
+
+    margin: 0;
+
+    overflow: hidden;
+
+    white-space: nowrap;
+
+    text-overflow: ellipsis;
+
+  }
+
+
+
+  /*
+
+   * VARIANTS
+
+   */
+
+  .build-your-pack__option {
+
+    position: relative;
+
+    min-width: 0;
+
+  }
+
+  .build-your-pack__option-label {
+
+    display: none;
+
+  }
+
+  .build-your-pack__option-control {
+
+    position: relative;
+
+    display: flex;
+
+    align-items: center;
+
+    width: 100%;
+
+    min-width: 0;
+
+  }
+
+  .build-your-pack__option-select {
+
+    width: 100%;
+
+    min-width: 0;
+
+    min-height: 3.3rem;
+
+    padding: .35rem 2.4rem .35rem 2.6rem;
+
+    border: 1px solid currentColor;
+
+    border-radius: 0;
+
+    outline: none;
+
+    background: transparent;
+
+    color: inherit;
+
+    font: inherit;
+
+    font-size: 1.2rem;
+
+    -webkit-appearance: auto;
+
+    appearance: auto;
+
+    cursor: pointer;
+
+    align-items: center;
+
+  }
+
+  .build-your-pack__option-swatch {
+
+    position: absolute;
+
+    left: 0.65rem;
+
+    z-index: 2;
+
+    width: 2rem;
+
+    height: 2rem;
+
+    border: 1px solid rgb(var(--color-foreground-rgb) / .3);
+
+    border-radius: 50%;
+
+    background: #d9d9d9;
+
+    pointer-events: none;
+
+  }
+
+
+
+  /*
+
+   * PRICE + ADD
+
+   *
+
+   * Matches Figma:
+
+   *
+
+   * $19.99                  ADD ☑
+
+   */
+
+  .build-your-pack__product-bottom {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 1rem;
+
+    width: 100%;
+
+    margin-top: auto;
+
+    padding-top: 1rem;
+
+  }
+
+  .build-your-pack__product-add-label {
+    font-size: 1.6rem;
+    line-height: 1.6rem;
+    text-transform: uppercase;
+    font-family: var(--font-heading--family);
+    font-style: var(--font-heading--style);
+    font-weight: var(--font-heading--weight);
+  }
+
+
+
+  /*
+
+   * CHECKBOX
+
+   */
+
+  .build-your-pack__checkbox {
+
+    position: relative;
+
+    z-index: 20;
+
+    display: flex;
+
+    flex: 0 0 auto;
+
+    align-items: center;
+
+    justify-content: center;
+
+    width: 1.9rem;
+
+    height: 1.9rem;
+
+    margin: 0;
+
+    padding: 0;
+
+    border: 0;
+
+    background: transparent;
+
+    color: inherit;
+
+    cursor: pointer;
+
+    pointer-events: auto;
+
+    touch-action: manipulation;
+
+  }
+
+  .build-your-pack__checkbox\:focus-visible {
+
+    outline: 1px solid currentColor;
+
+    outline-offset: 3px;
+
+  }
+
+  .build-your-pack__checkbox input {
+
+    position: absolute;
+
+    width: 1px;
+
+    height: 1px;
+
+    margin: 0;
+
+    opacity: 0;
+
+    pointer-events: none;
+
+    left: 1rem;
+
+    top: 0.8rem;
+
+  }
+
+  .build-your-pack__checkbox-visual {
+
+    display: block;
+
+    width: 1.9rem;
+
+    height: 1.9rem;
+
+    border: 1px solid currentColor;
+
+    background: transparent;
+
+    transition:
+
+      background-color 160ms ease,
+
+      border-color 160ms ease;
+
+    pointer-events: none;
+
+  }
+
+  .build-your-pack__checkbox.is-selected
+
+    .build-your-pack__checkbox-visual {
+
+    background: currentColor;
+
+  }
+
+  .build-your-pack__checkbox.is-disabled {
+
+    opacity: 0.35;
+
+    cursor: not-allowed;
+
+  }
+
+  .build-your-pack__checkbox\:disabled {
+
+    opacity: 0.35;
+
+    cursor: not-allowed;
+
+  }
+
+
+
+  /*
+
+   * AVAILABILITY
+
+   */
+
+  .build-your-pack__availability {
+
+    display: none;
+
+  }
+
+
+
+  /*
+
+   * FOOTER
+
+   */
+
+  .build-your-pack__footer {
+
+    display: flex;
+
+    justify-content: flex-end;
+
+    width: 100%;
+
+    margin-top: 1.6rem;
+
+  }
+
+  .build-your-pack__total-wrapper {
+
+    display: none;
+
+  }
+
+
+
+  /*
+
+   * MAIN ADD TO CART
+
+   */
+
+  /* .build-your-pack__add-button {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    min-width: 21rem;
+
+    padding: .8rem 1.2rem;
+
+    border: 0;
+
+    border-radius: 0;
+
+    background: #000;
+
+    color: #fff;
+
+    font: inherit;
+
+    font-size: 1.35rem;
+
+    line-height: 1;
+
+    font-weight: 700;
+
+    letter-spacing: -0.02em;
+
+    text-transform: uppercase;
+
+    cursor: pointer;
+
+  } */
+
+  .build-your-pack__add-button {
+
+    display: block;
+
+    width: 100%;
+
+    align-items: center;
+
+    padding: 1.2rem;
+
+    cursor: pointer;
+
+  }
+
+  .build-your-pack__add-button\:disabled {
+
+    opacity: 0.35;
+
+    cursor: not-allowed;
+
+  }
+
+
+
+  /*
+
+   * MESSAGE
+
+   */
+
+  .build-your-pack__message {
+
+    display: none;
+
+    width: 100%;
+
+    margin: 0.8rem 0 0;
+
+    font-size: 1.1rem;
+
+    line-height: 1.2;
+
+    text-align: right;
+
+  }
+
+  .build-your-pack__message.is-visible {
+
+    display: block;
+
+  }
+
+
+  /*
+
+   * ACCORDION CONTENT POLISH
+
+   *
+
+   * The parent Accordion Row owns the heading.
+
+   * We only make sure our content fills the row nicely.
+
+   */
+
+  .details-content > .build-your-pack {
+
+    margin: 0;
+
+  }
+
+  .details-content > .build-your-pack .build-your-pack__products {
+
+    width: 100%;
+
+  }
+
+
+
+  /*
+   * NEW FIGMA DESIGN OVERRIDES
+   *
+   * Layout:
+   * IMAGE | TITLE
+   *       | PRICE
+   *       | VARIANT
+   *       | ADD + CHECKBOX
+   */
+
+  .build-your-pack__products {
+    gap: 2.4rem;
+  }
+
+  .build-your-pack__product {
+    grid-template-columns: 42% 58%;
+    min-height: auto;
+    background: transparent;
+  }
+
+
+  .build-your-pack__product-image {
+    width: 100%;
+    height: 11.6rem;
+    object-fit: contain;
+  }
+
+  .build-your-pack__product-content {
+    align-items: flex-start;
+  }
+
+  .build-your-pack__product-top,
+  .build-your-pack__product-copy {
+    width: 100%;
+  }
+
+  .build-your-pack__product-price {
+    margin-top: 0.45rem;
+    font-family: var(--font-body--family);
+    font-size: 1.35rem;
+    line-height: 1.1;
+    font-weight: 400;
+  }
+
+  .build-your-pack__variants {
+    width: 100%;
+    margin-top: 1.2rem;
+  }
+
+  .build-your-pack__option-select {
+    min-height: 3.2rem;
+    padding: .25rem 2.1rem .25rem 2.3rem;
+    font-size: 1.4rem;
+  }
+
+  .build-your-pack__option-swatch {
+    width: 1.7rem;
+    height: 1.7rem;
+  }
+
+  .build-your-pack__product-add {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    margin-top: 1.2rem;
+  }
+
+  .build-your-pack__checkbox, .build-your-pack__checkbox-visual {
+    width: 2rem;
+    height: 2rem;
+  }
+
+  .build-your-pack__footer {
+    display: block;
+    width: 100%;
+    margin-top: 3.2rem;
+  }
+
+  .build-your-pack__add-button:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+  }
+
+  @media screen and (max-width: 749px) {
+    .build-your-pack__products {
+      grid-template-columns: 1fr;
+    }
+
+    .build-your-pack__product {
+      grid-template-columns: 29.16% 70.84%;
+      min-height: auto;
+    }
+
+    .build-your-pack__product-image {
+      height: 10rem;
+      object-fit: cover;
+    }
+
+    .build-your-pack__product-media {
+      align-items: flex-start;
+    }
+
+    .build-your-pack__product-content {
+      padding-left: 1.4rem;
+    }
+
+  }
+
+{% endstylesheet %}
+
+
+
+{% liquid
+
+  assign product_resource = closest.product
+
+  if request.visual_preview_mode and product_resource == blank
+
+    assign product_resource = collections.all.products.first
+
+  endif
+
+  assign pack_products = product_resource.metafields.custom.build_your_pack_products.value
+
+%}
+
+
+
+{% if pack_products != blank %}
+
+  <div
+
+    class="build-your-pack"
+
+    {{ block.shopify_attributes }}
+
+    data-build-your-pack
+
+    data-money-format="{{ shop.money_format | escape }}"
+
+  >
+
+    <div class="build-your-pack__inner">
+
+      <!--
+
+        PRODUCTS
+
+      -->
+
+      <div class="build-your-pack__products">
+
+        {% assign rendered_products = 0 %}
+
+        {% for pack_product in pack_products %}
+
+          {% if pack_product != blank and rendered_products < 2 %}
+
+            {% assign rendered_products = rendered_products | plus: 1 %}
+
+            {% liquid
+
+              assign initial_variant = pack_product.selected_or_first_available_variant
+
+            %}
+
+
+
+            <article
+
+              class="build-your-pack__product"
+
+              data-build-your-pack-product
+
+              data-product-id="{{ pack_product.id }}"
+
+              data-product-index="{{ rendered_products }}"
+
+            >
+
+
+
+              <!--
+
+                PRODUCT IMAGE
+
+              -->
+
+              <div class="build-your-pack__product-media">
+
+                {% if pack_product.featured_image != blank %}
+
+                  {{
+
+                    pack_product.featured_image
+
+                    | image_url: width: 800
+
+                    | image_tag:
+
+                      loading: 'lazy',
+
+                      widths: '300, 500, 700, 800',
+
+                      sizes: '(min-width: 750px) 20vw, 40vw',
+
+                      class: 'build-your-pack__product-image',
+
+                      alt: pack_product.featured_image.alt | default: pack_product.title | escape
+
+                  }}
+
+                {% endif %}
+
+              </div>
+
+
+
+              <!--
+
+                PRODUCT CONTENT
+
+              -->
+
+              <div class="build-your-pack__product-content">
+
+                <!--
+                  PRODUCT TITLE
+                -->
+                <div class="build-your-pack__product-top">
+                  <div class="build-your-pack__product-copy">
+                    <a
+                      class="build-your-pack__product-title"
+                      href="{{ pack_product.url }}"
+                    >
+                      {{ pack_product.title }}
+                    </a>
+                  </div>
+                </div>
+
+                <!--
+                  PRICE
+                -->
+                <div
+                  class="build-your-pack__product-price"
+                  data-build-your-pack-price
+                >
+                  {% if initial_variant != blank %}
+                    {{ initial_variant.price | money }}
+                  {% endif %}
+                </div>
+
+                <!--
+                  VARIANTS
+                -->
+                {% unless pack_product.has_only_default_variant %}
+                  <div class="build-your-pack__variants">
+                    {% for option in pack_product.options_with_values %}
+                      {% assign option_index = option.position | minus: 1 %}
+                      <div
+                        class="build-your-pack__option"
+                        data-build-your-pack-option-wrapper
+                      >
+                        <label
+                          class="build-your-pack__option-label"
+                          for="BuildYourPack-{{ block.id }}-{{ rendered_products }}-{{ option.position }}"
+                        >
+                          {{ option.name }}
+                        </label>
+
+                        <div class="build-your-pack__option-control">
+                          <span
+                            class="build-your-pack__option-swatch"
+                            data-build-your-pack-swatch
+                          ></span>
+
+                          <select
+                            id="BuildYourPack-{{ block.id }}-{{ rendered_products }}-{{ option.position }}"
+                            class="build-your-pack__option-select"
+                            data-build-your-pack-option
+                            data-option-position="{{ option.position }}"
+                          >
+                            {% for option_value in option.values %}
+                              <option
+                                value="{{ option_value | escape }}"
+                                {% if initial_variant != blank and initial_variant.options[option_index] == option_value %}
+                                  selected
+                                {% endif %}
+                              >
+                                {{ option_value }}
+                              </option>
+                            {% endfor %}
+                          </select>
+                        </div>
+                      </div>
+                    {% endfor %}
+                  </div>
+                {% endunless %}
+
+                <!--
+                  ADD + CHECKBOX
+                -->
+                <div class="build-your-pack__product-add">
+                  <button
+                    type="button"
+                    class="build-your-pack__checkbox{% unless initial_variant != blank and initial_variant.available %} is-disabled{% endunless %}"
+                    data-build-your-pack-toggle
+                    aria-label="Add {{ pack_product.title }} to pack"
+                    aria-pressed="false"
+                    {% unless initial_variant != blank and initial_variant.available %}
+                      disabled
+                    {% endunless %}
+                  >
+                    <input
+                      type="checkbox"
+                      data-build-your-pack-selected
+                      tabindex="-1"
+                      aria-hidden="true"
+                      {% unless initial_variant != blank and initial_variant.available %}
+                        disabled
+                      {% endunless %}
+                    >
+
+                    <span
+                      class="build-your-pack__checkbox-visual"
+                      aria-hidden="true"
+                    ></span>
+                  </button>
+
+                    <span class="build-your-pack__product-add-label">
+                    ADD
+                  </span>
+
+                </div>
+
+              </div>
+
+              <!--
+
+                VARIANT JSON DATA
+
+              -->
+
+              <script
+
+                type="application/json"
+
+                data-build-your-pack-variants
+
+              >
+
+                {{ pack_product.variants | json }}
+
+              </script>
+
+            </article>
+
+          {% endif %}
+
+        {% endfor %}
+
+      </div>
+
+
+
+      <!--
+
+        MAIN ADD TO CART
+
+      -->
+
+      <div class="build-your-pack__footer">
+
+        <button
+
+          type="button"
+
+          class="build-your-pack__add-button button button-primary"
+
+          data-build-your-pack-add
+
+          disabled
+
+        >
+
+          <span data-build-your-pack-add-label>
+
+            {{ block.settings.button_text }}
+
+          </span>
+</button>
+
+
+
+        <p
+
+          class="build-your-pack__message"
+
+          data-build-your-pack-message
+
+          role="status"
+
+          aria-live="polite"
+
+        ></p>
+
+      </div>
+
+    </div>
+
+  </div>
+
+{% endif %}
+
+
+
+{% javascript %}
+
+  (() => {
+
+    const initBuildYourPack = (root) => {
+
+      if (
+
+        !root ||
+
+        root.dataset.buildYourPackInitialized === 'true'
+
+      ) {
+
+        return;
+
+      }
+
+
+
+      root.dataset.buildYourPackInitialized =
+
+        'true';
+
+
+
+      const products = [
+
+        ...root.querySelectorAll(
+
+          '[data-build-your-pack-product]'
+
+        )
+
+      ];
+
+
+
+      const addButton =
+
+        root.querySelector(
+
+          '[data-build-your-pack-add]'
+
+        );
+const messageElement =
+
+        root.querySelector(
+
+          '[data-build-your-pack-message]'
+
+        );
+
+
+
+      if (
+
+        !products.length ||
+
+        !addButton
+
+      ) {
+
+        return;
+
+      }
+
+
+
+      const moneyFormat =
+
+        root.dataset.moneyFormat || '';
+
+
+
+      /*
+
+       * MONEY FORMAT
+
+       */
+
+
+
+      const formatMoney = (
+
+          cents
+
+        ) => {
+
+          cents =
+
+            Number(cents) || 0;
+
+          if (
+
+            typeof Shopify !== 'undefined' &&
+
+            typeof Shopify.formatMoney === 'function'
+
+          ) {
+
+            return Shopify
+
+              .formatMoney(
+
+                cents,
+
+                moneyFormat
+
+              )
+
+              .replace(/US\s*(?=\$)/g, '');
+
+          }
+
+          try {
+
+            return `$${(
+
+              cents / 100
+
+            ).toFixed(2)}`;
+
+          } catch {
+
+            return `${(
+
+              cents / 100
+
+            ).toFixed(2)}`;
+
+          }
+
+        };
+
+      /*
+
+       * GET VARIANTS
+
+       */
+
+      const getVariants = (
+
+        product
+
+      ) => {
+
+        const element =
+
+          product.querySelector(
+
+            '[data-build-your-pack-variants]'
+
+          );
+
+
+
+        if (!element) {
+
+          return [];
+
+        }
+
+
+
+        try {
+
+          const variants =
+
+            JSON.parse(
+
+              element.textContent
+
+            );
+
+
+
+          return Array.isArray(
+
+            variants
+
+          )
+
+            ? variants
+
+            : [];
+
+        } catch {
+
+          return [];
+
+        }
+
+      };
+
+
+
+      /*
+
+       * GET OPTION SELECTS
+
+       */
+
+      const getOptionSelects = (
+
+        product
+
+      ) => {
+
+        return [
+
+          ...product.querySelectorAll(
+
+            '[data-build-your-pack-option]'
+
+          )
+
+        ];
+
+      };
+
+
+
+      /*
+
+       * GET SELECTED OPTIONS
+
+       */
+
+      const getSelectedOptions = (
+
+        product
+
+      ) => {
+
+        return getOptionSelects(
+
+          product
+
+        ).map(
+
+          (select) =>
+
+            select.value
+
+        );
+
+      };
+
+
+
+      /*
+
+       * FIND ACTIVE VARIANT
+
+       */
+
+      const findVariant = (
+
+        product
+
+      ) => {
+
+        const variants =
+
+          getVariants(
+
+            product
+
+          );
+
+
+
+        if (!variants.length) {
+
+          return null;
+
+        }
+
+
+
+        const selects =
+
+          getOptionSelects(
+
+            product
+
+          );
+
+
+
+        if (!selects.length) {
+
+          return (
+
+            variants.find(
+
+              (variant) =>
+
+                variant.available
+
+            ) ||
+
+            variants[0]
+
+          );
+
+        }
+
+
+
+        const selectedOptions =
+
+          getSelectedOptions(
+
+            product
+
+          );
+
+
+
+        return (
+
+          variants.find(
+
+            (variant) => {
+
+              if (
+
+                !Array.isArray(
+
+                  variant.options
+
+                )
+
+              ) {
+
+                return false;
+
+              }
+
+
+
+              if (
+
+                variant.options.length !==
+
+                selectedOptions.length
+
+              ) {
+
+                return false;
+
+              }
+
+
+
+              return variant.options.every(
+
+                (
+
+                  option,
+
+                  index
+
+                ) =>
+
+                  String(option) ===
+
+                  String(
+
+                    selectedOptions[
+
+                      index
+
+                    ]
+
+                  )
+
+              );
+
+            }
+
+          ) || null
+
+        );
+
+      };
+
+
+
+      /*
+
+       * UPDATE OPTION AVAILABILITY
+
+       */
+
+      const updateOptionAvailability = (
+
+        product
+
+      ) => {
+
+        const variants =
+
+          getVariants(
+
+            product
+
+          );
+
+
+
+        const selects =
+
+          getOptionSelects(
+
+            product
+
+          );
+
+
+
+        if (
+
+          !variants.length ||
+
+          !selects.length
+
+        ) {
+
+          return;
+
+        }
+
+
+
+        let selectedOptions =
+
+          getSelectedOptions(
+
+            product
+
+          );
+
+
+
+        selects.forEach(
+
+          (
+
+            select,
+
+            optionIndex
+
+          ) => {
+
+            [
+
+              ...select.options
+
+            ].forEach(
+
+              (
+
+                option
+
+              ) => {
+
+                const optionValue =
+
+                  option.value;
+
+
+
+                const available =
+
+                  variants.some(
+
+                    (variant) => {
+
+                      if (
+
+                        !variant.available ||
+
+                        !Array.isArray(
+
+                          variant.options
+
+                        )
+
+                      ) {
+
+                        return false;
+
+                      }
+
+
+
+                      return variant.options.every(
+
+                        (
+
+                          variantOption,
+
+                          variantIndex
+
+                        ) => {
+
+                          if (
+
+                            variantIndex ===
+
+                            optionIndex
+
+                          ) {
+
+                            return (
+
+                              String(
+
+                                variantOption
+
+                              ) ===
+
+                              String(
+
+                                optionValue
+
+                              )
+
+                            );
+
+                          }
+
+
+
+                          return (
+
+                            String(
+
+                              variantOption
+
+                            ) ===
+
+                            String(
+
+                              selectedOptions[
+
+                                variantIndex
+
+                              ]
+
+                            )
+
+                          );
+
+                        }
+
+                      );
+
+                    }
+
+                  );
+
+
+
+                option.disabled =
+
+                  !available;
+
+              }
+
+            );
+
+
+
+            const selectedOption =
+
+              select.selectedOptions[0];
+
+
+
+            if (
+
+              selectedOption &&
+
+              selectedOption.disabled
+
+            ) {
+
+              const firstAvailable =
+
+                [
+
+                  ...select.options
+
+                ].find(
+
+                  (option) =>
+
+                    !option.disabled
+
+                );
+
+
+
+              if (firstAvailable) {
+
+                select.value =
+
+                  firstAvailable.value;
+
+              }
+
+            }
+
+
+
+            selectedOptions =
+
+              getSelectedOptions(
+
+                product
+
+              );
+
+          }
+
+        );
+
+      };
+
+
+
+      /*
+
+       * UPDATE COLOR SWATCH
+
+       */
+
+      const updateSwatches = (
+
+        product
+
+      ) => {
+
+        const selects =
+
+          getOptionSelects(
+
+            product
+
+          );
+
+
+
+        const wrappers =
+
+          [
+
+            ...product.querySelectorAll(
+
+              '[data-build-your-pack-option-wrapper]'
+
+            )
+
+          ];
+
+
+
+        selects.forEach(
+
+          (
+
+            select,
+
+            index
+
+          ) => {
+
+            const wrapper =
+
+              wrappers[index];
+
+
+
+            const swatch =
+
+              wrapper?.querySelector(
+
+                '[data-build-your-pack-swatch]'
+
+              );
+
+
+
+            if (!swatch) {
+
+              return;
+
+            }
+
+
+
+            const selectedValue =
+
+              select.value
+
+                .trim()
+
+                .toLowerCase();
+
+
+
+            const colorMap = {
+
+              red: '#d86f7c',
+
+              pink: '#d98999',
+
+              rose: '#d98999',
+
+              nude: '#c98e72',
+
+              beige: '#d4a77e',
+
+              brown: '#8b5a44',
+
+              blue: '#6e8fc4',
+
+              purple: '#a78ac4',
+
+              plum: '#774f72',
+
+              mauve: '#a87982',
+
+              orange: '#d8875d',
+
+              coral: '#e88b7d',
+
+              peach: '#e9a07f',
+
+              yellow: '#e3c76d',
+
+              green: '#7ca67d',
+
+              black: '#171717',
+
+              white: '#ffffff'
+
+            };
+
+
+
+            const color =
+
+              colorMap[
+
+                selectedValue
+
+              ] ||
+
+              '#d98999';
+
+
+
+            swatch.style.backgroundColor =
+
+              color;
+
+          }
+
+        );
+
+      };
+
+
+
+      /*
+
+       * UPDATE CHECKBOX STATE
+
+       */
+
+      const updateCheckboxState = (
+
+        product,
+
+        variant
+
+      ) => {
+
+        const toggle =
+
+          product.querySelector(
+
+            '[data-build-your-pack-toggle]'
+
+          );
+
+
+
+        const checkbox =
+
+          product.querySelector(
+
+            '[data-build-your-pack-selected]'
+
+          );
+
+
+
+        if (
+
+          !toggle ||
+
+          !checkbox
+
+        ) {
+
+          return;
+
+        }
+
+
+
+        if (
+
+          !variant ||
+
+          !variant.available
+
+        ) {
+
+          checkbox.checked =
+
+            false;
+
+          checkbox.disabled =
+
+            true;
+
+          toggle.disabled =
+
+            true;
+
+          toggle.classList.add(
+
+            'is-disabled'
+
+          );
+
+          toggle.classList.remove(
+
+            'is-selected'
+
+          );
+
+          toggle.setAttribute(
+
+            'aria-pressed',
+
+            'false'
+
+          );
+
+          return;
+
+        }
+
+
+
+        checkbox.disabled =
+
+          false;
+
+        toggle.disabled =
+
+          false;
+
+        toggle.classList.remove(
+
+          'is-disabled'
+
+        );
+
+
+
+        toggle.classList.toggle(
+
+          'is-selected',
+
+          checkbox.checked
+
+        );
+
+
+
+        toggle.setAttribute(
+
+          'aria-pressed',
+
+          checkbox.checked
+
+            ? 'true'
+
+            : 'false'
+
+        );
+
+      };
+
+
+
+      /*
+
+       * UPDATE PRODUCT
+
+       */
+
+      const updateProduct = (
+
+        product
+
+      ) => {
+
+        const variant =
+
+          findVariant(
+
+            product
+
+          );
+
+
+
+        const priceElement =
+
+          product.querySelector(
+
+            '[data-build-your-pack-price]'
+
+          );
+
+
+
+        const availabilityElement =
+
+          product.querySelector(
+
+            '[data-build-your-pack-availability]'
+
+          );
+
+
+
+        if (!variant) {
+
+          if (priceElement) {
+
+            priceElement.textContent =
+
+              '';
+
+          }
+
+
+
+          if (availabilityElement) {
+
+            availabilityElement.textContent =
+
+              'UNAVAILABLE';
+
+          }
+
+
+
+          updateCheckboxState(
+
+            product,
+
+            null
+
+          );
+
+
+
+          return null;
+
+        }
+
+
+
+        if (priceElement) {
+
+          priceElement.innerHTML =
+
+            formatMoney(
+
+              variant.price
+
+            );
+
+        }
+
+
+
+        if (availabilityElement) {
+
+          availabilityElement.textContent =
+
+            variant.available
+
+              ? 'AVAILABLE'
+
+              : 'SOLD OUT';
+
+        }
+
+
+
+        updateCheckboxState(
+
+          product,
+
+          variant
+
+        );
+
+
+
+        return variant;
+
+      };
+
+
+
+      /*
+
+       * GET SELECTED ITEMS
+
+       */
+
+      const getSelectedItems = () => {
+
+        return products
+
+          .map(
+
+            (product) => {
+
+              const checkbox =
+
+                product.querySelector(
+
+                  '[data-build-your-pack-selected]'
+
+                );
+
+
+
+              if (
+
+                !checkbox ||
+
+                !checkbox.checked
+
+              ) {
+
+                return null;
+
+              }
+
+
+
+              const variant =
+
+                findVariant(
+
+                  product
+
+                );
+
+
+
+              if (
+
+                !variant ||
+
+                !variant.available
+
+              ) {
+
+                checkbox.checked =
+
+                  false;
+
+                return null;
+
+              }
+
+
+
+              return {
+
+                id: Number(
+
+                  variant.id
+
+                ),
+
+                quantity: 1,
+
+                variant
+
+              };
+
+            }
+
+          )
+
+          .filter(Boolean);
+
+      };
+
+
+
+      /*
+
+       * UPDATE TOTAL
+
+       */
+
+      const updateTotal = () => {
+
+        const selectedItems =
+
+          getSelectedItems();
+
+
+
+        const total =
+
+          selectedItems.reduce(
+
+            (
+
+              sum,
+
+              item
+
+            ) =>
+
+              sum +
+
+              Number(
+
+                item.variant.price ||
+
+                0
+
+              ),
+
+            0
+
+          );
+addButton.disabled =
+
+          selectedItems.length ===
+
+          0;
+
+
+
+        products.forEach(
+
+          (product) => {
+
+            const checkbox =
+
+              product.querySelector(
+
+                '[data-build-your-pack-selected]'
+
+              );
+
+
+
+            const toggle =
+
+              product.querySelector(
+
+                '[data-build-your-pack-toggle]'
+
+              );
+
+
+
+            if (
+
+              checkbox &&
+
+              toggle
+
+            ) {
+
+              toggle.classList.toggle(
+
+                'is-selected',
+
+                checkbox.checked
+
+              );
+
+
+
+              toggle.setAttribute(
+
+                'aria-pressed',
+
+                checkbox.checked
+
+                  ? 'true'
+
+                  : 'false'
+
+              );
+
+            }
+
+          }
+
+        );
+
+
+
+        return selectedItems;
+
+      };
+
+
+
+      /*
+
+       * MESSAGE
+
+       */
+
+      const hideMessage = () => {
+
+        if (!messageElement) {
+
+          return;
+
+        }
+
+
+
+        messageElement.textContent =
+
+          '';
+
+
+
+        messageElement.classList.remove(
+
+          'is-visible'
+
+        );
+
+      };
+
+
+
+      const showMessage = (
+
+        message
+
+      ) => {
+
+        if (!messageElement) {
+
+          return;
+
+        }
+
+
+
+        messageElement.textContent =
+
+          message;
+
+
+
+        messageElement.classList.add(
+
+          'is-visible'
+
+        );
+
+      };
+
+
+
+      /*
+
+       * INITIALIZE PRODUCTS
+
+       */
+
+      products.forEach(
+
+        (product) => {
+
+          updateOptionAvailability(
+
+            product
+
+          );
+
+
+
+          updateSwatches(
+
+            product
+
+          );
+
+
+
+          updateProduct(
+
+            product
+
+          );
+
+
+
+          getOptionSelects(
+
+            product
+
+          ).forEach(
+
+            (select) => {
+
+              select.addEventListener(
+
+                'change',
+
+                () => {
+
+                  hideMessage();
+
+
+
+                  updateOptionAvailability(
+
+                    product
+
+                  );
+
+
+
+                  updateSwatches(
+
+                    product
+
+                  );
+
+
+
+                  updateProduct(
+
+                    product
+
+                  );
+
+
+
+                  updateTotal();
+
+                }
+
+              );
+
+            }
+
+          );
+
+        }
+
+      );
+
+
+
+      /*
+
+       * CHECKBOX CLICK
+
+       *
+
+       * Capture phase is preserved because
+
+       * this was part of the working version.
+
+       */
+
+      root.addEventListener(
+
+        'click',
+
+        (event) => {
+
+          const toggle =
+
+            event.target.closest(
+
+              '[data-build-your-pack-toggle]'
+
+            );
+
+
+
+          if (
+
+            !toggle ||
+
+            !root.contains(toggle)
+
+          ) {
+
+            return;
+
+          }
+
+
+
+          event.preventDefault();
+
+          event.stopPropagation();
+
+          event.stopImmediatePropagation();
+
+
+
+          if (toggle.disabled) {
+
+            return;
+
+          }
+
+
+
+          const product =
+
+            toggle.closest(
+
+              '[data-build-your-pack-product]'
+
+            );
+
+
+
+          if (!product) {
+
+            return;
+
+          }
+
+
+
+          const checkbox =
+
+            product.querySelector(
+
+              '[data-build-your-pack-selected]'
+
+            );
+
+
+
+          if (
+
+            !checkbox ||
+
+            checkbox.disabled
+
+          ) {
+
+            return;
+
+          }
+
+
+
+          checkbox.checked =
+
+            !checkbox.checked;
+
+
+
+          toggle.classList.toggle(
+
+            'is-selected',
+
+            checkbox.checked
+
+          );
+
+
+
+          toggle.setAttribute(
+
+            'aria-pressed',
+
+            checkbox.checked
+
+              ? 'true'
+
+              : 'false'
+
+          );
+
+
+
+          hideMessage();
+
+
+
+          updateTotal();
+
+        },
+
+        true
+
+      );
+
+
+
+      /*
+
+       * KEYBOARD ACCESSIBILITY
+
+       */
+
+      root.addEventListener(
+
+        'keydown',
+
+        (event) => {
+
+          const toggle =
+
+            event.target.closest(
+
+              '[data-build-your-pack-toggle]'
+
+            );
+
+
+
+          if (
+
+            !toggle ||
+
+            toggle.disabled
+
+          ) {
+
+            return;
+
+          }
+
+
+
+          if (
+
+            event.key !== 'Enter' &&
+
+            event.key !== ' '
+
+          ) {
+
+            return;
+
+          }
+
+
+
+          event.preventDefault();
+
+          event.stopPropagation();
+
+
+
+          toggle.click();
+
+        },
+
+        true
+
+      );
+
+
+
+      /*
+
+       * HORIZON CART UPDATE
+
+       *
+
+       * No static ES module import.
+
+       */
+
+      const createDeferred =
+
+        () => {
+
+          let resolvePromise;
+
+          let rejectPromise;
+
+
+
+          const promise =
+
+            new Promise(
+
+              (
+
+                resolve,
+
+                reject
+
+              ) => {
+
+                resolvePromise =
+
+                  resolve;
+
+                rejectPromise =
+
+                  reject;
+
+              }
+
+            );
+
+
+
+          return {
+
+            promise,
+
+            resolve:
+
+              resolvePromise,
+
+            reject:
+
+              rejectPromise
+
+          };
+
+        };
+
+
+
+      const createCartLinesUpdateEvent =
+
+        ({
+
+          action,
+
+          context,
+
+          lines,
+
+          promise
+
+        }) => {
+
+          const event =
+
+            new Event(
+
+              'shopify\:cart\:lines-update',
+
+              {
+
+                bubbles: true
+
+              }
+
+            );
+
+
+
+          Object.defineProperties(
+
+            event,
+
+            {
+
+              action: {
+
+                value: action,
+
+                enumerable: true
+
+              },
+
+              context: {
+
+                value: context,
+
+                enumerable: true
+
+              },
+
+              lines: {
+
+                value: lines,
+
+                enumerable: true
+
+              },
+
+              promise: {
+
+                value: promise,
+
+                enumerable: true
+
+              }
+
+            }
+
+          );
+
+
+
+          return event;
+
+        };
+
+
+
+      /*
+
+       * ADD TO CART
+
+       */
+
+      addButton.addEventListener(
+
+        'click',
+
+        async () => {
+
+          const selectedItems =
+
+            updateTotal();
+
+
+
+          if (
+
+            !selectedItems.length
+
+          ) {
+
+            return;
+
+          }
+
+
+
+          addButton.disabled =
+
+            true;
+
+
+
+          const labelElement =
+
+            addButton.querySelector(
+
+              '[data-build-your-pack-add-label]'
+
+            );
+const originalLabel =
+
+            labelElement
+
+              ? labelElement.textContent.trim()
+
+              : 'ADD TO CART';
+
+
+
+          if (labelElement) {
+
+            labelElement.textContent =
+
+              'ADDING...';
+
+          }
+hideMessage();
+
+
+
+          /*
+
+           * FIND HORIZON CART SECTIONS
+
+           */
+
+          const sectionIds =
+
+            new Set();
+
+
+
+          document
+
+            .querySelectorAll(
+
+              'cart-items-component'
+
+            )
+
+            .forEach(
+
+              (component) => {
+
+                const sectionId =
+
+                  component.dataset.sectionId;
+
+
+
+                if (sectionId) {
+
+                  sectionIds.add(
+
+                    sectionId
+
+                  );
+
+                }
+
+              }
+
+            );
+
+
+
+          sectionIds.add(
+
+            'cart-drawer-section'
+
+          );
+
+
+
+          /*
+
+           * DEFERRED HORIZON UPDATE
+
+           */
+
+          const deferredUpdate =
+
+            createDeferred();
+
+
+
+          const cartUpdateEvent =
+
+            createCartLinesUpdateEvent({
+
+              action: 'add',
+
+              context: 'product',
+
+              lines:
+
+                selectedItems.map(
+
+                  (item) => ({
+
+                    id:
+
+                      String(
+
+                        item.id
+
+                      ),
+
+                    quantity:
+
+                      item.quantity
+
+                  })
+
+                ),
+
+              promise:
+
+                deferredUpdate.promise
+
+            });
+
+
+
+          /*
+
+           * DISPATCH HORIZON EVENT
+
+           */
+
+          document.dispatchEvent(
+
+            cartUpdateEvent
+
+          );
+
+
+
+          try {
+
+            /*
+
+             * ACTUAL SHOPIFY CART ADD
+
+             */
+
+            const response =
+
+              await fetch(
+
+                `${Theme.routes.cart_add_url}`,
+
+                {
+
+                  method: 'POST',
+
+                  headers: {
+
+                    'Content-Type':
+
+                      'application/json',
+
+                    Accept:
+
+                      'application/json'
+
+                  },
+
+                  credentials:
+
+                    'same-origin',
+
+                  body:
+
+                    JSON.stringify({
+
+                      items:
+
+                        selectedItems.map(
+
+                          (item) => ({
+
+                            id:
+
+                              Number(
+
+                                item.id
+
+                              ),
+
+                            quantity:
+
+                              item.quantity
+
+                          })
+
+                        ),
+
+                      sections:
+
+                        Array.from(
+
+                          sectionIds
+
+                        ).join(','),
+
+                      sections_url:
+
+                        window.location.pathname
+
+                    })
+
+                }
+
+              );
+
+
+
+            const responseText =
+
+              await response.text();
+
+
+
+            let data;
+
+
+
+            try {
+
+              data =
+
+                JSON.parse(
+
+                  responseText
+
+                );
+
+            } catch {
+
+              throw new Error(
+
+                'Invalid response from Shopify cart.'
+
+              );
+
+            }
+
+
+
+            if (
+
+              !response.ok ||
+
+              data.status ||
+
+              data.errors
+
+            ) {
+
+              throw new Error(
+
+                data.description ||
+
+                data.message ||
+
+                data.errors ||
+
+                'Unable to add pack to cart.'
+
+              );
+
+            }
+
+
+
+            const sections =
+
+              data.sections ||
+
+              {};
+
+
+
+            let itemCount =
+
+              Number(
+
+                data.item_count
+
+              );
+
+
+
+            /*
+
+             * FALLBACK ITEM COUNT
+
+             */
+
+            if (
+
+              !Number.isFinite(
+
+                itemCount
+
+              )
+
+            ) {
+
+              try {
+
+                const sectionHTML =
+
+                  sections[
+
+                    'cart-drawer-section'
+
+                  ];
+
+
+
+                if (sectionHTML) {
+
+                  const parser =
+
+                    new DOMParser();
+
+
+
+                  const parsed =
+
+                    parser.parseFromString(
+
+                      sectionHTML,
+
+                      'text/html'
+
+                    );
+
+
+
+                  const countElement =
+
+                    parsed.querySelector(
+
+                      '[ref="cartItemCount"]'
+
+                    );
+
+
+
+                  itemCount =
+
+                    countElement
+
+                      ? parseInt(
+
+                          countElement.textContent,
+
+                          10
+
+                        )
+
+                      : 0;
+
+                }
+
+              } catch {
+
+                itemCount =
+
+                  0;
+
+              }
+
+            }
+
+
+
+            /*
+
+             * RESOLVE HORIZON UPDATE
+
+             */
+
+            deferredUpdate.resolve({
+
+              cart:
+
+                data,
+
+              detail: {
+
+                sections,
+
+                items:
+
+                  data.items ||
+
+                  [],
+
+                itemCount,
+
+                source:
+
+                  'build-your-pack',
+
+                didError:
+
+                  false
+
+              }
+
+            });
+
+
+
+            await deferredUpdate.promise;
+
+
+
+            /*
+
+             * WAIT FOR HORIZON TO UPDATE
+
+             */
+
+            await new Promise(
+
+              (resolve) =>
+
+                requestAnimationFrame(
+
+                  () => resolve()
+
+                )
+
+            );
+
+
+
+            await new Promise(
+
+              (resolve) =>
+
+                requestAnimationFrame(
+
+                  () => resolve()
+
+                )
+
+            );
+
+
+
+            /*
+
+             * OPEN HORIZON CART DRAWER
+
+             */
+
+            const cartDrawer =
+
+              document.querySelector(
+
+                'theme-drawer#cart-drawer'
+
+              );
+
+
+
+            if (
+
+              cartDrawer &&
+
+              typeof cartDrawer.open ===
+
+                'function'
+
+            ) {
+
+              cartDrawer.open();
+
+            } else {
+
+              if (
+
+                typeof Shopify !== 'undefined' &&
+
+                Shopify.actions &&
+
+                typeof Shopify.actions.openCart ===
+
+                  'function'
+
+              ) {
+
+                Shopify.actions.openCart();
+
+              }
+
+            }
+
+
+
+            /*
+
+             * SUCCESS
+
+             */
+
+            if (labelElement) {
+
+              labelElement.textContent =
+
+                'ADDED';
+
+            }
+setTimeout(
+
+              () => {
+
+                if (labelElement) {
+
+                  labelElement.textContent =
+
+                    originalLabel;
+
+                }
+updateTotal();
+
+              },
+
+              900
+
+            );
+
+
+
+          } catch (
+
+            error
+
+          ) {
+
+            console.error(
+
+              '[Build Your Pack] Add to cart failed:',
+
+              error
+
+            );
+
+
+
+            try {
+
+              deferredUpdate.reject(
+
+                error
+
+              );
+
+            } catch {
+
+              // Ignore promise cleanup errors.
+
+            }
+
+
+
+            if (labelElement) {
+
+              labelElement.textContent =
+
+                originalLabel;
+
+            }
+showMessage(
+
+              error?.message ||
+
+              'Something went wrong. Please try again.'
+
+            );
+
+
+
+            updateTotal();
+
+          }
+
+        }
+
+      );
+
+
+
+      /*
+
+       * INITIAL TOTAL
+
+       */
+
+      updateTotal();
+
+    };
+
+
+
+    /*
+
+     * INITIALIZE ALL BUILD YOUR PACK BLOCKS
+
+     */
+
+    const initAllBuildYourPacks =
+
+      () => {
+
+        document
+
+          .querySelectorAll(
+
+            '[data-build-your-pack]'
+
+          )
+
+          .forEach(
+
+            initBuildYourPack
+
+          );
+
+      };
+
+
+
+    /*
+
+     * INITIAL LOAD
+
+     */
+
+    initAllBuildYourPacks();
+
+
+
+    /*
+
+     * SHOPIFY THEME EDITOR SUPPORT
+
+     */
+
+    document.addEventListener(
+
+      'shopify\:section\:load',
+
+      initAllBuildYourPacks
+
+    );
+
+  })();
+
+{% endjavascript %}
+
+
+
+{% schema %}
+
+{
+
+  "name": "Build Your Pack",
+
+  "tag": "div",
+
+  "class": "build-your-pack-block",
+
+  "settings": [
+
+    {
+
+      "type": "text",
+
+      "id": "heading",
+
+      "label": "Heading",
+
+      "default": "BUILD YOUR PACK"
+
+    },
+
+    {
+
+      "type": "richtext",
+
+      "id": "description",
+
+      "label": "Description",
+
+      "default": "<p>Choose your favorites and build your perfect pack.</p>"
+
+    },
+
+    {
+
+      "type": "text",
+
+      "id": "button_text",
+
+      "label": "Button text",
+
+      "default": "ADD TO CART"
+
+    }
+
+  ],
+
+  "presets": [
+
+    {
+
+      "name": "Build Your Pack",
+
+      "category": "Product"
+
+    }
+
+  ]
+
+}
+
+{% endschema %}
