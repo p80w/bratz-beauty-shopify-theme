@@ -1,11 +1,9 @@
 {%- doc -%}
   Renders mega menu list markup and optional featured content.
   @param {object} [shop_all_image_1] - Shop All promotional image 1.
-  @param {string} [shop_all_text_1] - Shop All promotional text 1.
   @param {string} [shop_all_label_1] - Shop All promotional label 1.
   @param {string} [shop_all_link_1] - Shop All promotional link 1.
   @param {object} [shop_all_image_2] - Shop All promotional image 2.
-  @param {string} [shop_all_text_2] - Shop All promotional text 2.
   @param {string} [shop_all_label_2] - Shop All promotional label 2.
   @param {string} [shop_all_link_2] - Shop All promotional link 2.
 
@@ -205,11 +203,8 @@
               widths: '300, 450, 600'
           }}
 
-          {% if shop_all_text_1 != blank %}
-            <span class="bratz-shop-all-featured__text">
-              {{ shop_all_text_1 }}
-            </span>
-          {% endif %}
+          <div class="bratz-shop-all-featured__overlay"></div>
+
 
           {% if shop_all_label_1 != blank %}
             <span class="bratz-shop-all-featured__link">
@@ -233,11 +228,7 @@
               widths: '300, 450, 600'
           }}
 
-          {% if shop_all_text_2 != blank %}
-            <span class="bratz-shop-all-featured__text">
-              {{ shop_all_text_2 }}
-            </span>
-          {% endif %}
+          <div class="bratz-shop-all-featured__overlay"></div>
 
           {% if shop_all_label_2 != blank %}
             <span class="bratz-shop-all-featured__link">
@@ -272,11 +263,7 @@
               }}
             {% endif %}
 
-            {% if collection.description != blank %}
-              <span class="bratz-lips-featured__text">
-                {{ collection.description | strip_html }}
-              </span>
-            {% endif %}
+            <div class="bratz-shop-all-featured__overlay"></div>
 
             <span class="bratz-lips-featured__link">
               {{ child_link.title }}

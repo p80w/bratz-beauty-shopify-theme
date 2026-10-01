@@ -336,6 +336,12 @@ p:empty {
   min-height: var(--section-min-height, 'auto');
 }
 
+@media screen and (max-width: 1440px) {
+  .section {
+    display: block;
+  }
+}
+
 /* Place all direct children in the center column by default */
 .section > * {
   grid-column: 2;
