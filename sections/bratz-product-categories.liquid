@@ -243,6 +243,7 @@
   height: 100%;
   min-height: 63.6rem;
   overflow: hidden;
+  background: var(--color-bunny-boo)
 }
 
 
@@ -331,17 +332,15 @@
    ========================================================= */
 
 .bratz-product-category__content {
-  position: absolute;
-  inset-inline: 0;
-  bottom: 0;
-  z-index: 3;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-end;
-  padding: 3.2rem 0;
-  text-align: center;
-  pointer-events: none;
+    position: absolute;
+    inset-inline: 0;
+    bottom: 0;
+    z-index: 3;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem;
+    text-align: left;
+    pointer-events: none;
 }
 
 .bratz-product-category__title {
@@ -394,7 +393,8 @@ h3.bratz-product-category__title {
   }
 
   .bratz-product-categories__slide {
-    flex: 0 0 calc(100% - var(--bratz-mobile-slide-gap));
+      flex: 0 0 calc(100% - 10rem);
+      width: calc(100% - 10rem);
     }
 
   .bratz-product-category {

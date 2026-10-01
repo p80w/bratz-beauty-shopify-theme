@@ -160,11 +160,9 @@
                       content_aspect_ratio: ratio,
                       image_border_radius: image_border_radius,
                       shop_all_image_1: block.settings.shop_all_image_1,
-                      shop_all_text_1: block.settings.shop_all_text_1,
                       shop_all_label_1: block.settings.shop_all_label_1,
                       shop_all_link_1: block.settings.shop_all_link_1,
                       shop_all_image_2: block.settings.shop_all_image_2,
-                      shop_all_text_2: block.settings.shop_all_text_2,
                       shop_all_label_2: block.settings.shop_all_label_2,
                       shop_all_link_2: block.settings.shop_all_link_2
                     %}
@@ -789,6 +787,7 @@
     grid-template-columns: subgrid;
     grid-column: span var(--menu-columns-tablet);
     gap: var(--menu-vertical-gap) var(--menu-horizontal-gap);
+    padding: 0 4.8rem;
 
     @media screen and (min-width: 990px) {
       grid-column: span var(--menu-columns-desktop);
@@ -850,18 +849,20 @@
     font-family: var(--font-heading--family);
     font-style: var(--font-heading--style);
     font-weight: var(--font-heading--weight);
-    font-size: 2.4rem;
+    font-size: 1.8rem;
     text-transform: uppercase;
-    line-height: 2rem;
+    line-height: 1.6rem;
     padding: 0 0 1.8rem 0;
     pointer-events: none;
   }
 
   /* BRATZ - Shop All Mega Menu */
 
-
+  .mega-menu__grid[data-menu-grid-id="MegaMenuList-1"] {
+    --menu-columns-desktop: 4;
+  }
   .active.shop-all .mega-menu__grid {
-      padding: 0 10rem;
+      padding: 0 4.8rem;
   }
 
   @media screen and (min-width: 1360px) {
@@ -872,12 +873,20 @@
 
     span.bratz-lips-featured__link,
     span.bratz-shop-all-featured__link {
-      font-size: 1.4rem;
-      font-family: var(--font-druk-wide--family);
-      font-style: var(--font-druk-wide--style);
-      font-weight: var(--font-druk-wide--weight);
+      font-size: 1.8rem;
+      font-family: var(--font-heading--family);
+      font-style: var(--font-heading--style);
+      font-weight: var(--font-heading--weight);
       text-transform: uppercase;
       line-height: 100%;
+      position: absolute;
+      bottom: 4.8rem;
+      left: 4.87rem;
+      color: var(--color-white);
+      display: block;
+      width: 16rem;
+      text-wrap: wrap;
+      text-align: left;
     }
    
     .active.explore .mega-menu__list {
@@ -887,13 +896,11 @@
     }
     
     .active.shop-all li:nth-child(2).mega-menu__column {
-      padding-left: 4rem;
+      padding-left: 0;
     }
 
     .mega-menu__list:has(.bratz-shop-all-featured) > .bratz-shop-all-featured {
-        grid-column: 3 / -1;
-        width: 100%;
-        max-width: 70rem;
+        max-width: 100%;
         min-width: 0;
         display: grid;
         grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -901,6 +908,27 @@
         margin-left: auto;
     }
 
+    li.menu-list__list-item.shop-all .mega-menu__list {
+      display: flex;
+      gap: 7.8rem;
+      padding: 0 9.6rem;    
+    }
+
+    .bratz-shop-all-featured__overlay {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      top: 65%;
+      height: 35%;
+      background: linear-gradient(
+      to top,
+      rgba(0, 0, 0, 0.55),
+      rgba(0, 0, 0, 0)
+    );
+      pointer-events: none;
+    }
+    
     .bratz-shop-all-featured__item {
       display: flex;
       flex-direction: column;
@@ -909,6 +937,9 @@
       text-align: center;
       color: inherit;
       text-decoration: none;
+      position: relative;
+      width: 30rem;
+      height: 37.5rem;
     }
 
     .bratz-shop-all-featured__image {
@@ -916,6 +947,7 @@
       width: 100%;
       aspect-ratio: 1 / 1;
       object-fit: cover;
+      height: 375px;
     }
 
     .bratz-lips-featured__text,
@@ -941,9 +973,9 @@
   @media screen and (max-width: 1359px) {
 
     span.bratz-mobile-menu-title {
-      font-family: var(--font-subheading--family);
-      font-weight: var(--font-subheading--weight);
-      font-style: var(--font-subheading--style);
+      font-family: var(--font-heading--family);
+      font-weight: var(--font-heading--weight);
+      font-style: var(--font-heading--style);
       font-size: 2.4rem;
       line-height: 2rem;
       padding: 2.4rem;
@@ -984,18 +1016,20 @@
 
     .bratz-lips-featured__item {
       display: block;
-      width: 100%;
       min-width: 0;
       text-align: center;
+      position: relative;
+      width: 30rem;
+      height: 37.5rem;
       text-decoration: none;
     }
 
     .bratz-lips-featured__image {
       display: block;
       width: 100%;
-      height: auto;
       aspect-ratio: 1 / 1;
       object-fit: cover;
+      height: 375px;
     }
 
     .bratz-lips-featured__text,
@@ -1188,12 +1222,6 @@
     },
     {
       "type": "text",
-      "id": "shop_all_text_1",
-      "label": "Text 1",
-      "default": "Description Text"
-    },
-    {
-      "type": "text",
       "id": "shop_all_label_1",
       "label": "Label 1",
       "default": "SHOP NOW"
@@ -1207,12 +1235,6 @@
       "type": "image_picker",
       "id": "shop_all_image_2",
       "label": "Image 2"
-    },
-    {
-      "type": "text",
-      "id": "shop_all_text_2",
-      "label": "Text 2",
-      "default": "Description Text"
     },
     {
       "type": "text",

@@ -39,7 +39,6 @@
       </div>
     {% endif %}
 
-
     {%- comment -%}
       CONTENT
     {%- endcomment -%}
@@ -48,21 +47,20 @@
 
       {% if section_settings.heading != blank %}
         <div class="bratz-product-match__header">
-          <h2 class="bratz-product-match__heading">
+          <h2 class="bratz-product-match__heading h4">
             {{ section_settings.heading }}
           </h2>
         </div>
       {% endif %}
 
-
       {% if collection != blank and collection.products_count > 0 %}
+
         <div class="bratz-product-match__slideshow section section--page-width">
 
           {%- comment -%}
             SLIDES
-
-            Render a slideshow-slide for each product in the collection.
           {%- endcomment -%}
+
           {% capture slides %}
 
             {% for product in collection.products limit: product_count %}
@@ -78,19 +76,116 @@
                 >
 
                   {%- comment -%}
-                    HORIZON PRODUCT CARD
+                    PRODUCT MEDIA
 
-                    Reuse Horizon's existing product-card architecture.
+                    Image #2 = Default
+                    Image #1 = Hover
                   {%- endcomment -%}
 
-                  <div class="bratz-product-match__horizon-card">
-                    {% content_for 'block',
-                      type: '_product-card',
-                      id: 'static-product-card',
-                      closest.product: product,
-                      product_view_context: 'collection'
-                    %}
+                  <a
+                    href="{{ product.url }}"
+                    class="bratz-product-match__media"
+                    aria-label="{{ product.title | escape }}"
+                  >
+
+                    {% if product.images.size > 1 %}
+
+                      <div class="bratz-product-match__image-wrapper">
+
+                        {{
+                          product.images[1]
+                          | image_url: width: 1200
+                          | image_tag:
+                            class: 'bratz-product-match__image bratz-product-match__image--default',
+                            loading: 'lazy',
+                            widths: '360, 540, 720, 900, 1200',
+                            sizes: '(min-width: 990px) calc(100vw / 4), 80vw',
+                            alt: product.title
+                        }}
+
+                        {{
+                          product.images[0]
+                          | image_url: width: 1200
+                          | image_tag:
+                            class: 'bratz-product-match__image bratz-product-match__image--hover',
+                            loading: 'lazy',
+                            widths: '360, 540, 720, 900, 1200',
+                            sizes: '(min-width: 990px) calc(100vw / 4), 80vw',
+                            alt: product.title
+                        }}
+
+                      </div>
+
+                    {% elsif product.images.size == 1 %}
+
+                      <div class="bratz-product-match__image-wrapper">
+
+                        {{
+                          product.images[0]
+                          | image_url: width: 1200
+                          | image_tag:
+                            class: 'bratz-product-match__image bratz-product-match__image--default',
+                            loading: 'lazy',
+                            widths: '360, 540, 720, 900, 1200',
+                            sizes: '(min-width: 990px) calc(100vw / 4), 80vw',
+                            alt: product.title
+                        }}
+
+                      </div>
+
+                    {% endif %}
+
+                  </a>
+
+                  {%- comment -%}
+                    PRODUCT INFO
+                  {%- endcomment -%}
+
+                  <div class="bratz-product-match__info">
+
+                    <h3 class="bratz-product-match__title h5">
+                      <a href="{{ product.url }}">
+                        {{ product.title }}
+                      </a>
+                    </h3>
+
+                    {% if product.metafields.p80.product_highlight.value != blank %}
+                      <div class="bratz-product-match__highlight">
+                        {{ product.metafields.p80.product_highlight.value }}
+                      </div>
+                    {% endif %}
+
+                    <div class="bratz-product-match__price">
+
+                      {% if product.compare_at_price > product.price %}
+
+                        <span class="bratz-product-match__price-current">
+                          {{ product.price | money }}
+                        </span>
+
+                        <span class="bratz-product-match__price-compare">
+                          {{ product.compare_at_price | money }}
+                        </span>
+
+                      {% else %}
+
+                        <span class="bratz-product-match__price-current">
+                          {{ product.price | money }}
+                        </span>
+
+                      {% endif %}
+
+                    </div>
+
+                    <a
+                      href="{{ product.url }}"
+                      class="bratz-product-match__button button button-primary"
+                    >
+                      GET THE LOOK
+                    </a>
+
                   </div>
+
                 </article>
 
               </slideshow-slide>
@@ -98,7 +193,6 @@
             {% endfor %}
 
           {% endcapture %}
-
 
           {% liquid
             assign bratz_slideshow_ref = 'bratzProductMatch-' | append: section.id
@@ -132,14 +226,6 @@
 /* =========================================================
    BRATZ PRODUCT MATCH SECTION
    ========================================================= */
-
-slideshow-slide.bratz-product-match__slide {
-    background: var(--color-bunny-boo);
-}
-
-.bratz-product-match__slideshow slideshow-container {
-    background: transparent;
-}
 
 .bratz-product-match {
   width: 100%;
@@ -179,7 +265,7 @@ slideshow-slide.bratz-product-match__slide {
 .bratz-product-match__header {
   width: 100%;
   text-align: center;
-  margin-block-end: 3.2rem
+  margin-block-end: 3.2rem;
 }
 
 .bratz-product-match__heading {
@@ -193,10 +279,24 @@ slideshow-slide.bratz-product-match__slide {
 
 .bratz-product-match__slideshow {
   width: 100%;
+  padding: 0 4.8rem;
+}
+
+@media screen and (max-width: 749px) {
+  .bratz-product-match__slideshow {
+    padding: 0 0 0 1.6rem;
+  }
+}
+
+.bratz-product-match__slideshow slideshow-container {
+  background: transparent;
 }
 
 .bratz-product-match__slideshow slideshow-slides {
   gap: var(--bratz-match-gap);
+
+  /* Make all slides stretch to the tallest slide */
+  align-items: stretch;
 }
 
 .bratz-product-match__slide {
@@ -204,9 +304,13 @@ slideshow-slide.bratz-product-match__slide {
     (100% - (var(--bratz-match-gap) * (var(--bratz-match-columns) - 1)))
     / var(--bratz-match-columns)
   );
+
   flex: 0 0 auto;
   min-width: 0;
   scroll-snap-align: start;
+
+  /* Allow the product card to stretch */
+  display: flex;
 }
 
 
@@ -217,17 +321,125 @@ slideshow-slide.bratz-product-match__slide {
 .bratz-product-match__card {
   position: relative;
   width: 100%;
+
+  /* Equal-height card layout */
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
 
 /* =========================================================
-   PRODUCT HIGHLIGHT
+   PRODUCT MEDIA
    ========================================================= */
 
+.bratz-product-match__media {
+  display: block;
+  width: 100%;
+  text-decoration: none;
+  overflow: hidden;
+}
+
+.bratz-product-match__image-wrapper {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+.bratz-product-match__image {
+  display: block;
+  width: 100%;
+  height: auto;
+  transition: opacity 0.35s ease;
+}
+
+.bratz-product-match__image--default {
+  position: relative;
+  z-index: 1;
+  opacity: 1;
+}
+
+.bratz-product-match__image--hover {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  opacity: 0;
+}
+
+.bratz-product-match__media:hover .bratz-product-match__image--default {
+  opacity: 0;
+}
+
+.bratz-product-match__media:hover .bratz-product-match__image--hover {
+  opacity: 1;
+}
+
+
+/* =========================================================
+   PRODUCT INFO
+   ========================================================= */
+
+.bratz-product-match__info {
+  padding: 2.4rem;
+  /* Fill the remaining card height */
+  flex: 1;
+
+  /* Keep button at the bottom */
+  display: flex;
+  flex-direction: column;
+}
+
+.bratz-product-match__title {
+  margin: 0;
+  font-size: 1.6rem;
+  line-height: 1.2;
+}
+
+.bratz-product-match__title a {
+  color: inherit;
+  text-decoration: none;
+}
+
 .bratz-product-match__highlight {
-  margin-block-start: .8rem;
+    margin-block-start: .6rem;
+    font-size: 1.2rem;
+    line-height: 1.6;
+}
+
+.bratz-product-match__price {
+  display: flex;
+  align-items: center;
+  gap: .8rem;
   font-size: 1.4rem;
-  line-height: 1.4rem;
+  line-height: 1.4;
+  padding: 1.6rem 0;
+}
+
+.bratz-product-match__price-compare {
+  text-decoration: line-through;
+}
+
+
+/* =========================================================
+   GET THE LOOK BUTTON
+   ========================================================= */
+
+.bratz-product-match__button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+
+  margin-block-start: auto;
+
+  transition:
+    background-color 0.25s ease,
+    color 0.25s ease;
+}
+
+.bratz-product-match__button:hover {
+  opacity: 0.85;
 }
 
 
@@ -251,7 +463,6 @@ slideshow-slide.bratz-product-match__slide {
   }
 }
 
-
 @media screen and (min-width: 750px) and (max-width: 989px) {
   .bratz-product-match__section {
     --bratz-match-columns: 2 !important;
@@ -270,21 +481,55 @@ slideshow-slide.bratz-product-match__slide {
   }
 
   .bratz-product-match__slideshow slideshow-slides {
-    gap: .4rem;
+    gap: 0.4rem;
   }
 
   .bratz-product-match__slide {
-    flex: 0 0 calc(100% - 7rem);
-    width: calc(100% - 7rem);
+    flex: 0 0 calc(100% - 5rem);
+    width: calc(100% - 5rem);
   }
 
   .bratz-product-match__header {
-    margin-block-end: 2.4rem
+    margin-block-end: 2.4rem;
   }
-  
+
   .bratz-product-match__slideshow.section.section--page-width {
     display: block;
-    padding-left: 1.5rem
+    padding-left: 1.5rem;
+  }
+
+  .bratz-product-match__info {
+    padding-block-start: 1rem;
+  }
+
+  .bratz-product-match__title {
+    font-size: 1.5rem;
+  }
+
+  .bratz-product-match__highlight {
+    font-size: 1.3rem;
+  }
+
+  .bratz-product-match__price {
+    font-size: 1.3rem;
+  }
+
+  .bratz-product-match__button {
+    min-height: 4.4rem;
+    padding: 1rem 1.6rem;
+    font-size: 1.3rem;
+  }
+
+  /*
+    Disable image swap on touch devices.
+    The second image remains the default image on mobile.
+  */
+  .bratz-product-match__media:hover .bratz-product-match__image--default {
+    opacity: 1;
+  }
+
+  .bratz-product-match__media:hover .bratz-product-match__image--hover {
+    opacity: 0;
   }
 }
 
@@ -294,8 +539,12 @@ slideshow-slide.bratz-product-match__slide {
    ========================================================= */
 
 @media (prefers-reduced-motion: reduce) {
-  .bratz-product-match__horizon-card,
-  .bratz-product-match__card {
+
+  .bratz-product-match__image {
+    transition: none;
+  }
+
+  .bratz-product-match__button {
     transition: none;
   }
 }
@@ -427,96 +676,7 @@ slideshow-slide.bratz-product-match__slide {
 
   "presets": [
     {
-      "name": "Bratz Product Match",
-
-      "blocks": {
-        "static-product-card": {
-          "type": "_product-card",
-          "static": true,
-
-          "settings": {
-            "product_card_gap": 4,
-            "border": "none",
-            "border_width": 1,
-            "border_opacity": 100,
-            "border_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-
-          "blocks": {
-            "product-card-gallery": {
-              "type": "_product-card-gallery",
-
-              "settings": {
-                "image_ratio": "adapt",
-                "border": "none",
-                "border_width": 1,
-                "border_opacity": 100,
-                "border_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              }
-            },
-
-            "product_title": {
-              "type": "product-title",
-
-              "settings": {
-                "width": "fit-content",
-                "max_width": "normal",
-                "alignment": "left",
-                "type_preset": "paragraph",
-                "font": "var(--font-body--family)",
-                "font_size": "1rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 4,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              }
-            },
-
-            "price": {
-              "type": "price",
-
-              "settings": {
-                "show_sale_price_first": true,
-                "show_installments": false,
-                "show_tax_info": false,
-                "type_preset": "h6",
-                "width": "100%",
-                "alignment": "left",
-                "font": "var(--font-body--family)",
-                "font_size": "1rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              }
-            }
-          },
-
-          "block_order": [
-            "product-card-gallery",
-            "product_title",
-            "price"
-          ]
-        }
-      }
+      "name": "Bratz Product Match"
     }
   ]
 }
