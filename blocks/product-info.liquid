@@ -87,6 +87,46 @@
     margin: 0;
   }
 
+
+/* =========================================================
+   COLLECTION PRODUCT GRID - MOBILE
+   ========================================================= */
+
+@media screen and (max-width: 749px) {
+
+  .bratz-collection-product-card .bratz-product-info {
+    display: grid;
+    grid-template-columns: 1fr;
+    width: 100%;
+  }
+
+  .bratz-collection-product-card
+  .bratz-product-info__header {
+    display: contents;
+  }
+
+  .bratz-collection-product-card .bratz-product-info__title {
+    grid-column: 1;
+    grid-row: 1;
+    font-size: 1.6rem;
+    padding: 0.5rem 0.7rem;
+  }
+
+  .bratz-collection-product-card .bratz-product-info__highlight {
+    grid-column: 1;
+    grid-row: 2;
+    padding: 0 .7rem;
+  }
+
+  .bratz-collection-product-card .bratz-product-info__price {
+    grid-column: 1;
+    grid-row: 3;
+    padding: 0 0.7rem 0;
+    font-size: 1.6rem;
+  }
+
+}
+
 {% endstylesheet %}
 
 {% schema %}

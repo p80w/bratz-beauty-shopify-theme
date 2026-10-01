@@ -279,7 +279,7 @@
             {% endif %}
             {% if block_settings.filter_style == 'horizontal' %}
               <div
-                class="products-count-wrapper"
+                class="products-count-wrapper hidden"
                 data-testid="products-count"
               >
                 <span role="status">
@@ -291,17 +291,41 @@
                 </span>
               </div>
 
-              {% if block_settings.enable_sorting %}
-                {% render 'sorting',
-                  results: results,
-                  sort_by: sort_by,
-                  filter_style: block_settings.filter_style,
-                  suffix: 'desktop',
-                  sort_position: 'desktop',
-                  should_use_select_on_mobile: false,
-                  section_id: section.id
-                %}
-              {% endif %}
+              <div class="bratz-collection-toolbar">
+                <div class="bratz-collection-toolbar__scroll">
+
+                  <nav
+                    class="bratz-collection-toolbar__navigation"
+                    aria-label="Collection categories"
+                  >
+                    <div class="bratz-collection-toolbar__navigation-track">
+                      {% for link in linklists['collection-categories'].links %}
+                        <a
+                          href="{{ link.url }}"
+                          class="bratz-collection-categories__link{% if link.current or link.active %} is-active{% endif %}"
+                        >
+                          {{ link.title }}
+                        </a>
+                      {% endfor %}
+                    </div>
+                  </nav>
+
+                  <div class="bratz-collection-toolbar__sorting">
+                    {% if block_settings.enable_sorting %}
+                      {% render 'sorting',
+                        results: results,
+                        sort_by: sort_by,
+                        filter_style: block_settings.filter_style,
+                        suffix: 'desktop',
+                        sort_position: 'desktop',
+                        should_use_select_on_mobile: false,
+                        section_id: section.id
+                      %}
+                    {% endif %}
+                  </div>
+
+                </div>
+              </div>
 
               {% if block_settings.enable_grid_density %}
                 {% render 'grid-density-controls', viewport: 'desktop' %}
@@ -315,7 +339,7 @@
 
   <div
     class="
-      facets-toggle
+      facets-toggle hidden
       {%- if block_settings.enable_filtering == false %} facets-toggle--no-filters{% endif %}
       {%- if has_custom_color %} color-custom-{{ block.id }}{% endif %}
     "
@@ -545,6 +569,176 @@
 {% endif %}
 
 {% stylesheet %}
+
+
+/* =========================================================
+   BRATZ COLLECTION TOOLBAR
+   ========================================================= */
+
+.bratz-collection-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  width: 100%;
+
+  gap: 3rem;
+}
+
+
+.bratz-collection-toolbar__scroll {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+
+/* =========================================================
+   NAVIGATION
+   ========================================================= */
+
+.bratz-collection-toolbar__navigation {
+  min-width: 0;
+  flex: 1 1 auto;
+
+  overflow: hidden;
+}
+
+.bratz-collection-toolbar__navigation-track {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8rem;
+  min-width: 0;
+}
+
+
+.bratz-collection-categories__link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  min-height: 2.6rem;
+  padding: 0.35rem 1.25rem;
+  border: 1px solid var(--color-foreground);
+  background: var(--color-white);
+  color: var(--color-foreground);
+  font-family: var(--font-druk-wide--family);
+  font-weight: var(--font-druk-wide--weight);
+  font-style: var(--font-druk-wide--style);
+  font-size: 1.2rem;
+  font-weight: var(--font-druk-wide--weight);
+  line-height: 1;
+  text-decoration: none;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.bratz-collection-categories__link:hover,
+.bratz-collection-categories__link.is-active {
+  background: var(--color-foreground);
+  color: var(--color-white);
+}
+
+
+/* =========================================================
+   SORTING
+   ========================================================= */
+
+.bratz-collection-toolbar__sorting {
+  display: flex;
+  align-items: center;
+
+  flex: 0 0 auto;
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media screen and (max-width: 749px) {
+
+  .bratz-collection-toolbar {
+    width: 100%;
+    overflow: hidden;
+  }
+
+
+  /* =========================================================
+     MOBILE HORIZONTAL SCROLL
+     Navigation + Sorting scroll together
+     ========================================================= */
+
+  .bratz-collection-toolbar__scroll {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    -webkit-overflow-scrolling: touch;
+    padding-inline: 1.5rem;
+  }
+
+  .bratz-collection-toolbar__scroll::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Navigation */
+
+  .bratz-collection-toolbar__navigation {
+    flex: 0 0 auto;
+    min-width: max-content;
+    overflow: visible;
+  }
+
+  .bratz-collection-toolbar__navigation-track {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center;
+    justify-content: flex-start;
+    width: max-content;
+    min-width: max-content;
+    gap: 0.6rem;
+    padding: 0;
+  }
+
+  .bratz-collection-categories__link {
+    display: inline-flex !important;
+    flex: 0 0 auto;
+    white-space: nowrap;
+    min-height: 2.5rem;
+    padding: 0.35rem 1rem;
+    font-size: 1.1rem;
+  }
+
+  /* Sorting */
+
+  .bratz-collection-toolbar__sorting {
+    display: flex !important;
+    align-items: center;
+    flex: 0 0 auto;
+    margin-left: 4rem;
+    padding: 0;
+    white-space: nowrap;
+  }
+
+  details .sorting-filter__options {
+    left: auto !important;
+    top: 6.4rem !important;
+    right: 1.5rem;
+  }
+
+  .facets.facets--horizontal {
+    padding: 1.4rem 0;
+  }
+
+}
+
   .facets-block-wrapper {
     @media screen and (min-width: 750px) {
       margin: var(--facets-margin);
@@ -572,6 +766,10 @@
     @media screen and (min-width: 750px) {
       display: none;
     }
+     @media screen and (max-width: 749x) {
+      display: none;
+    }
+
   }
 
   .facets-toggle__wrapper {
@@ -679,8 +877,6 @@
   }
 
   .facets--horizontal {
-    display: none;
-
     @media screen and (min-width: 750px) {
       padding-block: var(--padding-block-start) var(--padding-block-end);
       display: flex;
@@ -849,7 +1045,6 @@
   .facets__summary .icon-caret {
     height: var(--icon-size-xs);
     width: var(--icon-size-xs);
-    color: rgb(var(--color-foreground-rgb) / var(--icon-opacity));
     margin-block: var(--margin-2xs);
     transition: color var(--animation-speed) var(--animation-easing);
   }
@@ -1132,6 +1327,11 @@
     color: var(--color-foreground);
     cursor: pointer;
     white-space: nowrap;
+    font-family: var(--font-druk-wide--family);
+    font-weight: var(--font-druk-wide--weight);
+    font-style: var(--font-druk-wide--style);
+    font-size: 1.2rem;
+    text-transform: uppercase;
 
     @media screen and (min-width: 750px) {
       margin-inline-end: var(--margin-2xs);
@@ -1219,6 +1419,12 @@
   .facets--horizontal .facets__form {
     @media screen and (min-width: 750px) {
       gap: 0 var(--facets-form-horizontal-gap);
+    }
+  }
+
+  span.facets__status.h6 {
+    @media screen and (max-width: 749px) {
+      display: none !important;
     }
   }
 

@@ -78,7 +78,7 @@
 %}
 
 <product-card
-  class="product-card size-style"
+  class="product-card size-style{% if template.name == 'collection' %} bratz-collection-product-card{% endif %}"
   style="{% render 'size-style', settings: block_settings %}"
   data-product-id="{{ product.id }}"
   id="product-card-{{ block.id }}-{{ product.id }}"
@@ -207,15 +207,20 @@
 
           </span>
 
-
           {% assign global_remaining_swatches = global_swatch_option.values.size | minus: 4 %}
+          {% assign global_remaining_swatches_mobile = global_swatch_option.values.size | minus: 3 %}
 
           {% if global_remaining_swatches > 0 %}
-            <span class="global-product-card__swatch-count">
-              +{{ global_remaining_swatches }} shades
+            <span class="global-product-card__swatch-count global-product-card__swatch-count--desktop">
+              +{{ global_remaining_swatches }} <span class="global-product-card__shades-label">shades</span>
             </span>
           {% endif %}
 
+          {% if template.name == 'collection' and global_remaining_swatches_mobile > 0 %}
+            <span class="global-product-card__swatch-count global-product-card__swatch-count--mobile">
+              +{{ global_remaining_swatches_mobile }} <span class="global-product-card__shades-label">shades</span>
+            </span>
+          {% endif %}
 
           <span
             class="global-product-card__swatch-action"
@@ -420,24 +425,36 @@
 
 
                   <button
-                    type="submit"
-                    name="add"
-                    class="global-product-card__add-button"
-                    data-global-add-button
-                    {% unless global_initial_variant.available %}
-                      disabled
-                    {% endunless %}
-                  >
+                      type="submit"
+                      name="add"
+                      class="global-product-card__add-button"
+                      data-global-add-button
+                      {% unless global_initial_variant.available %}
+                        disabled
+                      {% endunless %}
+                    >
 
-                    <span data-global-add-label>
-                      {% if global_initial_variant.available %}
-                        ADD TO CART - {{ global_initial_variant.price | money }}
-                      {% else %}
-                        SOLD OUT
-                      {% endif %}
-                    </span>
+                      <span data-global-add-label>
 
-                  </button>
+                        <span data-global-add-text>
+                          {% if global_initial_variant.available %}
+                            ADD TO CART
+                          {% else %}
+                            SOLD OUT
+                          {% endif %}
+                        </span>
+
+                        {% if global_initial_variant.available %}
+                          <span data-global-add-separator> - </span>
+
+                          <span data-global-add-price>
+                            {{ global_initial_variant.price | money }}
+                          </span>
+                        {% endif %}
+
+                      </span>
+
+                    </button>
 
                 {% endform %}
 
@@ -455,7 +472,6 @@
 
 
 {% render 'product-card-styles' %}
-
 
 {% javascript %}
   (() => {
@@ -648,6 +664,18 @@
         '[data-global-add-label]'
       );
 
+      const addText = details.querySelector(
+        '[data-global-add-text]'
+      );
+
+      const addSeparator = details.querySelector(
+        '[data-global-add-separator]'
+      );
+
+      const addPrice = details.querySelector(
+        '[data-global-add-price]'
+      );
+
 
       swatches.forEach((swatch) => {
 
@@ -748,15 +776,47 @@
              ADD TO CART BUTTON
              ----------------------------------------------- */
 
-          if (addButton && addLabel) {
+          if (addButton) {
 
             addButton.disabled =
               !selectedAvailable;
 
-            addLabel.textContent =
-              selectedAvailable
-                ? `ADD TO CART - ${selectedPrice}`
-                : 'SOLD OUT';
+          }
+
+
+          if (selectedAvailable) {
+
+            if (addText) {
+              addText.textContent =
+                'ADD TO CART';
+            }
+
+            if (addSeparator) {
+              addSeparator.textContent =
+                ' - ';
+              addSeparator.hidden = false;
+            }
+
+            if (addPrice) {
+              addPrice.textContent =
+                selectedPrice;
+              addPrice.hidden = false;
+            }
+
+          } else {
+
+            if (addText) {
+              addText.textContent =
+                'SOLD OUT';
+            }
+
+            if (addSeparator) {
+              addSeparator.hidden = true;
+            }
+
+            if (addPrice) {
+              addPrice.hidden = true;
+            }
 
           }
 
@@ -777,8 +837,7 @@
 
       if (
         productForm &&
-        addButton &&
-        addLabel
+        addButton
       ) {
 
         productForm.addEventListener(
@@ -796,8 +855,19 @@
 
             addButton.disabled = true;
 
-            addLabel.textContent =
-              'ADDING...';
+
+            if (addText) {
+              addText.textContent =
+                'ADDING...';
+            }
+
+            if (addSeparator) {
+              addSeparator.hidden = true;
+            }
+
+            if (addPrice) {
+              addPrice.hidden = true;
+            }
 
 
             /* ---------------------------------------------
@@ -821,8 +891,23 @@
 
               addButton.disabled = false;
 
-              addLabel.textContent =
-                `ADD TO CART - ${currentPrice}`;
+
+              if (addText) {
+                addText.textContent =
+                  'ADD TO CART';
+              }
+
+              if (addSeparator) {
+                addSeparator.textContent =
+                  ' - ';
+                addSeparator.hidden = false;
+              }
+
+              if (addPrice) {
+                addPrice.textContent =
+                  currentPrice;
+                addPrice.hidden = false;
+              }
 
             }, 1200);
 
@@ -960,6 +1045,53 @@ product-card .quick-add {
     text-align: left;
     opacity: 1!important;
     visibility: visible!important;
+}
+
+@media screen and (max-width: 749px) {
+  .bratz-collection-product-card .global-product-card__swatch-trigger {
+    padding: 1.4rem 1rem 1.4rem 1rem;
+  }
+
+  .bratz-collection-product-card .dummy-stars {
+    padding: 2.4rem .7rem 0;
+  }
+
+  .bratz-collection-product-card .global-product-card__shades-label {
+      display: none;
+  }
+
+  .bratz-collection-product-card .global-product-card__details-inner {
+      padding: 1.6rem .8rem .8rem;
+  }
+
+  .bratz-collection-product-card .global-product-card__details-image {
+    width: 4rem;
+    flex-basis: 4rem;
+  }
+  
+  .bratz-collection-product-card .global-product-card__details-price,
+  .bratz-collection-product-card .global-product-card__details-title {
+    font-size: 1.6rem;
+    line-height: 1.6rem;
+  }
+
+  .bratz-collection-product-card .global-product-card__details-close {
+    top: 0;
+    right: 0;
+  }
+
+  .bratz-collection-product-card .details-wrapper {
+    inset-inline: clamp(1.4rem, 4vw, 1rem);
+    bottom: 1.2rem;
+  }
+
+  .bratz-collection-product-card
+  [data-global-add-price],
+  .bratz-collection-product-card
+  [data-global-add-separator] {
+    display: none;
+  }
+  
 }
 
 /* =========================================================
@@ -1378,12 +1510,35 @@ product-card .global-product-card-options button {
   z-index: 51;
 }
 
+.global-product-card__swatch-count--mobile {
+  display: none;
+}
 
 /* =========================================================
    MOBILE
    ========================================================= */
 
 @media screen and (max-width: 749px) {
+
+  .bratz-collection-product-card
+  .global-product-card__swatch-count--desktop {
+    display: none;
+  }
+
+  .bratz-collection-product-card
+  .global-product-card__swatch-count--mobile {
+    display: inline;
+  }
+
+  .bratz-collection-product-card
+  .global-product-card__swatch {
+    /* Keep the first 3 visible */
+  }
+
+  .bratz-collection-product-card
+  .global-product-card__swatch:nth-child(4) {
+    display: none;
+  }
 
   .global-product-card__details-inner {
     padding: 2rem 2.2rem 2.2rem;

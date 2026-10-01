@@ -69,6 +69,7 @@
         "text_tqQTNE",
         "text_twGGkJ"
       ],
+      "disabled": true,
       "name": "t:names.heading",
       "settings": {
         "content_direction": "column",
@@ -99,6 +100,22 @@
         "padding-block-end": 48
       }
     },
+    "bratz_video_banner_MCNmAy": {
+      "type": "bratz-video-banner",
+      "name": "Bratz Video Banner",
+      "settings": {
+        "video": "shopify://files/videos/13c15a20cf7840569ed6fc53e566de3f.HD-1080p-7.2Mbps-89436699.mp4",
+        "desktop_height": 620,
+        "mobile_height": 400,
+        "video_overlay": true,
+        "video_overlay_color": "#000000",
+        "video_overlay_opacity": 30,
+        "heading": "{{ collection.title }}",
+        "description": "",
+        "button_label": "",
+        "button_link": ""
+      }
+    },
     "main": {
       "type": "main-collection",
       "blocks": {
@@ -106,21 +123,21 @@
           "type": "filters",
           "static": true,
           "settings": {
-            "enable_filtering": true,
+            "enable_filtering": false,
             "filter_style": "horizontal",
             "filter_width": "centered",
             "text_label_case": "default",
             "show_swatch_label": false,
             "show_filter_label": false,
             "enable_sorting": true,
-            "enable_grid_density": true,
+            "enable_grid_density": false,
             "background_color": "",
             "text_color": "",
-            "padding-block-start": 8,
-            "padding-block-end": 8,
+            "padding-block-start": 48,
+            "padding-block-end": 48,
             "padding-inline-start": 0,
             "padding-inline-end": 0,
-            "facets_margin_bottom": 8,
+            "facets_margin_bottom": 0,
             "facets_margin_right": 20
           },
           "blocks": {}
@@ -129,7 +146,7 @@
           "type": "_product-card",
           "static": true,
           "settings": {
-            "product_card_gap": 4,
+            "product_card_gap": 0,
             "background_color": "",
             "border": "none",
             "border_width": 1,
@@ -199,14 +216,18 @@
       },
       "settings": {
         "layout_type": "grid",
-        "product_card_size": "large",
-        "mobile_product_card_size": "large",
-        "enable_infinite_scroll": true,
-        "products_per_page": 24,
+        "mobile_product_card_size": "small",
+        "enable_infinite_scroll": false,
+        "products_per_page": 12,
+        "content_slot_image": "shopify://shop_images/7b301952502e110e2884830a0c8effadfe2dec19.png",
+        "content_slot_title": "CONTENT SLOT",
+        "content_slot_description": "<p>Makeup as rebellion, packaging as obsession. Made to be played with, flaunted and obsessed over.</p>",
+        "content_slot_button_label": "SHOP NOW",
+        "content_slot_button_link": "",
         "product_grid_width": "centered",
         "full_width_on_mobile": true,
-        "columns_gap_horizontal": 16,
-        "columns_gap_vertical": 24,
+        "columns_gap_horizontal": 4,
+        "columns_gap_vertical": 4,
         "padding-inline-start": 0,
         "padding-inline-end": 0,
         "background_color": "{{ settings.color_palette.background }}",
@@ -217,6 +238,7 @@
   },
   "order": [
     "section",
+    "bratz_video_banner_MCNmAy",
     "main"
   ]
 }
