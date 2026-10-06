@@ -4,9 +4,7 @@
 %}
 
 <div class="bratz-product-info" {{ block.shopify_attributes }}>
-
   <div class="bratz-product-info__header">
-
     {% if product == blank %}
       <p class="bratz-product-info__title">
         {{ 'placeholders.product_title' | t }}
@@ -19,25 +17,21 @@
         {{ product.title }}
       </a>
     {% endif %}
-
-    {% if product != blank %}
-      <div class="bratz-product-info__price">
-        {% render 'price',
-          product_resource: product,
-          show_unit_price: false,
-          show_sale_price_first: false
-        %}
-      </div>
-    {% endif %}
-
   </div>
-
   {% if product_highlight != blank %}
     <div class="bratz-product-info__highlight">
       {{ product_highlight | metafield_tag }}
     </div>
   {% endif %}
-
+  {% if product != blank %}
+    <div class="bratz-product-info__price">
+      {% render 'price',
+        product_resource: product,
+        show_unit_price: false,
+        show_sale_price_first: false
+      %}
+    </div>
+  {% endif %}
 </div>
 
 {% stylesheet %}
@@ -56,20 +50,17 @@
   }
 
   .bratz-product-info__header {
-    font-family: var(--font-subheading--family);
-    font-size: 2.4rem;
-    font-weight: var(--font-subheading--weight);
-    font-style: var(--font-subheading--style);
-    padding: 0.5rem 2.4rem;
+    font-family: var(--font-heading--family);
+    font-size: 1.4rem;
+    line-height: 1.6rem;
+    font-weight: var(--font-heading--weight);
+    font-style: var(--font-heading--style);
+    padding: 2.4rem 0 0;
     display: flex;
     align-items: baseline;
     justify-content: space-between;
     gap: 1.6rem;
     width: 100%;
-  }
-
-  .bratz-product-info__highlight {
-    padding: 0 2.4rem;
   }
 
   .bratz-product-info__highlight span.metafield-string {
@@ -81,12 +72,19 @@
     flex: 0 0 auto;
     margin: 0;
     white-space: nowrap;
+    padding: 1.6rem 0;
   }
 
   .bratz-product-info__highlight p {
     margin: 0;
   }
 
+  .bratz-product-info__price > div[ref="priceContainer"] {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: left;
+    gap: 1.6rem;
+  }
 
 /* =========================================================
    COLLECTION PRODUCT GRID - MOBILE

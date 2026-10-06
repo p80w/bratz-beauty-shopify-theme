@@ -322,11 +322,13 @@
 
             <div class="global-product-card__details-option">
 
-              <div
-                class="global-product-card__details-variant-title"
-                data-global-variant-title
-              >
-                {{ global_initial_variant.title }}
+              <div class="global-product-card__details-variant-title">
+                <span class="global-product-card__details-variant-label">
+                  {{ global_swatch_option.name }} -
+                </span>
+                <span data-global-variant-title>
+                  {{ global_initial_variant.title }}
+                </span>
               </div>
 
 
@@ -416,7 +418,6 @@
                     {% endunless %}
                   >
 
-
                   <input
                     type="hidden"
                     name="quantity"
@@ -427,7 +428,7 @@
                   <button
                       type="submit"
                       name="add"
-                      class="global-product-card__add-button"
+                      class="global-product-card__add-button button button-primary"
                       data-global-add-button
                       {% unless global_initial_variant.available %}
                         disabled
@@ -435,8 +436,10 @@
                     >
 
                       <span data-global-add-label>
-
-                        <span data-global-add-text>
+                        <span
+                          data-global-add-text
+                          data-global-add-text-desktop
+                        >
                           {% if global_initial_variant.available %}
                             ADD TO CART
                           {% else %}
@@ -444,17 +447,18 @@
                           {% endif %}
                         </span>
 
-                        {% if global_initial_variant.available %}
-                          <span data-global-add-separator> - </span>
-
-                          <span data-global-add-price>
-                            {{ global_initial_variant.price | money }}
-                          </span>
-                        {% endif %}
-
+                        <span
+                          class="global-product-card__add-text-mobile"
+                          data-global-add-text-mobile
+                        >
+                          {% if global_initial_variant.available %}
+                            ADD
+                          {% else %}
+                            SOLD OUT
+                          {% endif %}
+                        </span>
                       </span>
-
-                    </button>
+                  </button>
 
                 {% endform %}
 
@@ -484,7 +488,6 @@
 
       card.dataset.globalProductCardInitialized = 'true';
 
-
       const trigger = card.querySelector(
         '[data-global-swatch-trigger]'
       );
@@ -497,15 +500,13 @@
         '[data-global-details-close]'
       );
 
-
       if (!trigger || !details) {
         return;
       }
 
-
       /* =========================================================
-        PREVENT PRODUCT PAGE NAVIGATION INSIDE OPEN DETAILS
-        ========================================================= */
+         PREVENT PRODUCT PAGE NAVIGATION INSIDE OPEN DETAILS
+         ========================================================= */
 
       card.addEventListener(
         'click',
@@ -523,10 +524,9 @@
             return;
           }
 
-
           /* -------------------------------------------------------
-            ALLOWED INTERACTIONS
-            ------------------------------------------------------- */
+             ALLOWED INTERACTIONS
+             ------------------------------------------------------- */
 
           const allowedElement = event.target.closest(
             [
@@ -536,15 +536,13 @@
             ].join(',')
           );
 
-
           if (allowedElement) {
             return;
           }
 
-
           /* -------------------------------------------------------
-            BLOCK PRODUCT CARD NAVIGATION
-            ------------------------------------------------------- */
+             BLOCK PRODUCT CARD NAVIGATION
+             ------------------------------------------------------- */
 
           event.preventDefault();
           event.stopPropagation();
@@ -553,7 +551,6 @@
         },
         true
       );
-
 
       /* =========================================================
          SHOW / HIDE DETAILS
@@ -580,7 +577,6 @@
 
       };
 
-
       const openDetails = () => {
 
         details.hidden = false;
@@ -604,7 +600,6 @@
 
       };
 
-
       trigger.addEventListener('click', (event) => {
 
         event.preventDefault();
@@ -621,7 +616,6 @@
 
       });
 
-
       if (closeButton) {
 
         closeButton.addEventListener('click', (event) => {
@@ -634,7 +628,6 @@
         });
 
       }
-
 
       /* =========================================================
          VARIANT SELECTION
@@ -668,6 +661,10 @@
         '[data-global-add-text]'
       );
 
+      const addTextMobile = details.querySelector(
+        '[data-global-add-text-mobile]'
+      );
+
       const addSeparator = details.querySelector(
         '[data-global-add-separator]'
       );
@@ -676,6 +673,64 @@
         '[data-global-add-price]'
       );
 
+      /* =========================================================
+         ADD BUTTON TEXT
+         Desktop: ADD TO CART
+         Mobile: ADD
+         ========================================================= */
+
+      const isMobile = () => {
+        return window.matchMedia('(max-width: 749px)').matches;
+      };
+
+      let currentAddState = 'ADD';
+
+      const updateAddText = () => {
+
+        if (addText) {
+          if (currentAddState === 'ADD') {
+            addText.textContent = 'ADD TO CART';
+          } else {
+            addText.textContent = currentAddState;
+          }
+        }
+
+        if (addTextMobile) {
+          if (currentAddState === 'ADD') {
+            addTextMobile.textContent = 'ADD';
+          } else {
+            addTextMobile.textContent = currentAddState;
+          }
+        }
+
+      };
+
+      /* =========================================================
+         INITIAL BUTTON TEXT
+         ========================================================= */
+
+      if (addText) {
+
+        currentAddState = addButton?.disabled
+          ? 'SOLD OUT'
+          : 'ADD';
+
+        updateAddText();
+
+      }
+
+      /* =========================================================
+         UPDATE BUTTON TEXT ON RESIZE
+         ========================================================= */
+
+      window.addEventListener(
+        'resize',
+        updateAddText
+      );
+
+      /* =========================================================
+         VARIANT SELECTION
+         ========================================================= */
 
       swatches.forEach((swatch) => {
 
@@ -683,7 +738,6 @@
 
           event.preventDefault();
           event.stopPropagation();
-
 
           const variantId =
             swatch.dataset.variantId;
@@ -697,11 +751,9 @@
           const selectedAvailable =
             swatch.dataset.variantAvailable === 'true';
 
-
           if (!variantId || !variantInput) {
             return;
           }
-
 
           /* -----------------------------------------------
              SELECTED SWATCH
@@ -724,13 +776,11 @@
 
           });
 
-
           /* -----------------------------------------------
              REAL SHOPIFY VARIANT
              ----------------------------------------------- */
 
           variantInput.value = variantId;
-
 
           if (selectedAvailable) {
 
@@ -747,7 +797,6 @@
 
           }
 
-
           /* -----------------------------------------------
              VARIANT TITLE
              ----------------------------------------------- */
@@ -758,7 +807,6 @@
               selectedTitle;
 
           }
-
 
           /* -----------------------------------------------
              PRICE
@@ -771,7 +819,6 @@
 
           }
 
-
           /* -----------------------------------------------
              ADD TO CART BUTTON
              ----------------------------------------------- */
@@ -783,32 +830,35 @@
 
           }
 
-
           if (selectedAvailable) {
 
-            if (addText) {
-              addText.textContent =
-                'ADD TO CART';
-            }
+            currentAddState = 'ADD';
+
+            updateAddText();
 
             if (addSeparator) {
+
               addSeparator.textContent =
                 ' - ';
+
               addSeparator.hidden = false;
+
             }
 
             if (addPrice) {
+
               addPrice.textContent =
                 selectedPrice;
+
               addPrice.hidden = false;
+
             }
 
           } else {
 
-            if (addText) {
-              addText.textContent =
-                'SOLD OUT';
-            }
+            currentAddState = 'SOLD OUT';
+
+            updateAddText();
 
             if (addSeparator) {
               addSeparator.hidden = true;
@@ -824,7 +874,6 @@
 
       });
 
-
       /* =========================================================
          ADD TO CART FEEDBACK
          ========================================================= */
@@ -833,7 +882,6 @@
         details.querySelector(
           'product-form-component'
         );
-
 
       if (
         productForm &&
@@ -848,18 +896,15 @@
               return;
             }
 
-
             /* ---------------------------------------------
                LOADING STATE
                --------------------------------------------- */
 
             addButton.disabled = true;
 
+            currentAddState = 'ADDING...';
 
-            if (addText) {
-              addText.textContent =
-                'ADDING...';
-            }
+            updateAddText();
 
             if (addSeparator) {
               addSeparator.hidden = true;
@@ -869,6 +914,23 @@
               addPrice.hidden = true;
             }
 
+            /*
+             * Force the loading text again after the current
+             * event finishes. This helps prevent another
+             * Shopify form handler from immediately replacing it.
+             */
+
+            requestAnimationFrame(() => {
+
+              updateAddText();
+
+            });
+
+            window.setTimeout(() => {
+
+              updateAddText();
+
+            }, 0);
 
             /* ---------------------------------------------
                RESTORE BUTTON
@@ -884,40 +946,42 @@
                 return;
               }
 
-
               const currentPrice =
                 price?.textContent || '';
 
-
               addButton.disabled = false;
 
+              currentAddState = 'ADD';
 
-              if (addText) {
-                addText.textContent =
-                  'ADD TO CART';
-              }
+              updateAddText();
 
               if (addSeparator) {
+
                 addSeparator.textContent =
                   ' - ';
+
                 addSeparator.hidden = false;
+
               }
 
               if (addPrice) {
+
                 addPrice.textContent =
                   currentPrice;
+
                 addPrice.hidden = false;
+
               }
 
             }, 1200);
 
-          }
+          },
+          true
         );
 
       }
 
     };
-
 
     /* =========================================================
        INITIALIZE ALL PRODUCT CARDS
@@ -936,13 +1000,11 @@
 
       }
 
-
       root
         .querySelectorAll('product-card')
         .forEach(initGlobalProductCard);
 
     };
-
 
     /* =========================================================
        INITIAL LOAD
@@ -966,7 +1028,6 @@
 
     }
 
-
     /* =========================================================
        SHOPIFY THEME EDITOR
        ========================================================= */
@@ -988,7 +1049,7 @@
 {% stylesheet %}
 
 .dummy-stars {
-    padding: 2.4rem 2.4rem 0 2.4rem;
+    padding: 2.4rem 0 0;
 }
 
 slideshow-slide.bratz-product-match__slide {
@@ -1034,7 +1095,7 @@ product-card .quick-add {
     position: relative;
     z-index: 30;
     width: 100%;
-    padding: 1.4rem 2.4rem 2.4rem 2.4rem;
+    padding: 0.1rem;
     border: 0;
     background: transparent;
     color: inherit;
@@ -1060,10 +1121,6 @@ product-card .quick-add {
       display: none;
   }
 
-  .bratz-collection-product-card .global-product-card__details-inner {
-      padding: 1.6rem .8rem .8rem;
-  }
-
   .bratz-collection-product-card .global-product-card__details-image {
     width: 4rem;
     flex-basis: 4rem;
@@ -1081,7 +1138,7 @@ product-card .quick-add {
   }
 
   .bratz-collection-product-card .details-wrapper {
-    inset-inline: clamp(1.4rem, 4vw, 1rem);
+    inset-inline: inherit;
     bottom: 1.2rem;
   }
 
@@ -1193,11 +1250,16 @@ a {
   pointer-events: auto;
 }
 
+button.global-product-card__add-button.button.button-primary {
+    background: transparent;
+    box-shadow: none;
+    color: #000;
+}
 
 .details-wrapper {
     position: absolute;
-    bottom: 2.2rem;
-    inset-inline: clamp(2.2rem, 4vw, 1rem);
+    bottom: 0;
+    width: 100%;
 }
 
 .global-product-card__details {
@@ -1270,14 +1332,18 @@ a {
     position: relative;
     width: 100%;
     box-sizing: border-box;
-    background: rgb(var(--color-background-rgb) / .97);
-    padding: 2.2rem 2.4rem 2.4rem;
+    background: #fefefe;
     box-shadow: 0 .8rem 2.5rem #00000014;
     margin: 0 4rem;
     margin: 0 auto;
     max-width: 100%;
+    padding-top: 6rem;
 }
 
+.product-card.is-details-open button.global-product-card__add-button:hover {
+    background: #000;
+    color: #fff;
+}
 
 /* =========================================================
    CLOSE
@@ -1338,17 +1404,15 @@ a {
 
 .global-product-card__details-title {
     margin: 0 0 .4rem;
-    font-size: 1.8rem;
-    line-height: 1.8rem;
+    font-size: 1.4rem;
+    line-height: 1.6rem;
 }
 
 .global-product-card__details-price {
     margin: 0;
-     font-size: 1.8rem;
-    line-height: 1.8rem;
-    font-family: var(--font-subheading--family);
-    font-weight: var(--font-subheading--weight);
-    font-style: var(--font-subheading--style);
+    font-size: 1.6rem;
+    line-height: 2.4rem;
+    margin-top: .8rem;
 }
 
 
@@ -1373,6 +1437,11 @@ a {
     margin-block-end: 1.4rem;
     font-size: 1.4rem;
     line-height: 1.2;
+}
+
+span.global-product-card__details-variant-label {
+    text-transform: uppercase;
+    font-weight: bold;
 }
 
 /* =========================================================
@@ -1452,17 +1521,6 @@ a {
 
 .global-product-card__add-button {
     width: 100%;
-    border: 0;
-    background: #000;
-    color: #fff;
-    padding: .65rem 1.6rem;
-    cursor: pointer;
-    transition: opacity .2s ease,transform .15s ease;
-    font-size: 1.2rem;
-    font-family: var(--font-header--family);
-    font-weight: 500;
-    line-height: 1.2rem;
-    letter-spacing: .1rem;
 }
 
 .global-product-card__add-button:hover:not(:disabled) {
@@ -1530,10 +1588,6 @@ product-card .global-product-card-options button {
     display: inline;
   }
 
-  .bratz-collection-product-card
-  .global-product-card__swatch {
-    /* Keep the first 3 visible */
-  }
 
   .bratz-collection-product-card
   .global-product-card__swatch:nth-child(4) {
@@ -1541,7 +1595,6 @@ product-card .global-product-card-options button {
   }
 
   .global-product-card__details-inner {
-    padding: 2rem 2.2rem 2.2rem;
     max-width: 100%;
   }
 
@@ -1555,9 +1608,27 @@ product-card .global-product-card-options button {
   }
 
   .global-product-card__add-button {
-    font-family: var( --font-body--family);
+    font-family: var( --font-heading--family);
   }
 
+  .global-product-card__details-inner {
+    padding: 4.8rem 0 0 0;
+  }
+
+}
+
+.global-product-card__add-text-mobile {
+  display: none;
+}
+
+@media screen and (max-width: 749px) {
+  .global-product-card__add-text-mobile {
+    display: inline;
+  }
+
+  [data-global-add-text-desktop] {
+    display: none;
+  }
 }
 
 
