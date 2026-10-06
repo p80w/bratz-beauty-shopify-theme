@@ -175,42 +175,16 @@
               },
               "blocks": {}
             },
-            "review_7XcmDG": {
-              "type": "review",
-              "name": "t:names.product_review_stars",
-              "settings": {
-                "stars_style": "shaded",
-                "show_number": true,
-                "text_color": "",
-                "type_preset": "paragraph",
-                "width": "100%",
-                "alignment": "left"
-              },
-              "blocks": {}
-            },
             "product_info_XLFnCb": {
               "type": "product-info",
               "name": "Product info",
-              "settings": {
-                "highlight_namespace": "custom",
-                "highlight_key": "product_highlight"
-              },
-              "blocks": {}
-            },
-            "custom_liquid_7CbQNj": {
-              "type": "custom-liquid",
-              "name": "t:names.custom_liquid",
-              "settings": {
-                "custom_liquid": "{% assign product_highlight = closest.product.metafields.p80.product_highlight.value %}\n\n{% if product_highlight != blank %}\n<div class=\"p-highlight\"\n  {{ product_highlight }}\n</div>\n{% endif %}"
-              },
+              "settings": {},
               "blocks": {}
             }
           },
           "block_order": [
             "card-gallery",
-            "review_7XcmDG",
-            "product_info_XLFnCb",
-            "custom_liquid_7CbQNj"
+            "product_info_XLFnCb"
           ]
         }
       },
@@ -218,7 +192,7 @@
         "layout_type": "grid",
         "mobile_product_card_size": "small",
         "enable_infinite_scroll": false,
-        "products_per_page": 12,
+        "products_per_page": 8,
         "content_slot_image": "shopify://shop_images/7b301952502e110e2884830a0c8effadfe2dec19.png",
         "content_slot_title": "CONTENT SLOT",
         "content_slot_description": "<p>Makeup as rebellion, packaging as obsession. Made to be played with, flaunted and obsessed over.</p>",

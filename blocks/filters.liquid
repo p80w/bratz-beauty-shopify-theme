@@ -609,7 +609,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.8rem;
+  gap: 5rem;
   min-width: 0;
 }
 
@@ -620,15 +620,12 @@
   justify-content: center;
   flex: 0 0 auto;
   min-height: 2.6rem;
-  padding: 0.35rem 1.25rem;
-  border: 1px solid var(--color-foreground);
   background: var(--color-white);
   color: var(--color-foreground);
-  font-family: var(--font-druk-wide--family);
-  font-weight: var(--font-druk-wide--weight);
-  font-style: var(--font-druk-wide--style);
+  font-family: var(--font-heading--family);
+  font-weight: var(--font-heading--weight);
+  font-style: var(--font-heading--style);
   font-size: 1.2rem;
-  font-weight: var(--font-druk-wide--weight);
   line-height: 1;
   text-decoration: none;
   text-transform: uppercase;
@@ -637,8 +634,7 @@
 
 .bratz-collection-categories__link:hover,
 .bratz-collection-categories__link.is-active {
-  background: var(--color-foreground);
-  color: var(--color-white);
+  border-bottom: .1rem solid;
 }
 
 
@@ -1038,13 +1034,15 @@
     @media screen and (min-width: 750px) {
       font-size: var(--font-paragraph--size);
       justify-content: flex-start;
-      height: var(--minimum-touch-target);
+      border-bottom: .1rem solid;
+      height: 2.1rem;
+      padding: 0;
     }
   }
 
   .facets__summary .icon-caret {
-    height: var(--icon-size-xs);
-    width: var(--icon-size-xs);
+    height: var(--icon-size-2xs);
+    width: var(--icon-size-2xs);
     margin-block: var(--margin-2xs);
     transition: color var(--animation-speed) var(--animation-easing);
   }
@@ -1327,9 +1325,9 @@
     color: var(--color-foreground);
     cursor: pointer;
     white-space: nowrap;
-    font-family: var(--font-druk-wide--family);
-    font-weight: var(--font-druk-wide--weight);
-    font-style: var(--font-druk-wide--style);
+    font-family: var(--font-heading--family);
+    font-weight: var(--font-heading--weight);
+    font-style: var(--font-heading--style);
     font-size: 1.2rem;
     text-transform: uppercase;
 
@@ -1500,6 +1498,11 @@
     height: var(--font-paragraph--size);
     position: absolute;
   }
+
+  .facets-block-wrapper {
+    padding: 0 4.8rem;
+  }
+
 {% endstylesheet %}
 
 {% schema %}

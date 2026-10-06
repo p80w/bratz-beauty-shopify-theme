@@ -40,7 +40,9 @@
               on:click="{{ on_click_handler }}?{{ prev_params }}"
             {% endif %}
           >
-            {{ 'icon-chevron-left.svg' | inline_asset_content }}
+            <svg xmlns="http://www.w3.org/2000/svg" width="65" height="8" viewBox="0 0 65 8" fill="none">
+              <path d="M64.5 3.18213C64.7761 3.18213 65 3.40599 65 3.68213C65 3.95827 64.7761 4.18213 64.5 4.18213L64.5 3.68213L64.5 3.18213ZM0.146446 4.03569C-0.0488205 3.84043 -0.0488205 3.52384 0.146446 3.32858L3.32843 0.1466C3.52369 -0.0486619 3.84027 -0.0486619 4.03553 0.1466C4.23079 0.341862 4.23079 0.658445 4.03553 0.853707L1.2071 3.68213L4.03553 6.51056C4.23079 6.70582 4.23079 7.02241 4.03553 7.21767C3.84027 7.41293 3.52369 7.41293 3.32843 7.21767L0.146446 4.03569ZM64.5 3.68213L64.5 4.18213L0.5 4.18213L0.5 3.68213L0.5 3.18213L64.5 3.18213L64.5 3.68213Z" fill="black"/>
+            </svg>
           </a>
         {%- else -%}
           <span
@@ -48,7 +50,9 @@
             class="pagination__link pagination__link--arrow pagination__link--disabled"
             aria-disabled="true"
           >
-            {{ 'icon-chevron-left.svg' | inline_asset_content }}
+            <svg xmlns="http://www.w3.org/2000/svg" width="65" height="8" viewBox="0 0 65 8" fill="none">
+              <path d="M64.5 3.18213C64.7761 3.18213 65 3.40599 65 3.68213C65 3.95827 64.7761 4.18213 64.5 4.18213L64.5 3.68213L64.5 3.18213ZM0.146446 4.03569C-0.0488205 3.84043 -0.0488205 3.52384 0.146446 3.32858L3.32843 0.1466C3.52369 -0.0486619 3.84027 -0.0486619 4.03553 0.1466C4.23079 0.341862 4.23079 0.658445 4.03553 0.853707L1.2071 3.68213L4.03553 6.51056C4.23079 6.70582 4.23079 7.02241 4.03553 7.21767C3.84027 7.41293 3.52369 7.41293 3.32843 7.21767L0.146446 4.03569ZM64.5 3.68213L64.5 4.18213L0.5 4.18213L0.5 3.68213L0.5 3.18213L64.5 3.18213L64.5 3.68213Z" fill="black"/>
+            </svg>
           </span>
         {%- endif -%}
       </li>
@@ -145,7 +149,9 @@
               on:click="{{ on_click_handler }}?{{ next_params }}"
             {% endif %}
           >
-            {{ 'icon-chevron-right.svg' | inline_asset_content }}
+            <svg xmlns="http://www.w3.org/2000/svg" width="65" height="8" viewBox="0 0 65 8" fill="none">
+              <path d="M0.5 3.18213C0.223858 3.18213 2.41411e-08 3.40599 0 3.68213C-2.41411e-08 3.95827 0.223858 4.18213 0.5 4.18213L0.5 3.68213L0.5 3.18213ZM64.8536 4.03569C65.0488 3.84043 65.0488 3.52384 64.8536 3.32858L61.6716 0.1466C61.4763 -0.0486619 61.1597 -0.0486619 60.9645 0.1466C60.7692 0.341862 60.7692 0.658445 60.9645 0.853707L63.7929 3.68213L60.9645 6.51056C60.7692 6.70582 60.7692 7.02241 60.9645 7.21767C61.1597 7.41293 61.4763 7.41293 61.6716 7.21767L64.8536 4.03569ZM0.5 3.68213L0.5 4.18213L64.5 4.18213L64.5 3.68213L64.5 3.18213L0.5 3.18213L0.5 3.68213Z" fill="black"/>
+            </svg>
           </a>
         {%- else -%}
           <span
@@ -153,7 +159,9 @@
             class="pagination__link pagination__link--arrow pagination__link--disabled"
             aria-disabled="true"
           >
-            {{ 'icon-chevron-right.svg' | inline_asset_content }}
+            <svg xmlns="http://www.w3.org/2000/svg" width="65" height="8" viewBox="0 0 65 8" fill="none">
+              <path d="M0.5 3.18213C0.223858 3.18213 2.41411e-08 3.40599 0 3.68213C-2.41411e-08 3.95827 0.223858 4.18213 0.5 4.18213L0.5 3.68213L0.5 3.18213ZM64.8536 4.03569C65.0488 3.84043 65.0488 3.52384 64.8536 3.32858L61.6716 0.1466C61.4763 -0.0486619 61.1597 -0.0486619 60.9645 0.1466C60.7692 0.341862 60.7692 0.658445 60.9645 0.853707L63.7929 3.68213L60.9645 6.51056C60.7692 6.70582 60.7692 7.02241 60.9645 7.21767C61.1597 7.41293 61.4763 7.41293 61.6716 7.21767L64.8536 4.03569ZM0.5 3.68213L0.5 4.18213L64.5 4.18213L64.5 3.68213L64.5 3.18213L0.5 3.18213L0.5 3.68213Z" fill="black"/>
+            </svg>
           </span>
         {%- endif -%}
       </li>
@@ -163,9 +171,9 @@
 
 {% stylesheet %}
   .pagination {
-    --pagination-size: 36px;
+    --pagination-size: 41px;
     --pagination-inset: 2px;
-    --pagination-radius: 6;
+    --pagination-radius: 20;
 
     display: flex;
     justify-content: center;
@@ -177,7 +185,7 @@
 
   .pagination__list {
     display: flex;
-    gap: 0;
+    gap: 2.4rem;
     align-items: center;
     list-style: none;
     margin: 0;
@@ -208,6 +216,9 @@
     border-radius: calc(var(--pagination-radius) * 1px);
     transition: color var(--hover-transition-duration) var(--hover-transition-timing),
       opacity var(--hover-transition-duration) var(--hover-transition-timing);
+    font-family: var(--font-heading--family);
+    font-weight: var(--font-heading--weight);
+    font-style: var(--font-heading--style);
   }
 
   .pagination__link:focus-visible {
@@ -239,13 +250,41 @@
   }
 
   .pagination__link svg {
-    width: 0.5rem;
-    height: 0.75rem;
+    width: auto;
+    height: auto;
     flex-shrink: 0;
   }
 
   .pagination__item--mobile-only {
     display: none;
+  }
+
+  ul.pagination__list li:last-child,
+  ul.pagination__list li:first-child {
+    width: 6.4rem;
+  }
+
+  ul.pagination__list li:first-child svg {
+    width: 6.4rem;
+  }
+
+  ul.pagination__list li:last-child {
+    margin-left: 3rem;
+  }
+
+  ul.pagination__list li:first-child {
+    margin-right: 3rem;
+  }
+
+  li.pagination__item:hover a {
+    background: var(--color-kool-kat);
+    color: var(--color-white);
+  }
+
+  ul.pagination__list li:hover:first-child a,
+  ul.pagination__list li:hover:last-child a {
+      background: transparent;
+      color: inherit;
   }
 
   /* Fallback for browsers without anchor positioning support */
@@ -275,6 +314,7 @@
   /* Modern approach with anchor positioning */
   @supports (anchor-name: --pagination-active) {
     .pagination__list::before {
+      display: none;
       content: '';
       z-index: -1;
       position: absolute;
@@ -343,7 +383,7 @@
 
   @media screen and (max-width: 749px) {
     .pagination {
-      --pagination-size: 44px;
+      --pagination-size: 32px;
       --pagination-inset: 5px;
 
       padding: var(--padding-lg) var(--padding-sm);
